@@ -1,4 +1,4 @@
-﻿  #region License Information
+﻿#region License Information
 /* HeuristicLab
  * Copyright (C) 2002-2018 Heuristic and Evolutionary Algorithms Laboratory (HEAL)
  *
@@ -29,31 +29,31 @@ using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General.Creators;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple.Creators {
-  [Item("FileBasedSolutionCreator", "Creates a ASR solution from source code in given file.")]
+  [Item("TextBasedSolutionCreator", "Creates a ASR solution from source code as text.")]
   [StorableClass]
-  public sealed class FileBasedSolutionCreator :  ASRCreator {
+  public sealed class TextBasedSolutionCreator :  ASRCreator {
     
-    public ILookupParameter<TextFileValue> SourceFileParameter {
-      get { return (LookupParameter<TextFileValue>)Parameters["SourceFile"]; }
+    public ILookupParameter<StringValue> SourceCodeParameter {
+      get { return (LookupParameter<StringValue>)Parameters["SourceCode"]; }
     }
 
-    public TextFileValue SourceFile {
-      get { return SourceFileParameter.ActualValue; }
+    public string SourceCode {
+      get { return SourceCodeParameter.ActualValue.Value; }
     }
 
     [StorableConstructor]
-    private FileBasedSolutionCreator(bool deserializing) : base(deserializing) { }
+    private TextBasedSolutionCreator(bool deserializing) : base(deserializing) { }
 
-    public FileBasedSolutionCreator()
+    public TextBasedSolutionCreator()
         : base() {
-      Parameters.Add(new LookupParameter<TextFileValue>("SourceFile", "The text file containing the buggy program source code."));
+      Parameters.Add(new LookupParameter<StringValue>("SourceCode", "The source code of the buggy program."));
     }
 
     public override IDeepCloneable Clone(Cloner cloner) {
-      return new FileBasedSolutionCreator(this, cloner);
+      return new TextBasedSolutionCreator(this, cloner);
     }
 
-    private FileBasedSolutionCreator(FileBasedSolutionCreator original, Cloner cloner)
+    private TextBasedSolutionCreator(TextBasedSolutionCreator original, Cloner cloner)
         : base(original, cloner) {
     }
 
@@ -66,11 +66,9 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple.Creator
     public SimpleEncoding CreateSolution (IASRProblemInstance instance) {
       var result = new SimpleEncoding(instance);
 
-      var sourceFileContent = File.ReadAllText(SourceFile.Value);
-      result.SolutionPrograms.Add(new SolutionProgram(sourceFileContent));
+      result.SolutionPrograms.Add(new SolutionProgram(SourceCode));
 
       return result;
-
     }
   }
 }

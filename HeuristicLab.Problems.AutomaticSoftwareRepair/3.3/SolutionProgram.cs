@@ -23,6 +23,8 @@ using System;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
+using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings;
+using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 
@@ -30,7 +32,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
   [StorableClass]
   public sealed class SolutionProgram : NamedItem {
     [Storable]
-    public SyntaxTree TreeRepresentation { get; private set; }
+    public IASRSyntaxTree TreeRepresentation { get; private set; }
     [Storable]
     public string TextRepresentation { get; private set; }
     [Storable]
@@ -54,21 +56,21 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
     }
     #endregion
 
-    public SolutionProgram(SyntaxTree treeRepresentation, double quality)
-        : base("Solution", "A roslyn based automatic software repair solution.") {
+    public SolutionProgram(IASRSyntaxTree treeRepresentation, double quality = -1)
+        : base("Solution", "A .NET Compiler Platform based automatic software repair solution.") {
       this.TreeRepresentation = treeRepresentation;
-      this.TextRepresentation = treeRepresentation.ToString();
+      this.TextRepresentation = treeRepresentation.Tree.ToString();
       this.Quality = quality;
     }
 
-    public SolutionProgram(string textRepresentation, double quality)
-        : base("Solution", "A roslyn based automatic software repair solution.") {
+    public SolutionProgram(string textRepresentation, double quality = -1)
+        : base("Solution", "A .NET Compiler Platform based automatic software repair solution.") {
       this.TextRepresentation = textRepresentation;  
       this.Quality = quality;
 
       try
       {
-        this.TreeRepresentation = CSharpSyntaxTree.ParseText (textRepresentation);
+        this.TreeRepresentation = new NetCompilerPlatformBasedSyntaxTree(CSharpSyntaxTree.ParseText (textRepresentation));CSharpSyntaxTree.ParseText (textRepresentation);
       }
       catch (Exception)
       {

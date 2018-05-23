@@ -33,7 +33,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
   /// <summary>
   /// A base class for operators which evaluate ASR solutions.
   /// </summary>
-  [Item("TSPEvaluator", "A base class for operators which evaluate ASR solutions.")]
+  [Item("ASREvaluator", "A base class for operators which evaluate ASR solutions.")]
   [StorableClass]
   public abstract class ASREvaluator : ASROperator, IASREvaluator {
     

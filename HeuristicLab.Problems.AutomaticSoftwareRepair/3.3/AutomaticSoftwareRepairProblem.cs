@@ -30,6 +30,7 @@ using HeuristicLab.Encodings.PermutationEncoding;
 using HeuristicLab.Optimization;
 using HeuristicLab.Parameters;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
+using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple.Creators;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 using HeuristicLab.Problems.Instances;
@@ -39,43 +40,43 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
   [Item("Autmatic Software Repair Problem (ASR)", "Represents a generic automatic software repair problem.")]
   [Creatable(CreatableAttribute.Categories.CombinatorialProblems, Priority = 100)]
   [StorableClass]
-  public class AutomaticSoftwareRepairProblem: SingleObjectiveHeuristicOptimizationProblem<IASREvaluator, IPermutationCreator>, IStorableContent {
+  public class AutomaticSoftwareRepairProblem: SingleObjectiveHeuristicOptimizationProblem<IASREvaluator, IASRCreator>, IStorableContent {
 //      IProblemInstanceConsumer<ASRData> {
 
     public string Filename { get; set; }
 
     #region Parameter Properties
-    public OptionalValueParameter<DoubleMatrix> CoordinatesParameter {
-      get { return (OptionalValueParameter<DoubleMatrix>)Parameters["Coordinates"]; }
-    }
+    //public OptionalValueParameter<DoubleMatrix> CoordinatesParameter {
+    //  get { return (OptionalValueParameter<DoubleMatrix>)Parameters["Coordinates"]; }
+    //}
     //public OptionalValueParameter<DistanceMatrix> DistanceMatrixParameter {
     //  get { return (OptionalValueParameter<DistanceMatrix>)Parameters["DistanceMatrix"]; }
     //}
-    public ValueParameter<BoolValue> UseDistanceMatrixParameter {
-      get { return (ValueParameter<BoolValue>)Parameters["UseDistanceMatrix"]; }
-    }
-    public OptionalValueParameter<Permutation> BestKnownSolutionParameter {
-      get { return (OptionalValueParameter<Permutation>)Parameters["BestKnownSolution"]; }
-    }
+    //public ValueParameter<BoolValue> UseDistanceMatrixParameter {
+    //  get { return (ValueParameter<BoolValue>)Parameters["UseDistanceMatrix"]; }
+    //}
+    //public OptionalValueParameter<Permutation> BestKnownSolutionParameter {
+    //  get { return (OptionalValueParameter<Permutation>)Parameters["BestKnownSolution"]; }
+    //}
     #endregion
 
     #region Properties
-    public DoubleMatrix Coordinates {
-      get { return CoordinatesParameter.Value; }
-      set { CoordinatesParameter.Value = value; }
-    }
+    //public DoubleMatrix Coordinates {
+    //  get { return CoordinatesParameter.Value; }
+    //  set { CoordinatesParameter.Value = value; }
+    //}
     //public DistanceMatrix DistanceMatrix {
     //  get { return DistanceMatrixParameter.Value; }
     //  set { DistanceMatrixParameter.Value = value; }
     //}
-    public BoolValue UseDistanceMatrix {
-      get { return UseDistanceMatrixParameter.Value; }
-      set { UseDistanceMatrixParameter.Value = value; }
-    }
-    public Permutation BestKnownSolution {
-      get { return BestKnownSolutionParameter.Value; }
-      set { BestKnownSolutionParameter.Value = value; }
-    }
+    //public BoolValue UseDistanceMatrix {
+    //  get { return UseDistanceMatrixParameter.Value; }
+    //  set { UseDistanceMatrixParameter.Value = value; }
+    //}
+    //public Permutation BestKnownSolution {
+    //  get { return BestKnownSolutionParameter.Value; }
+    //  set { BestKnownSolutionParameter.Value = value; }
+    //}
     //private BestTSPSolutionAnalyzer BestTSPSolutionAnalyzer {
     //  get { return Operators.OfType<BestTSPSolutionAnalyzer>().FirstOrDefault(); }
     //}
@@ -96,28 +97,26 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
     }
 
     public AutomaticSoftwareRepairProblem()
-      : base(new ASRNUnitBasedEvaluator(), new RandomPermutationCreator()) {
-      Parameters.Add(new OptionalValueParameter<DoubleMatrix>("Coordinates", "The x- and y-Coordinates of the cities."));
+      : base(new ASRNUnitBasedEvaluator(), new TextBasedSolutionCreator()) {
+      //Parameters.Add(new OptionalValueParameter<DoubleMatrix>("Coordinates", "The x- and y-Coordinates of the cities."));
       //Parameters.Add(new OptionalValueParameter<DistanceMatrix>("DistanceMatrix", "The matrix which contains the distances between the cities."));
-      Parameters.Add(new ValueParameter<BoolValue>("UseDistanceMatrix", "True if the coordinates based evaluators should calculate the distance matrix from the coordinates and use it for evaluation similar to the distance matrix evaluator, otherwise false.", new BoolValue(true)));
-      Parameters.Add(new OptionalValueParameter<Permutation>("BestKnownSolution", "The best known solution of this TSP instance."));
+      //Parameters.Add(new ValueParameter<BoolValue>("UseDistanceMatrix", "True if the coordinates based evaluators should calculate the distance matrix from the coordinates and use it for evaluation similar to the distance matrix evaluator, otherwise false.", new BoolValue(true)));
+      //Parameters.Add(new OptionalValueParameter<Permutation>("BestKnownSolution", "The best known solution of this TSP instance."));
 
       Maximization.Value = false;
       MaximizationParameter.Hidden = true;
-      UseDistanceMatrixParameter.Hidden = true;
+      //UseDistanceMatrixParameter.Hidden = true;
       //DistanceMatrixParameter.ReactOnValueToStringChangedAndValueItemImageChanged = false;
 
-      Coordinates = new DoubleMatrix(new double[,] {
-        { 100, 100 }, { 100, 200 }, { 100, 300 }, { 100, 400 },
-        { 200, 100 }, { 200, 200 }, { 200, 300 }, { 200, 400 },
-        { 300, 100 }, { 300, 200 }, { 300, 300 }, { 300, 400 },
-        { 400, 100 }, { 400, 200 }, { 400, 300 }, { 400, 400 }
-      });
+      //Coordinates = new DoubleMatrix(new double[,] {
+      //  { 100, 100 }, { 100, 200 }, { 100, 300 }, { 100, 400 },
+      //  { 200, 100 }, { 200, 200 }, { 200, 300 }, { 200, 400 },
+      //  { 300, 100 }, { 300, 200 }, { 300, 300 }, { 300, 400 },
+      //  { 400, 100 }, { 400, 200 }, { 400, 300 }, { 400, 400 }
+      //});
 
-      SolutionCreator.PermutationParameter.ActualName = "TSPTour";
-      Evaluator.QualityParameter.ActualName = "TSPTourLength";
-      ParameterizeSolutionCreator();
-      ParameterizeEvaluator();
+      //SolutionCreator.PermutationParameter.ActualName = "TSPTour";
+      Evaluator.QualityParameter.ActualName = "ASRProgramSolutionQuality";
 
       InitializeOperators();
       RegisterEventHandlers();
@@ -126,27 +125,23 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
     #region Events
     protected override void OnSolutionCreatorChanged() {
       base.OnSolutionCreatorChanged();
-      SolutionCreator.PermutationParameter.ActualNameChanged += new EventHandler(SolutionCreator_PermutationParameter_ActualNameChanged);
-      ParameterizeSolutionCreator();
-      ParameterizeEvaluator();
+      //SolutionCreator.PermutationParameter.ActualNameChanged += new EventHandler(SolutionCreator_PermutationParameter_ActualNameChanged);
       ParameterizeAnalyzers();
       ParameterizeOperators();
     }
     protected override void OnEvaluatorChanged() {
       base.OnEvaluatorChanged();
       Evaluator.QualityParameter.ActualNameChanged += new EventHandler(Evaluator_QualityParameter_ActualNameChanged);
-      ParameterizeEvaluator();
-      ParameterizeSolutionCreator();
       UpdateMoveEvaluators();
       ParameterizeAnalyzers();
       //if (Evaluator is ITSPCoordinatesPathEvaluator && Coordinates != null)
       //  ClearDistanceMatrix();
     }
     private void CoordinatesParameter_ValueChanged(object sender, EventArgs e) {
-      if (Coordinates != null) {
-        Coordinates.ItemChanged += new EventHandler<EventArgs<int, int>>(Coordinates_ItemChanged);
-        Coordinates.Reset += new EventHandler(Coordinates_Reset);
-      }
+      //if (Coordinates != null) {
+      //  Coordinates.ItemChanged += new EventHandler<EventArgs<int, int>>(Coordinates_ItemChanged);
+      //  Coordinates.Reset += new EventHandler(Coordinates_Reset);
+      //}
       //if (Evaluator is ITSPCoordinatesPathEvaluator) {
       //  ParameterizeSolutionCreator();
       //  ClearDistanceMatrix();
@@ -164,7 +159,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
       //}
     }
     private void SolutionCreator_PermutationParameter_ActualNameChanged(object sender, EventArgs e) {
-      ParameterizeEvaluator();
       ParameterizeAnalyzers();
       ParameterizeOperators();
     }
@@ -195,11 +189,11 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
       //  }
       //}
 
-      ValueParameter<DoubleMatrix> oldCoordinates = (Parameters["Coordinates"] as ValueParameter<DoubleMatrix>);
-      if (oldCoordinates != null) {
-        Parameters.Remove(oldCoordinates);
-        Parameters.Add(new OptionalValueParameter<DoubleMatrix>("Coordinates", "The x- and y-Coordinates of the cities.", oldCoordinates.Value, oldCoordinates.GetsCollected));
-      }
+      //ValueParameter<DoubleMatrix> oldCoordinates = (Parameters["Coordinates"] as ValueParameter<DoubleMatrix>);
+      //if (oldCoordinates != null) {
+      //  Parameters.Remove(oldCoordinates);
+      //  Parameters.Add(new OptionalValueParameter<DoubleMatrix>("Coordinates", "The x- and y-Coordinates of the cities.", oldCoordinates.Value, oldCoordinates.GetsCollected));
+      //}
 
       if (Operators.Count == 0) InitializeOperators();
       #endregion
@@ -207,12 +201,12 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
     }
 
     private void RegisterEventHandlers() {
-      CoordinatesParameter.ValueChanged += new EventHandler(CoordinatesParameter_ValueChanged);
-      if (Coordinates != null) {
-        Coordinates.ItemChanged += new EventHandler<EventArgs<int, int>>(Coordinates_ItemChanged);
-        Coordinates.Reset += new EventHandler(Coordinates_Reset);
-      }
-      SolutionCreator.PermutationParameter.ActualNameChanged += new EventHandler(SolutionCreator_PermutationParameter_ActualNameChanged);
+      //CoordinatesParameter.ValueChanged += new EventHandler(CoordinatesParameter_ValueChanged);
+      //if (Coordinates != null) {
+      //  Coordinates.ItemChanged += new EventHandler<EventArgs<int, int>>(Coordinates_ItemChanged);
+      //  Coordinates.Reset += new EventHandler(Coordinates_Reset);
+      //}
+      //SolutionCreator.PermutationParameter.ActualNameChanged += new EventHandler(SolutionCreator_PermutationParameter_ActualNameChanged);
       Evaluator.QualityParameter.ActualNameChanged += new EventHandler(Evaluator_QualityParameter_ActualNameChanged);
     }
 
@@ -249,44 +243,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
       //ParameterizeOperators();
       //OnOperatorsChanged();
     }
-    private void ParameterizeSolutionCreator() {
-      //if (Evaluator is ITSPDistanceMatrixEvaluator && DistanceMatrix != null)
-      //  SolutionCreator.LengthParameter.Value = new IntValue(DistanceMatrix.Rows);
-      //else if (Evaluator is ITSPCoordinatesPathEvaluator && Coordinates != null)
-      //  SolutionCreator.LengthParameter.Value = new IntValue(Coordinates.Rows);
-      //else {
-      //  SolutionCreator.LengthParameter.Value = null;
-      //  string error = "The given problem does not support the selected evaluator.";
-      //  if (Evaluator is ITSPDistanceMatrixEvaluator)
-      //    error += Environment.NewLine + "Please review that the " + DistanceMatrixParameter.Name + " parameter is defined or choose another evaluator.";
-      //  else error += Environment.NewLine + "Please review that the " + CoordinatesParameter.Name + " parameter is defined or choose another evaluator.";
-      //  PluginInfrastructure.ErrorHandling.ShowErrorDialog(error, null);
-      //}
-      //SolutionCreator.LengthParameter.Hidden = SolutionCreator.LengthParameter.Value != null;
-      //SolutionCreator.PermutationTypeParameter.Value = new PermutationType(PermutationTypes.RelativeUndirected);
-      //SolutionCreator.PermutationTypeParameter.Hidden = true;
-    }
-    private void ParameterizeEvaluator() {
-      //if (Evaluator is ITSPPathEvaluator) {
-      //  ITSPPathEvaluator evaluator = (ITSPPathEvaluator)Evaluator;
-      //  evaluator.PermutationParameter.ActualName = SolutionCreator.PermutationParameter.ActualName;
-      //  evaluator.PermutationParameter.Hidden = true;
-      //}
-      //if (Evaluator is ITSPCoordinatesPathEvaluator) {
-      //  ITSPCoordinatesPathEvaluator evaluator = (ITSPCoordinatesPathEvaluator)Evaluator;
-      //  evaluator.CoordinatesParameter.ActualName = CoordinatesParameter.Name;
-      //  evaluator.CoordinatesParameter.Hidden = true;
-      //  evaluator.DistanceMatrixParameter.ActualName = DistanceMatrixParameter.Name;
-      //  evaluator.DistanceMatrixParameter.Hidden = true;
-      //  evaluator.UseDistanceMatrixParameter.ActualName = UseDistanceMatrixParameter.Name;
-      //  evaluator.UseDistanceMatrixParameter.Hidden = true;
-      //}
-      //if (Evaluator is ITSPDistanceMatrixEvaluator) {
-      //  var evaluator = (ITSPDistanceMatrixEvaluator)Evaluator;
-      //  evaluator.DistanceMatrixParameter.ActualName = DistanceMatrixParameter.Name;
-      //  evaluator.DistanceMatrixParameter.Hidden = true;
-      //}
-    }
+  
     private void ParameterizeAnalyzers() {
       //if (BestTSPSolutionAnalyzer != null) {
       //  BestTSPSolutionAnalyzer.QualityParameter.ActualName = Evaluator.QualityParameter.ActualName;
@@ -309,20 +266,20 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
       //}
     }
     private void ParameterizeOperators() {
-      foreach (IPermutationCrossover op in Operators.OfType<IPermutationCrossover>()) {
-        op.ParentsParameter.ActualName = SolutionCreator.PermutationParameter.ActualName;
-        op.ParentsParameter.Hidden = true;
-        op.ChildParameter.ActualName = SolutionCreator.PermutationParameter.ActualName;
-        op.ChildParameter.Hidden = true;
-      }
-      foreach (IPermutationManipulator op in Operators.OfType<IPermutationManipulator>()) {
-        op.PermutationParameter.ActualName = SolutionCreator.PermutationParameter.ActualName;
-        op.PermutationParameter.Hidden = true;
-      }
-      foreach (IPermutationMoveOperator op in Operators.OfType<IPermutationMoveOperator>()) {
-        op.PermutationParameter.ActualName = SolutionCreator.PermutationParameter.ActualName;
-        op.PermutationParameter.Hidden = true;
-      }
+      //foreach (IPermutationCrossover op in Operators.OfType<IPermutationCrossover>()) {
+      //  op.ParentsParameter.ActualName = SolutionCreator.PermutationParameter.ActualName;
+      //  op.ParentsParameter.Hidden = true;
+      //  op.ChildParameter.ActualName = SolutionCreator.PermutationParameter.ActualName;
+      //  op.ChildParameter.Hidden = true;
+      //}
+      //foreach (IPermutationManipulator op in Operators.OfType<IPermutationManipulator>()) {
+      //  op.PermutationParameter.ActualName = SolutionCreator.PermutationParameter.ActualName;
+      //  op.PermutationParameter.Hidden = true;
+      //}
+      //foreach (IPermutationMoveOperator op in Operators.OfType<IPermutationMoveOperator>()) {
+      //  op.PermutationParameter.ActualName = SolutionCreator.PermutationParameter.ActualName;
+      //  op.PermutationParameter.Hidden = true;
+      //}
       //foreach (ITSPPathMoveEvaluator op in Operators.OfType<ITSPPathMoveEvaluator>()) {
       //  op.CoordinatesParameter.ActualName = CoordinatesParameter.Name;
       //  op.CoordinatesParameter.Hidden = true;
@@ -335,22 +292,22 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
       //  op.PermutationParameter.ActualName = SolutionCreator.PermutationParameter.ActualName;
       //  op.PermutationParameter.Hidden = true;
       //}
-      foreach (IPermutationMultiNeighborhoodShakingOperator op in Operators.OfType<IPermutationMultiNeighborhoodShakingOperator>()) {
-        op.PermutationParameter.ActualName = SolutionCreator.PermutationParameter.ActualName;
-        op.PermutationParameter.Hidden = true;
-      }
-      foreach (ISingleObjectiveImprovementOperator op in Operators.OfType<ISingleObjectiveImprovementOperator>()) {
-        op.SolutionParameter.ActualName = SolutionCreator.PermutationParameter.ActualName;
-        op.SolutionParameter.Hidden = true;
-      }
-      foreach (ISingleObjectivePathRelinker op in Operators.OfType<ISingleObjectivePathRelinker>()) {
-        op.ParentsParameter.ActualName = SolutionCreator.PermutationParameter.ActualName;
-        op.ParentsParameter.Hidden = true;
-      }
-      foreach (ISolutionSimilarityCalculator op in Operators.OfType<ISolutionSimilarityCalculator>()) {
-        op.SolutionVariableName = SolutionCreator.PermutationParameter.ActualName;
-        op.QualityVariableName = Evaluator.QualityParameter.ActualName;
-      }
+      //foreach (IPermutationMultiNeighborhoodShakingOperator op in Operators.OfType<IPermutationMultiNeighborhoodShakingOperator>()) {
+      //  op.PermutationParameter.ActualName = SolutionCreator.PermutationParameter.ActualName;
+      //  op.PermutationParameter.Hidden = true;
+      //}
+      //foreach (ISingleObjectiveImprovementOperator op in Operators.OfType<ISingleObjectiveImprovementOperator>()) {
+      //  op.SolutionParameter.ActualName = SolutionCreator.PermutationParameter.ActualName;
+      //  op.SolutionParameter.Hidden = true;
+      //}
+      //foreach (ISingleObjectivePathRelinker op in Operators.OfType<ISingleObjectivePathRelinker>()) {
+      //  op.ParentsParameter.ActualName = SolutionCreator.PermutationParameter.ActualName;
+      //  op.ParentsParameter.Hidden = true;
+      //}
+      //foreach (ISolutionSimilarityCalculator op in Operators.OfType<ISolutionSimilarityCalculator>()) {
+      //  op.SolutionVariableName = SolutionCreator.PermutationParameter.ActualName;
+      //  op.QualityVariableName = Evaluator.QualityParameter.ActualName;
+      //}
     }
     #endregion
 
