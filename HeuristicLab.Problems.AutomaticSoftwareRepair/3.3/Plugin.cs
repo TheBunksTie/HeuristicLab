@@ -26,22 +26,25 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
   /// <summary>
   /// Plugin class for HeuristicLab.Problems.AutomaticSoftwareRepair plugin
   /// </summary>
-  [Plugin ("HeuristicLab.Problems.AutomaticSoftwareRepair", "3.3.15.15587")]
+  [Plugin ("HeuristicLab.Problems.AutomaticSoftwareRepair", "3.3.0.0")]
   [PluginFile ("HeuristicLab.Problems.AutomaticSoftwareRepair-3.3.dll", PluginFileType.Assembly)]
-  [PluginDependency ("HeuristicLab.Analysis", "3.3")]
+  [PluginFile ("Microsoft.CodeAnalysis.Analyzers.dll", PluginFileType.Assembly)]
+  [PluginFile ("Microsoft.CodeAnalysis.CSharp.Analyzers.dll", PluginFileType.Assembly)]
+  [PluginFile ("Microsoft.CodeAnalysis.dll", PluginFileType.Assembly)]
+  [PluginFile ("Microsoft.CodeAnalysis.CSharp.dll", PluginFileType.Assembly)]
+  [PluginFile ("nunit.framework.dll", PluginFileType.Assembly)]
+  [PluginFile ("System.Collections.Immutable.dll", PluginFileType.Assembly)]
+  [PluginFile ("System.Reflection.Metadata.dll", PluginFileType.Assembly)]
   [PluginDependency ("HeuristicLab.Collections", "3.3")]
   [PluginDependency ("HeuristicLab.Common", "3.3")]
   [PluginDependency ("HeuristicLab.Common.Resources", "3.3")]
   [PluginDependency ("HeuristicLab.Core", "3.3")]
   [PluginDependency ("HeuristicLab.Data", "3.3")]
-  [PluginDependency ("HeuristicLab.Encodings.PermutationEncoding", "3.3")]
   [PluginDependency ("HeuristicLab.Operators", "3.3")]
   [PluginDependency ("HeuristicLab.Optimization", "3.3")]
-  [PluginDependency ("HeuristicLab.Optimization.Operators", "3.3")]
   [PluginDependency ("HeuristicLab.Parameters", "3.3")]
   [PluginDependency ("HeuristicLab.Persistence", "3.3")]
   [PluginDependency ("HeuristicLab.Problems.Instances", "3.3")]
-  [PluginDependency ("System.Collections.Immutable", "3.3")]
   public class HeuristicLabProblemsAutomaticSoftwareRepairPlugin : PluginBase {
   }
 }

@@ -26,7 +26,6 @@ using System.Linq;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
 using HeuristicLab.Data;
-using HeuristicLab.Encodings.PermutationEncoding;
 using HeuristicLab.Optimization;
 using HeuristicLab.Parameters;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
@@ -37,8 +36,8 @@ using HeuristicLab.Problems.Instances;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
 
-  [Item("Autmatic Software Repair Problem (ASR)", "Represents a generic automatic software repair problem.")]
-  [Creatable(CreatableAttribute.Categories.CombinatorialProblems, Priority = 100)]
+  [Item("Automatic Software Repair Problem (ASR)", "Represents a generic automatic software repair problem.")]
+  [Creatable(CreatableAttribute.Categories.GeneticProgrammingProblems, Priority = 900)]
   [StorableClass]
   public class AutomaticSoftwareRepairProblem: SingleObjectiveHeuristicOptimizationProblem<IASREvaluator, IASRCreator>, IStorableContent {
 //      IProblemInstanceConsumer<ASRData> {
