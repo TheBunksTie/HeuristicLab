@@ -33,7 +33,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
   /// </summary>
   [Item("ASRManipulator", "A base class for manipulating automatic software repair solutions.")]
   [StorableClass]
-  public abstract class ASRManipulator : ASRSyntaxTreeOperator, IASRManipulator {
+  public abstract class ASRManipulator : ASROperator, IASRManipulator {
     private const string AsrSolutionProgramParameterName = "ASRSolutionProgram";
     private const string AsrManipulationProbabilityParameterName = "AsrManipulationProbability";
 
@@ -64,11 +64,11 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
       //  ASRSolutionProgramParameter.ActualValue = SimpleEncoding.ConvertFrom(solution, ProblemInstance);
       //}
 
-      Manipulate (RandomParameter.ActualValue, ASRSolutionProgramParameter.ActualValue as SolutionProgramEncoding);
+      Manipulate (RandomParameter.ActualValue, ASRSolutionProgramParameter.ActualValue as ASREncoding);
 
       return base.InstrumentedApply();
     }
 
-    protected abstract void Manipulate (IRandom random, SolutionProgramEncoding individual);
+    protected abstract void Manipulate (IRandom random, IASREncoding individual);
   }
 }

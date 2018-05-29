@@ -29,7 +29,7 @@ using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
   [Item("ASRCrossover", "Crosses ASR solutions.")]
   [StorableClass]
-  public abstract class ASRCrossover : ASRSyntaxTreeOperator, IASRCrossover {
+  public abstract class ASRCrossover : ASROperator, IASRCrossover {
     private const string parentsParameterName = "Parents";
     private const string childParameterName = "Child";
 

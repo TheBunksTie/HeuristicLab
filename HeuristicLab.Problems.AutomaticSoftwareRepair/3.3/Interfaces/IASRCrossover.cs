@@ -24,7 +24,7 @@ using HeuristicLab.Core;
 using HeuristicLab.Optimization;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces {
-  public interface IASRCrossover : IASRSyntaxTreeOperator, ICrossover {
+  public interface IASRCrossover : IASROperator, ICrossover {
     ILookupParameter<ItemArray<IASREncoding>> ParentsParameter { get; }
     ILookupParameter<IASREncoding> ChildParameter { get; }
   }

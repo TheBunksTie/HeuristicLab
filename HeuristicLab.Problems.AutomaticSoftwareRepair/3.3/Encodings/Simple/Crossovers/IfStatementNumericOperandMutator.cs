@@ -50,16 +50,16 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple.Crossov
     }
 
     protected override IASREncoding Crossover (IRandom random, IASREncoding parent1, IASREncoding parent2) {
-      var tree1 = parent1.GetSolutionPrograms().First().TreeRepresentation.Tree.GetRoot ();
+      var tree1 = parent1.SolutionProgram.TreeRepresentation.GetRoot ();
       var ifStatements1 = tree1.DescendantNodesAndSelf ().OfType<IfStatementSyntax> ().ToArray ();
-      var ifStatements2 = parent2.GetSolutionPrograms().First().TreeRepresentation.Tree.GetRoot ().DescendantNodesAndSelf ().OfType<IfStatementSyntax> ().ToArray ();
+      var ifStatements2 = parent2.SolutionProgram.TreeRepresentation.GetRoot ().DescendantNodesAndSelf ().OfType<IfStatementSyntax> ().ToArray ();
 
       var selectedIfStat1 = ifStatements1[random.Next (ifStatements1.Length)];
       var selectedIfStat2 = ifStatements2[random.Next (ifStatements2.Length)];
 
       var syntaxTree = tree1.ReplaceNode (selectedIfStat1, selectedIfStat2).SyntaxTree;
 
-      parent1.GetSolutionPrograms().First().TreeRepresentation.Tree = syntaxTree;
+      parent1.SolutionProgram.TreeRepresentation = syntaxTree;
 
       return parent1;
     }

@@ -19,7 +19,7 @@
  */
 #endregion
 
-using System.IO;
+using System;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
 using HeuristicLab.Data;
@@ -63,10 +63,10 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple.Creator
       return base.InstrumentedApply();
     }
 
-    public SimpleEncoding CreateSolution (IASRProblemInstance instance) {
-      var result = new SimpleEncoding(instance);
+    public IASREncoding CreateSolution (IASRProblemInstance instance) {
+      var result = new NetCompilerPlatformBasedEncoding(instance);
 
-      result.SolutionPrograms.Add(new SolutionProgram(SourceCode));
+      result.SolutionProgram = new SolutionProgram(SourceCode);
 
       return result;
     }

@@ -28,8 +28,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
   /// </summary>
   [Plugin ("HeuristicLab.Problems.AutomaticSoftwareRepair", "3.3.0.0")]
   [PluginFile ("HeuristicLab.Problems.AutomaticSoftwareRepair-3.3.dll", PluginFileType.Assembly)]
-  [PluginFile ("Microsoft.CodeAnalysis.Analyzers.dll", PluginFileType.Assembly)]
-  [PluginFile ("Microsoft.CodeAnalysis.CSharp.Analyzers.dll", PluginFileType.Assembly)]
   [PluginFile ("Microsoft.CodeAnalysis.dll", PluginFileType.Assembly)]
   [PluginFile ("Microsoft.CodeAnalysis.CSharp.dll", PluginFileType.Assembly)]
   [PluginFile ("nunit.framework.dll", PluginFileType.Assembly)]

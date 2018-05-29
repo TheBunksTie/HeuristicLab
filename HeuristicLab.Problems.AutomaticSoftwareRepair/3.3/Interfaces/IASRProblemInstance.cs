@@ -22,6 +22,7 @@
 using System;
 using System.Collections.Generic;
 using HeuristicLab.Core;
+using HeuristicLab.Data;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces
 {
@@ -30,6 +31,10 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces
     IASREvaluator SolutionEvaluator { get; set; }
     IEnumerable<IOperator> Operators { get; }
 
-    event EventHandler EvaluationChanged;
+    //event EventHandler EvaluationChanged;
+
+    StringValue CorrectnessSpecification { get;  }
+    StringValue BuggyProgram { get; }
+
   }
 }

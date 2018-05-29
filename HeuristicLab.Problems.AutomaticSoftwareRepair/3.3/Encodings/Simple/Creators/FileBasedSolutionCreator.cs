@@ -63,11 +63,11 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple.Creator
       return base.InstrumentedApply();
     }
 
-    public SimpleEncoding CreateSolution (IASRProblemInstance instance) {
-      var result = new SimpleEncoding(instance);
+    public NetCompilerPlatformBasedEncoding CreateSolution (IASRProblemInstance instance) {
+      var result = new NetCompilerPlatformBasedEncoding(instance);
 
       var sourceFileContent = File.ReadAllText(SourceFile.Value);
-      result.SolutionPrograms.Add(new SolutionProgram(sourceFileContent));
+      result.SolutionProgram = new SolutionProgram (sourceFileContent);
 
       return result;
 

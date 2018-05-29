@@ -25,6 +25,7 @@ using HeuristicLab.Common;
 using HeuristicLab.Core;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General;
+using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
@@ -49,18 +50,18 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple.Manipul
         : base(original, cloner) {
     }
 
-    protected override void Manipulate(IRandom random, SolutionProgramEncoding individual) {
+    protected override void Manipulate(IRandom random, IASREncoding individual) {
       // TODO: should this be done outside or by infrastructure
       if (random.NextDouble() <=  ASRManipulationProbability.ActualValue.Value)
         return;
 
       var mutator = new SyntaxTreeRewriter(random);
 
-      var tree = individual.SolutionPrograms.First ();
+      var tree = individual.SolutionProgram;
 
-      var mutatedTree = mutator.MutateTree (tree.TreeRepresentation.Tree);
+      var mutatedTree = mutator.MutateTree (tree.TreeRepresentation);
 
-      individual.SolutionPrograms.Add (new SolutionProgram (new NetCompilerPlatformBasedSyntaxTree (mutatedTree)));
+      individual.SolutionProgram = new SolutionProgram (mutatedTree);
     }
 
     private sealed class SyntaxTreeRewriter : CSharpSyntaxRewriter {

@@ -42,9 +42,11 @@
   <ItemGroup>
     <Reference Include="Microsoft.CodeAnalysis, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.CodeAnalysis.Common.1.3.2\lib\net45\Microsoft.CodeAnalysis.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Microsoft.CodeAnalysis.CSharp, Version=1.3.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.CodeAnalysis.CSharp.1.3.2\lib\net45\Microsoft.CodeAnalysis.CSharp.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="nunit.framework, Version=3.10.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NUnit.3.10.1\lib\net45\nunit.framework.dll</HintPath>
@@ -52,12 +54,15 @@
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.1.37.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Collections.Immutable.1.1.37\lib\dotnet\System.Collections.Immutable.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Reflection.Metadata, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Reflection.Metadata.1.2.0\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProblemInstances\ASRProblemInstance.cs" />
     <Compile Include="AutomaticSoftwareRepairProblem.cs" />
     <Compile Include="Encodings\ASROperator.cs" />
     <Compile Include="Encodings\General\ASRCrossover.cs" />
@@ -65,13 +70,11 @@
     <Compile Include="Encodings\General\ASRManipulator.cs" />
     <Compile Include="Encodings\Simple\Crossovers\IfStatementNumericOperandMutator.cs" />
     <Compile Include="Encodings\Simple\Manipulators\IfStatementNumericOperandMutator.cs" />
-    <Compile Include="Encodings\General\SolutionProgramEncoding.cs" />
+    <Compile Include="Encodings\General\ASREncoding.cs" />
     <Compile Include="Interfaces\IASRCrossover.cs" />
-    <Compile Include="Interfaces\IASRSyntaxTree.cs" />
-    <Compile Include="Interfaces\IASRSyntaxTreeOperator.cs" />
     <Compile Include="Encodings\Simple\Creators\TextBasedSolutionCreator.cs" />
     <Compile Include="Encodings\Simple\Creators\FileBasedSolutionCreator.cs" />
-    <Compile Include="Encodings\Simple\SimpleEncoding.cs" />
+    <Compile Include="Encodings\Simple\NetCompilerPlatformBasedEncoding.cs" />
     <Compile Include="Evaluators\ASRNUnitBasedEvaluator.cs" />
     <Compile Include="Evaluators\ASRTestSuiteBasedEvaluator.cs" />
     <Compile Include="Evaluators\ASREvaluator.cs" />
@@ -82,12 +85,14 @@
     <Compile Include="Interfaces\IASRManipulator.cs" />
     <Compile Include="Interfaces\IASROperator.cs" />
     <Compile Include="Interfaces\IASRProblemInstance.cs" />
-    <Compile Include="Encodings\NetCompilerPlatformBasedSyntaxTree.cs" />
     <None Include="app.config" />
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Plugin.cs.frame" />
     <Compile Include="Plugin.cs" />
     <None Include="Properties\AssemblyInfo.cs.frame" />
+    <Compile Include="ProblemInstances\SingleSmallSourceCodeASRProblemInstance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SolutionProgram.cs" />
   </ItemGroup>

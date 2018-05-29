@@ -20,12 +20,10 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using HeuristicLab.Core;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces {
   public interface IASREncoding : IItem {
-    IList<SolutionProgram> GetSolutionPrograms();
-    int GetSolutionProgramIndex(SolutionProgram solutionProgram);
+    SolutionProgram SolutionProgram {get; set; }
   }
 }

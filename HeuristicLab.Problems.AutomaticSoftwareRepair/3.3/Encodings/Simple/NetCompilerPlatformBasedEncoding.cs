@@ -27,24 +27,27 @@ using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple {
-  [Item ("SimpleEncoding", "Represents a simple encoding of ASR solutions. It is implemented in a prototypical way loosely based on Le Goues et. al (2012): GenProg:...")]
+  [Item ("NetCompilerPlatformBasedEncoding", "Represents a simple encoding of ASR solutions. It is implemented in a prototypical way loosely based on Le Goues et. al (2012): GenProg:...")]
   [StorableClass]
-  public class SimpleEncoding : SolutionProgramEncoding {
-    public SimpleEncoding(IASRProblemInstance instance)
+  public class NetCompilerPlatformBasedEncoding : ASREncoding {
+    public NetCompilerPlatformBasedEncoding(IASRProblemInstance instance)
         : base(instance) {
     }
 
     [StorableConstructor]
-    protected SimpleEncoding(bool serializing)
+    protected NetCompilerPlatformBasedEncoding(bool serializing)
         : base(serializing) {
     }
 
     public override IDeepCloneable Clone(Cloner cloner) {
-      return new SimpleEncoding(this, cloner);
+      return new NetCompilerPlatformBasedEncoding(this, cloner);
     }
 
-    protected SimpleEncoding(SimpleEncoding original, Cloner cloner)
+    protected NetCompilerPlatformBasedEncoding(NetCompilerPlatformBasedEncoding original, Cloner cloner)
         : base(original, cloner) {
     }
+
+
+
   }
 }
