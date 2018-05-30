@@ -22,7 +22,7 @@
 using System;
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances
 {
-  public class IntroClassInstanceProider : SectionStructuredFileBasedInstanceProvider {
+  public class IntroClassInstanceProvider : SectionStructuredFileBasedInstanceProvider {
     public override string Name {
       get { return "IntroClass for C#"; }
     }

@@ -45,10 +45,11 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
   {
     private const string c_evaluationClassTemplate = @"using System;
 using System.Linq;
+using System.Collections.Generic;
 using NUnit;
 using NUnit.Framework;
 
-namespace GeneticImprovement.Evaluation
+namespace ASRNUnitBasedEvaluator.Evaluation
 {{
   public class EvaluationClass
   {{
