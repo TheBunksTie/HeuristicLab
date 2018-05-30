@@ -22,6 +22,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
@@ -43,6 +44,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
   public sealed class ASRNUnitBasedEvaluator : ASRTestSuiteBasedEvaluator
   {
     private const string c_evaluationClassTemplate = @"using System;
+using System.Linq;
 using NUnit;
 using NUnit.Framework;
 
@@ -63,8 +65,9 @@ namespace GeneticImprovement.Evaluation
 
     private static readonly MetadataReference coreLibReference = MetadataReference.CreateFromFile (typeof (object).Assembly.Location);
     private static readonly MetadataReference nunitReference = MetadataReference.CreateFromFile (typeof (TestFixtureAttribute).Assembly.Location);
+    private static readonly MetadataReference enumerableReference = MetadataReference.CreateFromFile (typeof (Enumerable).Assembly.Location);
 
-    private static readonly Dictionary<string, object> testSettings = new Dictionary<string, object>();
+    private readonly Dictionary<string, object> testSettings = new Dictionary<string, object>();
     private static readonly NullTestListener nullTestListener = new NullTestListener ();
     private static readonly DefaultTestAssemblyBuilder defaultTestAssemblyBuilder = new DefaultTestAssemblyBuilder ();
 
@@ -116,8 +119,8 @@ namespace GeneticImprovement.Evaluation
       var comp = CSharpCompilation.Create (
           "ASRNUnitBasedEvaluator_" + Guid.NewGuid ().ToString ("D"),
           syntaxTrees: new[] { tree },
-          references: new[] { coreLibReference, nunitReference },
-          options: new CSharpCompilationOptions (OutputKind.DynamicallyLinkedLibrary, optimizationLevel: OptimizationLevel.Release));
+          references: new[] { coreLibReference, nunitReference, enumerableReference },
+          options: new CSharpCompilationOptions (OutputKind.DynamicallyLinkedLibrary));
 
       var evaluationAssembly = EmitToAssembly (comp);
       return evaluationAssembly;

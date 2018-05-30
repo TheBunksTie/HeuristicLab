@@ -32,7 +32,7 @@ using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances
 {
-  [Item("SingleSmallSourceCodeASRProblemInstance", "Represents a single depot VRP instance.")]
+  [Item("SingleSmallSourceCodeASRProblemInstance", "Represents a small single source file based ASR instance.")]
   [StorableClass]
   public sealed class SingleSmallSourceCodeASRProblemInstance : ASRProblemInstance {
 

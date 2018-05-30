@@ -20,20 +20,27 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using HeuristicLab.Core;
-using HeuristicLab.Data;
-
-namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces
+namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances
 {
-  // from IVRPProblemInstance
-  public interface IASRProblemInstance : IParameterizedNamedItem {
-    IASREvaluator SolutionEvaluator { get; set; }
-    IEnumerable<IOperator> Operators { get; }
+  public class IntroClassInstanceProider : SectionStructuredFileBasedInstanceProvider {
+    public override string Name {
+      get { return "IntroClass for C#"; }
+    }
 
-    //event EventHandler EvaluationChanged;
+    public override string Description {
+      get { return "Manual C# port of subset of IntroClass for Java buggy programs"; }
+    }
 
-    StringValue CorrectnessSpecification { get;  }
-    StringValue ProductionCode { get; }
+    public override Uri WebLink {
+      get { return new Uri("https://github.com/Spirals-Team/IntroClassJava"); }
+    }
+
+    public override string ReferencePublication {
+      get { return "Durieux, Monperrus, 2016 \"IntroClassJava: A Benchmark of  297 Small and Buggy Java Programs\", in Technical Report, University Lille 1"; }
+    }
+
+    protected override string FileName {
+      get { return "IntroClass"; }
+    }
   }
 }

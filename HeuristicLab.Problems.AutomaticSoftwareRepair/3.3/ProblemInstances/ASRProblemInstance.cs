@@ -69,7 +69,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
       get { return CorrectnessSpecificationParameter.Value; }
       set { CorrectnessSpecificationParameter.Value = value; }
     }
-    public StringValue BuggyProgram {
+    public StringValue ProductionCode {
       get { return BuggyProgramParameter.Value; }
       set { BuggyProgramParameter.Value = value; }
     }

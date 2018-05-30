@@ -20,20 +20,29 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using HeuristicLab.Core;
-using HeuristicLab.Data;
 
-namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces
-{
-  // from IVRPProblemInstance
-  public interface IASRProblemInstance : IParameterizedNamedItem {
-    IASREvaluator SolutionEvaluator { get; set; }
-    IEnumerable<IOperator> Operators { get; }
+namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
+  /// <summary>
+  /// Describes instances of the Automatic Software Repair Problem (ASR).
+  /// </summary>
+  public class ASRData : IASRData {
+    /// <summary>
+    /// The name of the instance
+    /// </summary>
+    public string Name { get; set; }
+    /// <summary>
+    /// Optional! The description of the instance
+    /// </summary>
+    public string Description { get; set; }
 
-    //event EventHandler EvaluationChanged;
+    /// <summary>
+    /// The buggy prodution code to be repaired.
+    /// </summary>
+    public string ProductionCode { get; set; }
 
-    StringValue CorrectnessSpecification { get;  }
-    StringValue ProductionCode { get; }
+    /// <summary>
+    /// The correctness specification.
+    /// </summary>
+    public string CorrectnessSpecification { get; set; }
   }
 }

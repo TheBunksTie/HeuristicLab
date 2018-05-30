@@ -20,20 +20,14 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using HeuristicLab.Core;
-using HeuristicLab.Data;
 
-namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces
+namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances
 {
-  // from IVRPProblemInstance
-  public interface IASRProblemInstance : IParameterizedNamedItem {
-    IASREvaluator SolutionEvaluator { get; set; }
-    IEnumerable<IOperator> Operators { get; }
+  public interface IASRInstanceProvider<TData> where TData : IASRData {
+    bool CanImportData { get; }
+    TData Import(string instancePath);
 
-    //event EventHandler EvaluationChanged;
-
-    StringValue CorrectnessSpecification { get;  }
-    StringValue ProductionCode { get; }
+    bool CanExportData { get; }
+    void Export(TData instance, string path);
   }
 }

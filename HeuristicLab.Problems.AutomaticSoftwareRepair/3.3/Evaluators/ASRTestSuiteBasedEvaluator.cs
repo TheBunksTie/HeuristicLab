@@ -34,22 +34,22 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
   [StorableClass]
   [Item("ASRTestSuiteBasedEvaluator", "A base class for operators which evaluate ASR solutions agains a given test suite.")]
   public abstract class ASRTestSuiteBasedEvaluator : ASREvaluator {
-    
-    //private object locker = new object();
+    private const string ProductionCodeParameterName = "ProductionCode";
+    private const string CorrectnesSpecificationParameterName = "CorrectnessSpecification";
 
     public ILookupParameter<StringValue> ProductionCode {
-      get { return (ILookupParameter<StringValue>)Parameters["ProductionCode"]; }
+      get { return (ILookupParameter<StringValue>)Parameters[ProductionCodeParameterName]; }
     }
     public ILookupParameter<StringValue> TestCode {
-      get { return (ILookupParameter<StringValue>)Parameters["TestCode"]; }
+      get { return (ILookupParameter<StringValue>)Parameters[CorrectnesSpecificationParameterName]; }
     }
 
     [StorableConstructor]
     protected ASRTestSuiteBasedEvaluator(bool deserializing) : base(deserializing) { }
     protected ASRTestSuiteBasedEvaluator(ASRTestSuiteBasedEvaluator original, Cloner cloner) : base(original, cloner) { }
     protected ASRTestSuiteBasedEvaluator() {
-      Parameters.Add(new LookupParameter<StringValue>("ProductionCode", "The ASR solution given in string representation which should be evaluated."));
-      Parameters.Add(new LookupParameter<StringValue>("TestCode", "The test suite acting as an orcale for correctness."));
+      Parameters.Add(new LookupParameter<StringValue>(ProductionCodeParameterName, "The ASR solution given in string representation which should be evaluated."));
+      Parameters.Add(new LookupParameter<StringValue>(CorrectnesSpecificationParameterName, "The test suite acting as an orcale for correctness."));
     }
 
     //[StorableHook(HookType.AfterDeserialization)]

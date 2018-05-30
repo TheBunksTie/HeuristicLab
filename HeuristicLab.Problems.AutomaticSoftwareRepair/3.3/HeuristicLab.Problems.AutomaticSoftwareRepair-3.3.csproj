@@ -56,12 +56,16 @@
       <HintPath>..\..\packages\System.Collections.Immutable.1.1.37\lib\dotnet\System.Collections.Immutable.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Reflection.Metadata, Version=1.2.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Reflection.Metadata.1.2.0\lib\portable-net45+win8\System.Reflection.Metadata.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ProblemInstances\ASRData.cs" />
+    <Compile Include="ProblemInstances\ASRDataDescriptor.cs" />
+    <Compile Include="ProblemInstances\ASRInstanceProvider.cs" />
     <Compile Include="ProblemInstances\ASRProblemInstance.cs" />
     <Compile Include="AutomaticSoftwareRepairProblem.cs" />
     <Compile Include="Encodings\ASROperator.cs" />
@@ -91,7 +95,12 @@
     </None>
     <None Include="Plugin.cs.frame" />
     <Compile Include="Plugin.cs" />
+    <EmbeddedResource Include="ProblemInstances\Data\IntroClass.zip" />
     <None Include="Properties\AssemblyInfo.cs.frame" />
+    <Compile Include="ProblemInstances\IASRData.cs" />
+    <Compile Include="ProblemInstances\IASRInstanceProvider.cs" />
+    <Compile Include="ProblemInstances\IntroClassInstanceProider.cs" />
+    <Compile Include="ProblemInstances\SectionStructuredFileBasedInstanceProvider.cs" />
     <Compile Include="ProblemInstances\SingleSmallSourceCodeASRProblemInstance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SolutionProgram.cs" />

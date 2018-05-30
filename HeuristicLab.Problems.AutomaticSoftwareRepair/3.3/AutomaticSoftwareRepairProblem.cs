@@ -32,6 +32,7 @@ using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple.Creators;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
+using HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances;
 using HeuristicLab.Problems.Instances;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
@@ -39,49 +40,29 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
   [Item("Automatic Software Repair Problem (ASR)", "Represents a generic automatic software repair problem.")]
   [Creatable(CreatableAttribute.Categories.GeneticProgrammingProblems, Priority = 900)]
   [StorableClass]
-  public class AutomaticSoftwareRepairProblem: SingleObjectiveHeuristicOptimizationProblem<IASREvaluator, IASRCreator>, IStorableContent {
-//      IProblemInstanceConsumer<ASRData> {
+  public class AutomaticSoftwareRepairProblem: SingleObjectiveHeuristicOptimizationProblem<IASREvaluator, IASRCreator>, IStorableContent, IProblemInstanceConsumer<ASRData> {
 
     public string Filename { get; set; }
 
     #region Parameter Properties
-    //public OptionalValueParameter<DoubleMatrix> CoordinatesParameter {
-    //  get { return (OptionalValueParameter<DoubleMatrix>)Parameters["Coordinates"]; }
-    //}
-    //public OptionalValueParameter<DistanceMatrix> DistanceMatrixParameter {
-    //  get { return (OptionalValueParameter<DistanceMatrix>)Parameters["DistanceMatrix"]; }
-    //}
-    //public ValueParameter<BoolValue> UseDistanceMatrixParameter {
-    //  get { return (ValueParameter<BoolValue>)Parameters["UseDistanceMatrix"]; }
-    //}
-    //public OptionalValueParameter<Permutation> BestKnownSolutionParameter {
-    //  get { return (OptionalValueParameter<Permutation>)Parameters["BestKnownSolution"]; }
-    //}
+    public ValueParameter<StringValue> CorrectnessSpecificationParameter {
+      get { return (ValueParameter<StringValue>)Parameters["CorrectnessSpecification"]; }
+    }
+    public ValueParameter<StringValue> ProductionCodeParameter {
+      get { return (ValueParameter<StringValue>)Parameters["ProductionCode"]; }
+    }
     #endregion
 
     #region Properties
-    //public DoubleMatrix Coordinates {
-    //  get { return CoordinatesParameter.Value; }
-    //  set { CoordinatesParameter.Value = value; }
-    //}
-    //public DistanceMatrix DistanceMatrix {
-    //  get { return DistanceMatrixParameter.Value; }
-    //  set { DistanceMatrixParameter.Value = value; }
-    //}
-    //public BoolValue UseDistanceMatrix {
-    //  get { return UseDistanceMatrixParameter.Value; }
-    //  set { UseDistanceMatrixParameter.Value = value; }
-    //}
-    //public Permutation BestKnownSolution {
-    //  get { return BestKnownSolutionParameter.Value; }
-    //  set { BestKnownSolutionParameter.Value = value; }
-    //}
-    //private BestTSPSolutionAnalyzer BestTSPSolutionAnalyzer {
-    //  get { return Operators.OfType<BestTSPSolutionAnalyzer>().FirstOrDefault(); }
-    //}
-    //private TSPAlleleFrequencyAnalyzer TSPAlleleFrequencyAnalyzer {
-    //  get { return Operators.OfType<TSPAlleleFrequencyAnalyzer>().FirstOrDefault(); }
-    //}
+    public StringValue CorrectnessSpecification {
+      get { return CorrectnessSpecificationParameter.Value; }
+      set { CorrectnessSpecificationParameter.Value = value; }
+    }
+
+    public StringValue ProductionCode {
+      get { return ProductionCodeParameter.Value; }
+      set { ProductionCodeParameter.Value = value; }
+    }
     #endregion
 
     [StorableConstructor]
@@ -97,24 +78,11 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
 
     public AutomaticSoftwareRepairProblem()
       : base(new ASRNUnitBasedEvaluator(), new TextBasedSolutionCreator()) {
-      //Parameters.Add(new OptionalValueParameter<DoubleMatrix>("Coordinates", "The x- and y-Coordinates of the cities."));
-      //Parameters.Add(new OptionalValueParameter<DistanceMatrix>("DistanceMatrix", "The matrix which contains the distances between the cities."));
-      //Parameters.Add(new ValueParameter<BoolValue>("UseDistanceMatrix", "True if the coordinates based evaluators should calculate the distance matrix from the coordinates and use it for evaluation similar to the distance matrix evaluator, otherwise false.", new BoolValue(true)));
-      //Parameters.Add(new OptionalValueParameter<Permutation>("BestKnownSolution", "The best known solution of this TSP instance."));
-
-      Maximization.Value = false;
-      MaximizationParameter.Hidden = true;
-      //UseDistanceMatrixParameter.Hidden = true;
-      //DistanceMatrixParameter.ReactOnValueToStringChangedAndValueItemImageChanged = false;
-
-      //Coordinates = new DoubleMatrix(new double[,] {
-      //  { 100, 100 }, { 100, 200 }, { 100, 300 }, { 100, 400 },
-      //  { 200, 100 }, { 200, 200 }, { 200, 300 }, { 200, 400 },
-      //  { 300, 100 }, { 300, 200 }, { 300, 300 }, { 300, 400 },
-      //  { 400, 100 }, { 400, 200 }, { 400, 300 }, { 400, 400 }
-      //});
-
-      //SolutionCreator.PermutationParameter.ActualName = "TSPTour";
+      Parameters.Add(new ValueParameter<StringValue>("CorrectnessSpecification", "The correctness specification for the production code."));
+      Parameters.Add(new ValueParameter<StringValue>("ProductionCode", "The buggy production code to be repaired."));
+     
+      Maximization.Value = true;
+      MaximizationParameter.Hidden = true; 
       Evaluator.QualityParameter.ActualName = "ASRProgramSolutionQuality";
 
       InitializeOperators();
@@ -395,6 +363,11 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
       //  throw new InvalidOperationException("Cannot calculate solution quality, evaluator type is unknown.");
       //}
       //BestKnownQuality = new DoubleValue(quality);
+    }
+
+    public void Load (ASRData data) {
+      CorrectnessSpecification.Value = data.CorrectnessSpecification;
+      ProductionCode.Value = data.ProductionCode;
     }
   }
 }

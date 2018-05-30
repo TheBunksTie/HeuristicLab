@@ -32,13 +32,14 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple.Creator
   [Item("TextBasedSolutionCreator", "Creates a ASR solution from source code as text.")]
   [StorableClass]
   public sealed class TextBasedSolutionCreator :  ASRCreator {
-    
-    public ILookupParameter<StringValue> SourceCodeParameter {
-      get { return (LookupParameter<StringValue>)Parameters["SourceCode"]; }
+    private const string SourceScodeParameterName = "SourceCode";
+
+    public IValueParameter<StringValue> SourceCodeParameter {
+      get { return (ValueParameter<StringValue>)Parameters[SourceScodeParameterName]; }
     }
 
     public string SourceCode {
-      get { return SourceCodeParameter.ActualValue.Value; }
+      get { return SourceCodeParameter.Value.Value; }
     }
 
     [StorableConstructor]
@@ -46,7 +47,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple.Creator
 
     public TextBasedSolutionCreator()
         : base() {
-      Parameters.Add(new LookupParameter<StringValue>("SourceCode", "The source code of the buggy program."));
+      Parameters.Add(new ValueParameter<StringValue>(SourceScodeParameterName, "The source code of the buggy program.", new StringValue()));
     }
 
     public override IDeepCloneable Clone(Cloner cloner) {
