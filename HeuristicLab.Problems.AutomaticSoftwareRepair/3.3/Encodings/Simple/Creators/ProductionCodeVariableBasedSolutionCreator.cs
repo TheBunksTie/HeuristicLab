@@ -29,32 +29,32 @@ using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General.Creators;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple.Creators {
-  [Item("TextBasedSolutionCreator", "Creates a ASR solution from source code as text.")]
+  [Item("ProductionCodeVariableBasedSolutionCreator", "Creates a ASR solution from production code stored in variable.")]
   [StorableClass]
-  public sealed class TextBasedSolutionCreator :  ASRCreator {
-    private const string SourceScodeParameterName = "SourceCode";
+  public sealed class ProductionCodeVariableBasedSolutionCreator :  ASRCreator {
+    private const string ProductionCodeParameterName = "ProductionCode";
 
-    public IValueParameter<StringValue> SourceCodeParameter {
-      get { return (ValueParameter<StringValue>)Parameters[SourceScodeParameterName]; }
+    public ILookupParameter<StringValue> SourceCodeParameter {
+      get { return (LookupParameter<StringValue>)Parameters[ProductionCodeParameterName]; }
     }
 
     public string SourceCode {
-      get { return SourceCodeParameter.Value.Value; }
+      get { return SourceCodeParameter.ActualValue.Value; }
     }
 
     [StorableConstructor]
-    private TextBasedSolutionCreator(bool deserializing) : base(deserializing) { }
+    private ProductionCodeVariableBasedSolutionCreator(bool deserializing) : base(deserializing) { }
 
-    public TextBasedSolutionCreator()
+    public ProductionCodeVariableBasedSolutionCreator()
         : base() {
-      Parameters.Add(new ValueParameter<StringValue>(SourceScodeParameterName, "The source code of the buggy program.", new StringValue()));
+      Parameters.Add(new LookupParameter<StringValue>(ProductionCodeParameterName, "The source code of the buggy program."));
     }
 
     public override IDeepCloneable Clone(Cloner cloner) {
-      return new TextBasedSolutionCreator(this, cloner);
+      return new ProductionCodeVariableBasedSolutionCreator(this, cloner);
     }
 
-    private TextBasedSolutionCreator(TextBasedSolutionCreator original, Cloner cloner)
+    private ProductionCodeVariableBasedSolutionCreator(ProductionCodeVariableBasedSolutionCreator original, Cloner cloner)
         : base(original, cloner) {
     }
 
@@ -65,10 +65,8 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple.Creator
     }
 
     public IASREncoding CreateSolution (IASRProblemInstance instance) {
-      var result = new NetCompilerPlatformBasedEncoding(instance);
-
-      result.SolutionProgram = new SolutionProgram(SourceCode);
-
+      var solutionProgram =  new SolutionProgram(SourceCode);
+      var result = new NetCompilerPlatformSyntaxTreeBasedEncoding(solutionProgram, instance);
       return result;
     }
   }

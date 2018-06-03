@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Encodings\Class1.cs" />
+    <Compile Include="Encodings\Simple\DiffPatchBasedEncoding.cs" />
     <Compile Include="ProblemInstances\ASRData.cs" />
     <Compile Include="ProblemInstances\ASRDataDescriptor.cs" />
     <Compile Include="ProblemInstances\ASRInstanceProvider.cs" />
@@ -77,9 +78,8 @@
     <Compile Include="Encodings\Simple\Manipulators\IfStatementNumericOperandMutator.cs" />
     <Compile Include="Encodings\General\ASREncoding.cs" />
     <Compile Include="Interfaces\IASRCrossover.cs" />
-    <Compile Include="Encodings\Simple\Creators\TextBasedSolutionCreator.cs" />
-    <Compile Include="Encodings\Simple\Creators\FileBasedSolutionCreator.cs" />
-    <Compile Include="Encodings\Simple\NetCompilerPlatformBasedEncoding.cs" />
+    <Compile Include="Encodings\Simple\Creators\ProductionCodeVariableBasedSolutionCreator.cs" />
+    <Compile Include="Encodings\Simple\NetCompilerPlatformSyntaxTreeBasedEncoding.cs" />
     <Compile Include="Evaluators\ASRNUnitBasedEvaluator.cs" />
     <Compile Include="Evaluators\ASRTestSuiteBasedEvaluator.cs" />
     <Compile Include="Evaluators\ASREvaluator.cs" />

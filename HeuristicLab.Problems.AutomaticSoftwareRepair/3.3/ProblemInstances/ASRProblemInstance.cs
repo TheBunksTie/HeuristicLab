@@ -33,10 +33,12 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
   [Item ("ASRProblemInstance", "Represents a ASR instance.")]
   [StorableClass]
   public abstract class ASRProblemInstance : ParameterizedNamedItem, IASRProblemInstance, IStatefulItem {
+    private const string CorrectnessSpecificationParameterName = "CorrectnessSpecification";
+    private const string ProductionCodeParameterName = "ProductionCode";
 
     IASREvaluator evaluator;
 
-    private object locker = new object();
+    private readonly object locker = new object();
 
     public IASREvaluator SolutionEvaluator {
       get {
@@ -59,10 +61,10 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
     }
 
     protected ValueParameter<StringValue> CorrectnessSpecificationParameter {
-      get { return (ValueParameter<StringValue>)Parameters["CorrectnessSpecification"]; }
+      get { return (ValueParameter<StringValue>)Parameters[CorrectnessSpecificationParameterName]; }
     }
-    protected ValueParameter<StringValue> BuggyProgramParameter {
-      get { return (ValueParameter<StringValue>)Parameters["BuggyProgram"]; }
+    protected ValueParameter<StringValue> ProductionCodeParameter {
+      get { return (ValueParameter<StringValue>)Parameters[ProductionCodeParameterName]; }
     }
 
     public StringValue CorrectnessSpecification {
@@ -70,8 +72,8 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
       set { CorrectnessSpecificationParameter.Value = value; }
     }
     public StringValue ProductionCode {
-      get { return BuggyProgramParameter.Value; }
-      set { BuggyProgramParameter.Value = value; }
+      get { return ProductionCodeParameter.Value; }
+      set { ProductionCodeParameter.Value = value; }
     }
 
     
@@ -83,8 +85,8 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
 
     public ASRProblemInstance()
         : base() {
-      Parameters.Add(new ValueParameter<StringValue>("CorrectnessSpecification", "The correctness specification for the buggy program.", new StringValue()));
-      Parameters.Add(new ValueParameter<StringValue>("BuggyProgram", "The buggy program.", new StringValue()));
+      Parameters.Add(new ValueParameter<StringValue>(CorrectnessSpecificationParameterName, "The correctness specification for the buggy program.", new StringValue()));
+      Parameters.Add(new ValueParameter<StringValue>(ProductionCodeParameterName, "The buggy production code to repair.", new StringValue()));
       
       evaluator = Evaluator;
       AttachEventHandlers();

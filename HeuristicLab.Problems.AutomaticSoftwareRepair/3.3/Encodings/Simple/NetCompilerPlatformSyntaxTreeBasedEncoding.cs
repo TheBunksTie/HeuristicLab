@@ -27,27 +27,28 @@ using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple {
-  [Item ("NetCompilerPlatformBasedEncoding", "Represents a simple encoding of ASR solutions. It is implemented in a prototypical way loosely based on Le Goues et. al (2012): GenProg:...")]
+  [Item ("NetCompilerPlatformSyntaxTreeBasedEncoding", "Represents a simple encoding of ASR solutions. It is implemented in a prototypical way loosely based on Le Goues et. al (2012): GenProg:...")]
   [StorableClass]
-  public class NetCompilerPlatformBasedEncoding : ASREncoding {
-    public NetCompilerPlatformBasedEncoding(IASRProblemInstance instance)
+  public class NetCompilerPlatformSyntaxTreeBasedEncoding : ASREncoding {
+    public NetCompilerPlatformSyntaxTreeBasedEncoding(SolutionProgram solutionProgram, IASRProblemInstance instance)
         : base(instance) {
+      this.SolutionProgram = solutionProgram;
     }
 
     [StorableConstructor]
-    protected NetCompilerPlatformBasedEncoding(bool serializing)
+    protected NetCompilerPlatformSyntaxTreeBasedEncoding(bool serializing)
         : base(serializing) {
     }
 
     public override IDeepCloneable Clone(Cloner cloner) {
-      return new NetCompilerPlatformBasedEncoding(this, cloner);
+      return new NetCompilerPlatformSyntaxTreeBasedEncoding(this, cloner);
     }
 
-    protected NetCompilerPlatformBasedEncoding(NetCompilerPlatformBasedEncoding original, Cloner cloner)
+    protected NetCompilerPlatformSyntaxTreeBasedEncoding(NetCompilerPlatformSyntaxTreeBasedEncoding original, Cloner cloner)
         : base(original, cloner) {
+
+      SolutionProgram = original.SolutionProgram;
     }
-
-
-
+    public SolutionProgram SolutionProgram { get; set; }
   }
 }

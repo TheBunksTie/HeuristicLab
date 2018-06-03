@@ -33,43 +33,11 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
     //  get { return HeuristicLab.Common.Resources.VSImageLibrary.Class; }
     //}
 
-    //public IList<SolutionProgram> GetSolutionPrograms () {
-
-    //  var result = new List<SolutionProgram>();
-    //  foreach (var solutionProgram in SolutionPrograms)
-    //    result.Add(solutionProgram.Clone() as SolutionProgram);
-
-    //  return result;
-    //}
-
-    //public int GetSolutionProgramIndex (SolutionProgram solutionProgram) {
-    //  int index = -1;
-
-    //  for (int i = 0; i < SolutionPrograms.Count; i++) {
-    //    if (SolutionPrograms[i].IsEqual(solutionProgram)) {
-    //      index = i;
-    //      break;
-    //    }
-    //  }
-
-    //  return index;
-    //}
-
-    //[Storable]
-    //public ItemList<SolutionProgram> SolutionPrograms { get; set; }
-
     [Storable]
     protected IASRProblemInstance ProblemInstance { get; set; }
 
     public ASREncoding(IASRProblemInstance problemInstance) { 
       ProblemInstance = problemInstance;
-    }
-
-    public ASREncoding(SolutionProgram solutionProgram, IASRProblemInstance problemInstance)
-        : base() { 
-
-      this.SolutionProgram = solutionProgram;
-      this.ProblemInstance = problemInstance;
     }
 
     [StorableConstructor]
@@ -98,18 +66,14 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
         this.ProblemInstance = (IASRProblemInstance)cloner.Clone(original.ProblemInstance);
       else
         this.ProblemInstance = original.ProblemInstance;
-
-      SolutionProgram = original.SolutionProgram;
     }
 
     protected ASREncoding(string name)
       : base() {
     }
 
-    public SolutionProgram GetSolutionPrograms () {
-      throw new NotImplementedException();
-    }
-
-    public SolutionProgram SolutionProgram { get; set; }
+    //public SolutionProgram GetSolutionPrograms () {
+    //  throw new NotImplementedException();
+    //}
   }
 }

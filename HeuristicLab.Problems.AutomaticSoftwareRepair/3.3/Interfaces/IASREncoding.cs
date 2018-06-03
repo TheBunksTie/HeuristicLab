@@ -24,6 +24,5 @@ using HeuristicLab.Core;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces {
   public interface IASREncoding : IItem {
-    SolutionProgram SolutionProgram {get; set; }
   }
 }

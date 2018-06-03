@@ -37,6 +37,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances
   public sealed class SingleSmallSourceCodeASRProblemInstance : ASRProblemInstance {
 
     protected override IEnumerable<IOperator> GetOperators() {
+      //return base.GetOperators().Where(o => o is IASROperator).Cast<IOperator>();
       return ApplicationManager.Manager.GetInstances<IASROperator>().Cast<IOperator>();
     }
 
@@ -51,7 +52,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances
     }
 
     protected override IASRCreator Creator {
-      get { return new TextBasedSolutionCreator(); }
+      get { return new ProductionCodeVariableBasedSolutionCreator(); }
     }
 
     [StorableConstructor]

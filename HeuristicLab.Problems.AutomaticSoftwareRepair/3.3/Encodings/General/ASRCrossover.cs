@@ -30,15 +30,15 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
   [Item("ASRCrossover", "Crosses ASR solutions.")]
   [StorableClass]
   public abstract class ASRCrossover : ASROperator, IASRCrossover {
-    private const string parentsParameterName = "Parents";
-    private const string childParameterName = "Child";
+    private const string ParentsParameterName = "Parents";
+    private const string ChildParameterName = "Child";
 
     public ILookupParameter<ItemArray<IASREncoding>> ParentsParameter {
-      get { return (ScopeTreeLookupParameter<IASREncoding>)Parameters[parentsParameterName]; }
+      get { return (ScopeTreeLookupParameter<IASREncoding>)Parameters[ParentsParameterName]; }
     }
 
     public ILookupParameter<IASREncoding> ChildParameter {
-      get { return (ILookupParameter<IASREncoding>)Parameters[childParameterName]; }
+      get { return (ILookupParameter<IASREncoding>)Parameters[ChildParameterName]; }
     }
 
     [StorableConstructor]
@@ -46,9 +46,9 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
 
     public ASRCrossover()
         : base() {
-      Parameters.Add(new ScopeTreeLookupParameter<IASREncoding>(parentsParameterName, "The parent ASR solutions which should be crossed."));
+      Parameters.Add(new ScopeTreeLookupParameter<IASREncoding>(ParentsParameterName, "The parent ASR solutions which should be crossed."));
       ParentsParameter.ActualName = "ARSSolutionPrograms";
-      Parameters.Add(new LookupParameter<IASREncoding>(childParameterName, "The child ASR solution resulting from the crossover."));
+      Parameters.Add(new LookupParameter<IASREncoding>(ChildParameterName, "The child ASR solution resulting from the crossover."));
       ChildParameter.ActualName = "IStochasticOperator";
     }
 
@@ -59,7 +59,8 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
     protected abstract IASREncoding Crossover(IRandom random, IASREncoding parent1, IASREncoding parent2);
 
     public override IOperation InstrumentedApply() {
-      var parents = new ItemArray<IASREncoding>(ParentsParameter.ActualValue.Length);
+
+      var parents = new ItemArray<IASREncoding> (ParentsParameter.ActualValue.Length);
       for (var i = 0; i < ParentsParameter.ActualValue.Length; i++) {
         parents[i] = ParentsParameter.ActualValue[i];
       }

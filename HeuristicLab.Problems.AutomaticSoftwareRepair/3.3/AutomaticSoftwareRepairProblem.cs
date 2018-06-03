@@ -29,6 +29,7 @@ using HeuristicLab.Data;
 using HeuristicLab.Optimization;
 using HeuristicLab.Parameters;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
+using HeuristicLab.PluginInfrastructure;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple.Creators;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
@@ -41,16 +42,23 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
   [Creatable(CreatableAttribute.Categories.GeneticProgrammingProblems, Priority = 900)]
   [StorableClass]
   public class AutomaticSoftwareRepairProblem: SingleObjectiveHeuristicOptimizationProblem<IASREvaluator, IASRCreator>, IStorableContent, IProblemInstanceConsumer<ASRData> {
+    private const string CorrectnessSpecificationParameterName = "CorrectnessSpecification";
+    private const string ProductionCodeParameterName = "ProductionCode";
+    private const string ProblemInstanceParameterName = "ProblemInstance";
 
     public string Filename { get; set; }
 
     #region Parameter Properties
     public ValueParameter<StringValue> CorrectnessSpecificationParameter {
-      get { return (ValueParameter<StringValue>)Parameters["CorrectnessSpecification"]; }
+      get { return (ValueParameter<StringValue>)Parameters[CorrectnessSpecificationParameterName]; }
     }
     public ValueParameter<StringValue> ProductionCodeParameter {
-      get { return (ValueParameter<StringValue>)Parameters["ProductionCode"]; }
+      get { return (ValueParameter<StringValue>)Parameters[ProductionCodeParameterName]; }
     }
+    public ValueParameter<IASRProblemInstance> ProblemInstanceParameter {
+      get { return (ValueParameter<IASRProblemInstance>)Parameters[ProblemInstanceParameterName]; }
+    }
+
     #endregion
 
     #region Properties
@@ -63,6 +71,12 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
       get { return ProductionCodeParameter.Value; }
       set { ProductionCodeParameter.Value = value; }
     }
+    
+    public IASRProblemInstance ProblemInstance {
+      get { return ProblemInstanceParameter.Value; }
+      set { ProblemInstanceParameter.Value = value; }
+    }
+
     #endregion
 
     [StorableConstructor]
@@ -77,16 +91,25 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
     }
 
     public AutomaticSoftwareRepairProblem()
-      : base(new ASRNUnitBasedEvaluator(), new TextBasedSolutionCreator()) {
-      Parameters.Add(new ValueParameter<StringValue>("CorrectnessSpecification", "The correctness specification for the production code."));
-      Parameters.Add(new ValueParameter<StringValue>("ProductionCode", "The buggy production code to be repaired."));
+      : base(new ASRNUnitBasedEvaluator(), new ProductionCodeVariableBasedSolutionCreator()) {
+      Parameters.Add(new ValueParameter<StringValue>(CorrectnessSpecificationParameterName, "The correctness specification for the production code."));
+      Parameters.Add(new ValueParameter<StringValue>(ProductionCodeParameterName, "The buggy production code to be repaired."));
+      Parameters.Add(new ValueParameter<IASRProblemInstance>(ProblemInstanceParameterName, "The ASR problem instance."));
      
       Maximization.Value = true;
       MaximizationParameter.Hidden = true; 
       Evaluator.QualityParameter.ActualName = "ASRProgramSolutionQuality";
 
+      InitializeASRProblemInstance();
       InitializeOperators();
       RegisterEventHandlers();
+    }
+
+    private void InitializeASRProblemInstance () {
+      var asrProblemInstance = new SingleSmallSourceCodeASRProblemInstance();
+      asrProblemInstance.ProductionCode.Value = ProductionCode.Value;
+
+      ProblemInstance = asrProblemInstance;
     }
 
     #region Events
@@ -177,7 +200,18 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
       Evaluator.QualityParameter.ActualNameChanged += new EventHandler(Evaluator_QualityParameter_ActualNameChanged);
     }
 
-    private void InitializeOperators() {
+    private void InitializeOperators() {  
+      Operators.Clear();
+
+      if (ProblemInstance != null) {
+        Operators.AddRange (ProblemInstance.Operators.Concat (ApplicationManager.Manager.GetInstances<IASROperator>().Cast<IOperator>()).OrderBy (op => op.Name));
+
+        //IASRCreator defaultCreator = null;
+        //foreach (var creator in Operators.Where(o => o is IASRCreator)) {
+        //  solutionCreatorParameter.ValidValues.Add(creator); 
+        //}
+      }
+
       //Operators.Add(new TSPImprovementOperator());
       //Operators.Add(new TSPMultipleGuidesPathRelinker());
       //Operators.Add(new TSPPathRelinker());
