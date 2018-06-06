@@ -32,6 +32,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
   public abstract class ASRCrossover : ASROperator, IASRCrossover {
     private const string ParentsParameterName = "Parents";
     private const string ChildParameterName = "Child";
+    private const string AsrSolutionParameterName = "ASRSolution";
 
     public ILookupParameter<ItemArray<IASREncoding>> ParentsParameter {
       get { return (ScopeTreeLookupParameter<IASREncoding>)Parameters[ParentsParameterName]; }
@@ -47,28 +48,13 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
     public ASRCrossover()
         : base() {
       Parameters.Add(new ScopeTreeLookupParameter<IASREncoding>(ParentsParameterName, "The parent ASR solutions which should be crossed."));
-      ParentsParameter.ActualName = "ARSSolutionPrograms";
+      ParentsParameter.ActualName = AsrSolutionParameterName;
       Parameters.Add(new LookupParameter<IASREncoding>(ChildParameterName, "The child ASR solution resulting from the crossover."));
-      ChildParameter.ActualName = "IStochasticOperator";
+      ChildParameter.ActualName = AsrSolutionParameterName;
     }
 
     protected ASRCrossover(ASRCrossover original, Cloner cloner)
         : base(original, cloner) {
-    }
-    
-    protected abstract IASREncoding Crossover(IRandom random, IASREncoding parent1, IASREncoding parent2);
-
-    public override IOperation InstrumentedApply() {
-
-      var parents = new ItemArray<IASREncoding> (ParentsParameter.ActualValue.Length);
-      for (var i = 0; i < ParentsParameter.ActualValue.Length; i++) {
-        parents[i] = ParentsParameter.ActualValue[i];
-      }
-      ParentsParameter.ActualValue = parents;
-
-      ChildParameter.ActualValue = Crossover(RandomParameter.ActualValue, parents[0], parents[1]);
-
-      return base.InstrumentedApply();
     }
   }
 }

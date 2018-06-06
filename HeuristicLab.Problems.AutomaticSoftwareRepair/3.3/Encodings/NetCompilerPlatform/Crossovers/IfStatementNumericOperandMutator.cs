@@ -24,16 +24,15 @@ using System.Linq;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
-using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple.Crossovers
+namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Crossovers
 {
   [Item("IfStatementCrossover", "A simple crossover operator which crosses two ASR synatx trees by a crossover point of an if statement.")]
   [StorableClass]
-  public sealed class IfStatementCrossover : ASRCrossover {
+  public sealed class IfStatementCrossover : SyntaxTreeCrossover {
     [StorableConstructor]
     private IfStatementCrossover(bool deserializing) : base(deserializing) { }
 
@@ -49,17 +48,23 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple.Crossov
         : base(original, cloner) {
     }
 
-    protected override IASREncoding Crossover (IRandom random, IASREncoding parent1, IASREncoding parent2) {
-      var tree1 = parent1.SolutionProgram.TreeRepresentation.GetRoot ();
+    protected override IASREncoding Crossover (IRandom random, SyntaxTreeEncoding parent1, SyntaxTreeEncoding parent2) {
+      var tree1 = parent1.SyntaxTree.GetRoot ();
       var ifStatements1 = tree1.DescendantNodesAndSelf ().OfType<IfStatementSyntax> ().ToArray ();
-      var ifStatements2 = parent2.SolutionProgram.TreeRepresentation.GetRoot ().DescendantNodesAndSelf ().OfType<IfStatementSyntax> ().ToArray ();
+      var ifStatements2 = parent2.SyntaxTree.GetRoot ().DescendantNodesAndSelf ().OfType<IfStatementSyntax> ().ToArray ();
+
+      if (ifStatements1.Length == 0)
+        return parent2;
+
+      if (ifStatements2.Length == 0)
+        return parent1;
 
       var selectedIfStat1 = ifStatements1[random.Next (ifStatements1.Length)];
       var selectedIfStat2 = ifStatements2[random.Next (ifStatements2.Length)];
 
       var syntaxTree = tree1.ReplaceNode (selectedIfStat1, selectedIfStat2).SyntaxTree;
 
-      parent1.SolutionProgram.TreeRepresentation = syntaxTree;
+      parent1.SyntaxTree = syntaxTree;
 
       return parent1;
     }

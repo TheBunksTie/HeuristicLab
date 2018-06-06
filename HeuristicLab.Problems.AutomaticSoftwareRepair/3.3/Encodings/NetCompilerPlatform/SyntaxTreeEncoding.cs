@@ -25,30 +25,45 @@ using HeuristicLab.Core;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 
-namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple {
-  [Item ("NetCompilerPlatformSyntaxTreeBasedEncoding", "Represents a simple encoding of ASR solutions. It is implemented in a prototypical way loosely based on Le Goues et. al (2012): GenProg:...")]
+namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform {
+  [Item ("SyntaxTreeEncoding", "Represents a simple encoding of ASR solutions. It is implemented in a prototypical way loosely based on Le Goues et. al (2012): GenProg:...")]
   [StorableClass]
-  public class NetCompilerPlatformSyntaxTreeBasedEncoding : ASREncoding {
-    public NetCompilerPlatformSyntaxTreeBasedEncoding(SolutionProgram solutionProgram, IASRProblemInstance instance)
+  public class SyntaxTreeEncoding : ASREncoding {
+    public SyntaxTreeEncoding(SyntaxTree syntaxTree, IASRProblemInstance instance)
         : base(instance) {
-      this.SolutionProgram = solutionProgram;
+      this.SyntaxTree = syntaxTree;
+    }
+
+    public SyntaxTreeEncoding(string sourceCode, IASRProblemInstance instance)
+        : base(instance) {
+      try {
+        this.SyntaxTree = CSharpSyntaxTree.ParseText (sourceCode);
+      } catch (Exception) {
+        // ignored
+      }
     }
 
     [StorableConstructor]
-    protected NetCompilerPlatformSyntaxTreeBasedEncoding(bool serializing)
+    protected SyntaxTreeEncoding(bool serializing)
         : base(serializing) {
     }
 
     public override IDeepCloneable Clone(Cloner cloner) {
-      return new NetCompilerPlatformSyntaxTreeBasedEncoding(this, cloner);
+      return new SyntaxTreeEncoding(this, cloner);
     }
 
-    protected NetCompilerPlatformSyntaxTreeBasedEncoding(NetCompilerPlatformSyntaxTreeBasedEncoding original, Cloner cloner)
+    protected SyntaxTreeEncoding(SyntaxTreeEncoding original, Cloner cloner)
         : base(original, cloner) {
 
-      SolutionProgram = original.SolutionProgram;
+      SyntaxTree = original.SyntaxTree;
     }
-    public SolutionProgram SolutionProgram { get; set; }
+    public SyntaxTree SyntaxTree { get; set; }
+
+    public override string ToString () {
+      return SyntaxTree != null ? SyntaxTree.ToString() : string.Empty;
+    }
   }
 }

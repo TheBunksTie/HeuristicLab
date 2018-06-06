@@ -26,6 +26,6 @@ using HeuristicLab.Optimization;
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces
 {
   public interface IASRCreator : IASROperator, ISolutionCreator {
-    ILookupParameter<IASREncoding> ASRProgramSolutionsParameter { get; }
+    ILookupParameter<IASREncoding> ASRSolutionParameter { get; }
   }
 }

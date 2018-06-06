@@ -22,34 +22,32 @@
 using System;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
-using HeuristicLab.Parameters;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
-using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
+using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General;
 
-namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
-  /// <summary>
-  ///  A base class for manipulating automatic software repair solutions.
-  /// </summary>
-  [Item("ASRManipulator", "A base class for manipulating automatic software repair solutions.")]
+namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators
+{
+  [Item("SyntaxTreeManipulator", "A base class for manipulating syntax tree encoded automatic software repair solutions.")]
   [StorableClass]
-  public abstract class ASRManipulator : ASROperator, IASRManipulator {
-    private const string SolutionParameterName = "ASRSolution";
-
-    public ILookupParameter<IASREncoding> ASRSolutionParameter {
-      get { return (ILookupParameter<IASREncoding>) Parameters[SolutionParameterName]; }
-    }
+  public abstract class SyntaxTreeManipulator : ASRManipulator {
 
     [StorableConstructor]
-    protected ASRManipulator (bool deserializing) : base (deserializing) {
-    }
+    protected SyntaxTreeManipulator(bool deserializing) : base(deserializing) { }
 
-    public ASRManipulator ()
+    public SyntaxTreeManipulator()
         : base() {
-      Parameters.Add (new LookupParameter<IASREncoding> (SolutionParameterName, "The ARS solution program to be manipulated."));
     }
 
-    protected ASRManipulator (ASRManipulator original, Cloner cloner)
-        : base (original, cloner) {
+    protected SyntaxTreeManipulator(SyntaxTreeManipulator original, Cloner cloner)
+        : base(original, cloner) {
     }
+
+    public override IOperation InstrumentedApply() {  
+      Manipulate (RandomParameter.ActualValue, ASRSolutionParameter.ActualValue as SyntaxTreeEncoding);
+
+      return base.InstrumentedApply();
+    }
+
+    protected abstract void Manipulate (IRandom random, SyntaxTreeEncoding individual);
   }
 }

@@ -28,7 +28,7 @@ using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General.Creators;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
-namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple.Creators {
+namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Creators {
   [Item("ProductionCodeVariableBasedSolutionCreator", "Creates a ASR solution from production code stored in variable.")]
   [StorableClass]
   public sealed class ProductionCodeVariableBasedSolutionCreator :  ASRCreator {
@@ -59,14 +59,13 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple.Creator
     }
 
     public override IOperation InstrumentedApply() {
-      ASRProgramSolutionsParameter.ActualValue = CreateSolution(ProblemInstance);
+      ASRSolutionParameter.ActualValue = CreateSolution(ProblemInstance);
 
       return base.InstrumentedApply();
     }
 
     public IASREncoding CreateSolution (IASRProblemInstance instance) {
-      var solutionProgram =  new SolutionProgram(SourceCode);
-      var result = new NetCompilerPlatformSyntaxTreeBasedEncoding(solutionProgram, instance);
+      var result = new SyntaxTreeEncoding(SourceCode, instance);
       return result;
     }
   }

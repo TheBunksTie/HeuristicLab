@@ -63,8 +63,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Encodings\Class1.cs" />
-    <Compile Include="Encodings\Simple\DiffPatchBasedEncoding.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\SyntaxTreeManipulator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Crossovers\SyntaxTreeCrossover.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\DiffPatchBasedEncoding.cs" />
     <Compile Include="ProblemInstances\ASRData.cs" />
     <Compile Include="ProblemInstances\ASRDataDescriptor.cs" />
     <Compile Include="ProblemInstances\ASRInstanceProvider.cs" />
@@ -72,14 +73,13 @@
     <Compile Include="AutomaticSoftwareRepairProblem.cs" />
     <Compile Include="Encodings\ASROperator.cs" />
     <Compile Include="Encodings\General\ASRCrossover.cs" />
-    <Compile Include="Encodings\General\ASRSyntaxTreeOperator.cs" />
     <Compile Include="Encodings\General\ASRManipulator.cs" />
-    <Compile Include="Encodings\Simple\Crossovers\IfStatementNumericOperandMutator.cs" />
-    <Compile Include="Encodings\Simple\Manipulators\IfStatementNumericOperandMutator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Crossovers\IfStatementNumericOperandMutator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\IfStatementNumericOperandMutator.cs" />
     <Compile Include="Encodings\General\ASREncoding.cs" />
     <Compile Include="Interfaces\IASRCrossover.cs" />
-    <Compile Include="Encodings\Simple\Creators\ProductionCodeVariableBasedSolutionCreator.cs" />
-    <Compile Include="Encodings\Simple\NetCompilerPlatformSyntaxTreeBasedEncoding.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Creators\ProductionCodeVariableBasedSolutionCreator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\SyntaxTreeEncoding.cs" />
     <Compile Include="Evaluators\ASRNUnitBasedEvaluator.cs" />
     <Compile Include="Evaluators\ASRTestSuiteBasedEvaluator.cs" />
     <Compile Include="Evaluators\ASREvaluator.cs" />

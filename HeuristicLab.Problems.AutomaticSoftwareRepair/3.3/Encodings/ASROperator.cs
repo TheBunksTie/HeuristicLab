@@ -32,7 +32,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings {
   public abstract class ASROperator : InstrumentedOperator, IASROperator {
     private const string RandomParameterName = "Random";
     private const string ProblemInstanceParameterName = "ProblemInstance";
-    //    private const string SyntaxTreeParameterName = "SyntaxTreeParameter";
 
     public ILookupParameter<IASRProblemInstance> ProblemInstanceParameter {
       get { return (LookupParameter<IASRProblemInstance>)Parameters[ProblemInstanceParameterName]; }

@@ -74,12 +74,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
       return base.InstrumentedApply();
     }
 
-    //public static double Apply(ASRTestSuiteBasedEvaluator evaluator, string productionCode, string testCode) {
-
-    //  var quality = evaluator.Evaluate(productionCode, testCode);
-    //  return quality;
-    //}
-
     /// <summary>
     /// Calculates the quality of production code.
     /// </summary>

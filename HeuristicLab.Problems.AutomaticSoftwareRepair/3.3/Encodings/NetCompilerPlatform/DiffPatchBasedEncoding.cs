@@ -26,7 +26,7 @@ using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
-namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple
+namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform
 {
   [Item ("DiffPatchBasedEncoding", "Represents a diff patch based encoding of an ASR solution. It is implemented in a prototypical way loosely based on Le Goues et. al (2012): GenProg:...")]
   [StorableClass]

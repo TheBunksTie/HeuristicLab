@@ -20,21 +20,18 @@
 #endregion
 
 using System;
-using System.Linq;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
-using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General;
-using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
-namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple.Manipulators
+namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators
 {
   [Item("IfStatementNumericOperandMutator", "A simple operator which manipulates a ASR representation by changing numeric constants in if statements.")]
   [StorableClass]
-  public sealed class IfStatementNumericOperandMutator : ASRManipulator {
+  public sealed class IfStatementNumericOperandMutator : SyntaxTreeManipulator {
     [StorableConstructor]
     private IfStatementNumericOperandMutator(bool deserializing) : base(deserializing) { }
 
@@ -50,18 +47,14 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.Simple.Manipul
         : base(original, cloner) {
     }
 
-    protected override void Manipulate(IRandom random, IASREncoding individual) {
-      // TODO: should this be done outside or by infrastructure
-      if (random.NextDouble() <=  ASRManipulationProbability.ActualValue.Value)
-        return;
+    protected override void Manipulate(IRandom random, SyntaxTreeEncoding individual) {
+     var mutator = new SyntaxTreeRewriter(random);
 
-      var mutator = new SyntaxTreeRewriter(random);
+      var tree = individual.SyntaxTree;
 
-      var tree = individual.SolutionProgram;
+      var mutatedTree = mutator.MutateTree (tree);
 
-      var mutatedTree = mutator.MutateTree (tree.TreeRepresentation);
-
-      individual.SolutionProgram = new SolutionProgram (mutatedTree);
+      individual.SyntaxTree = mutatedTree;
     }
 
     private sealed class SyntaxTreeRewriter : CSharpSyntaxRewriter {
