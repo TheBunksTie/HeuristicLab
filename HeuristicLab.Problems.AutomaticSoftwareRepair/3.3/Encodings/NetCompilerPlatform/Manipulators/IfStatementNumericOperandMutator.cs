@@ -29,7 +29,7 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators
 {
-  [Item("IfStatementNumericOperandMutator", "A simple operator which manipulates a ASR representation by changing numeric constants in if statements.")]
+  [Item("IfStatementNumericOperandMutator", "A simple mutation operator which manipulates a syntax tree representation by changing numeric constants in if statements.")]
   [StorableClass]
   public sealed class IfStatementNumericOperandMutator : SyntaxTreeManipulator {
     [StorableConstructor]

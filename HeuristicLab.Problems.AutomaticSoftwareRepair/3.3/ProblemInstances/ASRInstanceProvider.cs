@@ -27,13 +27,13 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using HeuristicLab.Common;
+using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 using HeuristicLab.Problems.Instances;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
 
   public abstract class ASRInstanceProvider<TData> : ProblemInstanceProvider<TData>, IASRInstanceProvider<TData> where TData : IASRData {
 
-      // based on VRPInstanceProvider
       protected abstract string FileName { get; }
 
       public override IEnumerable<IDataDescriptor> GetDataDescriptors() {

@@ -29,13 +29,11 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances
     public string Description { get; internal set; }
 
     internal string InstanceIdentifier { get; set; }
-    //internal string SolutionIdentifier { get; set; }
 
     internal ASRDataDescriptor(string name, string description, string instanceIdentifier) {
       this.Name = name;
       this.Description = description;
       this.InstanceIdentifier = instanceIdentifier;
-      //this.SolutionIdentifier = solutionIdentifier;
     }
   }
 }

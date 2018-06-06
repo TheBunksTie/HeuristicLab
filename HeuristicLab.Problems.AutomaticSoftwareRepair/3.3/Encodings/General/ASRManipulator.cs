@@ -45,7 +45,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
 
     public ASRManipulator ()
         : base() {
-      Parameters.Add (new LookupParameter<IASREncoding> (SolutionParameterName, "The ARS solution program to be manipulated."));
+      Parameters.Add (new LookupParameter<IASREncoding> (SolutionParameterName, "The ASR solution program to be manipulated."));
     }
 
     protected ASRManipulator (ASRManipulator original, Cloner cloner)

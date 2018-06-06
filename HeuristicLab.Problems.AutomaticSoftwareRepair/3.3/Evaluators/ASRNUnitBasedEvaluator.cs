@@ -39,7 +39,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
   /// <summary>
   /// An operator which evaluates ASR solutions given ASR solutions against a given test suite using NUnit.
   /// </summary>
-  [Item("ASRNUnitBasedEvaluator", "An operator which evaluates ASR solutions given ASR solutions against a given test suite using NUnit.")]
+  [Item("ASRNUnitBasedEvaluator", "An operator which evaluates ASR solutions given ASR as source code against a given test suite using NUnit.")]
   [StorableClass]
   public sealed class ASRNUnitBasedEvaluator : ASRTestSuiteBasedEvaluator
   {

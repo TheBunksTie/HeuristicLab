@@ -21,13 +21,13 @@
 
 using System;
 
-namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances
+namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces
 {
-  /// <summary>
-  /// Interface for ASR data
-  /// </summary>
-  public interface IASRData {
-    string Name { get; set; }
-    string Description { get; set; }
+  public interface IASRInstanceProvider<TData> where TData : IASRData {
+    bool CanImportData { get; }
+    TData Import(string instancePath);
+
+    bool CanExportData { get; }
+    void Export(TData instance, string path);
   }
 }

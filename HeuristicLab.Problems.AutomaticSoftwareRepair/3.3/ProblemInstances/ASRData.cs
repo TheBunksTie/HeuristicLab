@@ -20,6 +20,7 @@
 #endregion
 
 using System;
+using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
   /// <summary>

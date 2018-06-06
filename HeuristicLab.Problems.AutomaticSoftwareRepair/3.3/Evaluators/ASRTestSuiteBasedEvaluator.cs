@@ -32,7 +32,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
   /// A base class for operators which evaluate ASR solutions against a given test suite.
   /// </summary>
   [StorableClass]
-  [Item("ASRTestSuiteBasedEvaluator", "A base class for operators which evaluate ASR solutions agains a given test suite.")]
+  [Item("ASRTestSuiteBasedEvaluator", "A base class for operators which evaluate ASR solutions as source code against a given test suite.")]
   public abstract class ASRTestSuiteBasedEvaluator : ASREvaluator {
     private const string ProductionCodeParameterName = "ProductionCode";
     private const string CorrectnesSpecificationParameterName = "CorrectnessSpecification";
@@ -51,20 +51,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
       Parameters.Add(new LookupParameter<StringValue>(ProductionCodeParameterName, "The ASR solution given in string representation which should be evaluated."));
       Parameters.Add(new LookupParameter<StringValue>(CorrectnesSpecificationParameterName, "The test suite acting as an orcale for correctness."));
     }
-
-    //[StorableHook(HookType.AfterDeserialization)]
-    //private void AfterDeserialization() {
-    //  // BackwardsCompatibility3.3
-    //  #region Backwards compatible code (remove with 3.4)
-    //  LookupParameter<DoubleMatrix> oldDistanceMatrixParameter = Parameters["DistanceMatrix"] as LookupParameter<DoubleMatrix>;
-    //  if (oldDistanceMatrixParameter != null) {
-    //    Parameters.Remove(oldDistanceMatrixParameter);
-    //    //Parameters.Add(new LookupParameter<DistanceMatrix>("DistanceMatrix", "The matrix which contains the distances between the cities."));
-    //    //DistanceMatrixParameter.ActualName = oldDistanceMatrixParameter.ActualName;
-    //  }
-    //  #endregion
-    //}
-
     public override IOperation InstrumentedApply () {
 
       var qualityValue = Evaluate(ProductionCode.ActualValue.Value, TestCode.ActualValue.Value);

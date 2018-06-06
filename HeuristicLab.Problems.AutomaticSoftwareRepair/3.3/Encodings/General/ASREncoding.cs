@@ -26,13 +26,9 @@ using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
-  [Item("SolutionProgramEncoding", "Represents a base class for solution program encodings of ASR solutions.")]
+  [Item("ASREncoding", "A base class for encodings of ASR solutions.")]
   [StorableClass]
   public abstract class ASREncoding : Item, IASREncoding {
-    //public static new Image StaticItemImage {
-    //  get { return HeuristicLab.Common.Resources.VSImageLibrary.Class; }
-    //}
-
     [Storable]
     protected IASRProblemInstance ProblemInstance { get; set; }
 
@@ -44,36 +40,14 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
     protected ASREncoding(bool serializing)
         : base(serializing) {
     }
-
-    //public static void ConvertFrom(IASREncoding encoding, SolutionProgramEncoding solution, IASRProblemInstance problemInstance) {
-    //  solution.SolutionPrograms = new ItemList<SolutionProgram>(encoding.GetSolutionPrograms());
-    //  //TODO what is solution.Repair();
-    //}
-
-    //public static void ConvertFrom(string solutionProgram, SolutionProgramEncoding solution) {
-    //  solution.SolutionPrograms = new ItemList<SolutionProgram>();
-
-    //  var tour = new SolutionProgram(solutionProgram, -1);
-    //  solution.SolutionPrograms.Add(tour);
-    //  //solution.Repair();
-    //}
-
    
     protected ASREncoding(ASREncoding original, Cloner cloner)
       : base(original, cloner) {
       
       if (original.ProblemInstance != null && cloner.ClonedObjectRegistered(original.ProblemInstance))
-        this.ProblemInstance = (IASRProblemInstance)cloner.Clone(original.ProblemInstance);
+        this.ProblemInstance = cloner.Clone(original.ProblemInstance);
       else
         this.ProblemInstance = original.ProblemInstance;
     }
-
-    protected ASREncoding(string name)
-      : base() {
-    }
-
-    //public SolutionProgram GetSolutionPrograms () {
-    //  throw new NotImplementedException();
-    //}
   }
 }

@@ -35,7 +35,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
   [PluginFile ("System.Reflection.Metadata.dll", PluginFileType.Assembly)]
   [PluginDependency ("HeuristicLab.Collections", "3.3")]
   [PluginDependency ("HeuristicLab.Common", "3.3")]
-  [PluginDependency ("HeuristicLab.Common.Resources", "3.3")]
   [PluginDependency ("HeuristicLab.Core", "3.3")]
   [PluginDependency ("HeuristicLab.Data", "3.3")]
   [PluginDependency ("HeuristicLab.Operators", "3.3")]

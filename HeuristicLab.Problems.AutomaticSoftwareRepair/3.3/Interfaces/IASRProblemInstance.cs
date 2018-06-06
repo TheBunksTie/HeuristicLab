@@ -26,12 +26,9 @@ using HeuristicLab.Data;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces
 {
-  // from IVRPProblemInstance
   public interface IASRProblemInstance : IParameterizedNamedItem {
     IASREvaluator SolutionEvaluator { get; set; }
     IEnumerable<IOperator> Operators { get; }
-
-    //event EventHandler EvaluationChanged;
 
     StringValue CorrectnessSpecification { get;  }
     StringValue ProductionCode { get; }

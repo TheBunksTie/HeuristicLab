@@ -28,6 +28,7 @@ using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform
 {
+  // just for conceptional reasons, wont be used and will probably be dumped later in this iteration
   [Item ("DiffPatchBasedEncoding", "Represents a diff patch based encoding of an ASR solution. It is implemented in a prototypical way loosely based on Le Goues et. al (2012): GenProg:...")]
   [StorableClass]
   public class DiffPatchBasedEncoding : ASREncoding {

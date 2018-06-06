@@ -46,8 +46,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General.Creato
 
     protected ASRCreator(ASRCreator original, Cloner cloner)
         : base(original, cloner) {
-    }
-
-    
+    } 
   }
 }

@@ -96,17 +96,14 @@
     </None>
     <None Include="Plugin.cs.frame" />
     <Compile Include="Plugin.cs" />
-    <EmbeddedResource Include="ProblemInstances\Data\IntroClass.zip" />
     <EmbeddedResource Include="ProblemInstances\Data\Quix.zip" />
     <None Include="Properties\AssemblyInfo.cs.frame" />
-    <Compile Include="ProblemInstances\IASRData.cs" />
-    <Compile Include="ProblemInstances\IASRInstanceProvider.cs" />
-    <Compile Include="ProblemInstances\IntroClassInstanceProvider.cs" />
+    <Compile Include="Interfaces\IASRData.cs" />
+    <Compile Include="Interfaces\IASRInstanceProvider.cs" />
     <Compile Include="ProblemInstances\QuixBugInstanceProvider.cs" />
     <Compile Include="ProblemInstances\SectionStructuredFileBasedInstanceProvider.cs" />
-    <Compile Include="ProblemInstances\SingleSmallSourceCodeASRProblemInstance.cs" />
+    <Compile Include="ProblemInstances\SimpleASRProblemInstance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SolutionProgram.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\HeuristicLab.Collections\3.3\HeuristicLab.Collections-3.3.csproj">

@@ -30,7 +30,7 @@ using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
-  [Item ("ASRProblemInstance", "Represents a ASR instance.")]
+  [Item ("ASRProblemInstance", "Represents a ASR problem instance.")]
   [StorableClass]
   public abstract class ASRProblemInstance : ParameterizedNamedItem, IASRProblemInstance, IStatefulItem {
     private const string CorrectnessSpecificationParameterName = "CorrectnessSpecification";
@@ -105,7 +105,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
     }
 
     private void AttachEventHandlers () {
-      //CorrectnessSpecificationParameter.ValueChanged += CoordinatesParameter_ValueChanged;
     }
 
     public virtual void InitializeState () {

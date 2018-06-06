@@ -32,12 +32,11 @@ using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances
 {
-  [Item("SingleSmallSourceCodeASRProblemInstance", "Represents a small single source file based ASR instance.")]
+  [Item("SimpleASRProblemInstance", "Represents a small single source file based ASR problem instance.")]
   [StorableClass]
-  public sealed class SingleSmallSourceCodeASRProblemInstance : ASRProblemInstance {
+  public sealed class SimpleASRProblemInstance : ASRProblemInstance {
 
     protected override IEnumerable<IOperator> GetOperators() {
-      //return base.GetOperators().Where(o => o is IASROperator).Cast<IOperator>();
       return ApplicationManager.Manager.GetInstances<IASROperator>().Cast<IOperator>();
     }
 
@@ -56,16 +55,16 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances
     }
 
     [StorableConstructor]
-    protected SingleSmallSourceCodeASRProblemInstance(bool deserializing) : base(deserializing) { }
+    protected SimpleASRProblemInstance(bool deserializing) : base(deserializing) { }
 
-    public SingleSmallSourceCodeASRProblemInstance() {
+    public SimpleASRProblemInstance() {
     }
 
     public override IDeepCloneable Clone(Cloner cloner) {
-      return new SingleSmallSourceCodeASRProblemInstance(this, cloner);
+      return new SimpleASRProblemInstance(this, cloner);
     }
 
-    protected SingleSmallSourceCodeASRProblemInstance(SingleSmallSourceCodeASRProblemInstance original, Cloner cloner)
+    protected SimpleASRProblemInstance(SimpleASRProblemInstance original, Cloner cloner)
         : base(original, cloner) {
     }
 
