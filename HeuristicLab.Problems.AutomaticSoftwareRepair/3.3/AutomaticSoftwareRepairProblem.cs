@@ -122,6 +122,16 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
       if (ProblemInstance != null) {
         Operators.AddRange (ProblemInstance.Operators.Concat (ApplicationManager.Manager.GetInstances<IASROperator>().Cast<IOperator>()).OrderBy (op => op.Name));
       }
+
+      ParameterizeOperators();
+    }
+
+    private void ParameterizeOperators () {
+      foreach (IOperator op in Operators.OfType<IOperator>()) {
+        if (op is IMultiASROperator) {
+          (op as IMultiASROperator).SetOperators (Operators.OfType<IOperator>());
+        }
+      }
     }
 
     #endregion

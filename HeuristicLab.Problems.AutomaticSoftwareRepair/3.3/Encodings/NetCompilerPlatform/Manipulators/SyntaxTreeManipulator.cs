@@ -22,32 +22,53 @@
 using System;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
+using HeuristicLab.Parameters;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General;
+using Microsoft.CodeAnalysis.CSharp;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators
 {
   [Item("SyntaxTreeManipulator", "A base class for manipulating syntax tree encoded automatic software repair solutions.")]
   [StorableClass]
   public abstract class SyntaxTreeManipulator : ASRManipulator {
+    private CSharpSyntaxRewriter syntaxTreeRewriter;
 
+    private const string RandomParameterName = "Random";
+
+    public ILookupParameter<IRandom> RandomParameter {
+      get { return (LookupParameter<IRandom>) Parameters[RandomParameterName]; }
+    }
+ 
     [StorableConstructor]
     protected SyntaxTreeManipulator(bool deserializing) : base(deserializing) { }
 
     public SyntaxTreeManipulator()
         : base() {
+      Parameters.Add(new LookupParameter<IRandom>(RandomParameterName,  "The pseudo random number generator which should be used for symbolic expression tree operators."));
     }
 
     protected SyntaxTreeManipulator(SyntaxTreeManipulator original, Cloner cloner)
         : base(original, cloner) {
     }
 
-    public override IOperation InstrumentedApply() {  
-      Manipulate (RandomParameter.ActualValue, ASRSolutionParameter.ActualValue as SyntaxTreeEncoding);
+    public override IOperation InstrumentedApply() {
+      var individual = ASRSolutionParameter.ActualValue as SyntaxTreeEncoding;
+
+      if (individual != null) {
+        var orginalSyntaxTreeRoot = individual.SyntaxTree.GetRoot();
+
+        if (syntaxTreeRewriter == null)
+          syntaxTreeRewriter = CreateSyntaxTreeRewriter(RandomParameter.ActualValue);
+
+          var mutatedTree = syntaxTreeRewriter.Visit (orginalSyntaxTreeRoot).SyntaxTree;
+
+          individual.SyntaxTree = mutatedTree;
+      }
 
       return base.InstrumentedApply();
     }
 
-    protected abstract void Manipulate (IRandom random, SyntaxTreeEncoding individual);
+    protected abstract CSharpSyntaxRewriter CreateSyntaxTreeRewriter (IRandom random);
   }
 }

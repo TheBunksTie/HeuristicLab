@@ -22,6 +22,7 @@
 using System;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
+using HeuristicLab.Parameters;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
@@ -30,12 +31,18 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
 {
   [Item("SyntaxTreeCrossover", "Crosses ASR solutions encoded as .NET Compiler Platform Syntax Trees.")]
   [StorableClass]
-  public abstract class SyntaxTreeCrossover : ASRCrossover { 
+  public abstract class SyntaxTreeCrossover : ASRCrossover {
+    private const string RandomParameterName = "Random";
+
+    public ILookupParameter<IRandom> RandomParameter {
+      get { return (LookupParameter<IRandom>) Parameters[RandomParameterName]; }
+    }
     [StorableConstructor]
     protected SyntaxTreeCrossover(bool deserializing) : base(deserializing) { }
 
     public SyntaxTreeCrossover()
         : base() {
+      Parameters.Add(new LookupParameter<IRandom>(RandomParameterName,  "The pseudo random number generator which should be used for symbolic expression tree operators."));
     }
 
     protected SyntaxTreeCrossover(SyntaxTreeCrossover original, Cloner cloner)

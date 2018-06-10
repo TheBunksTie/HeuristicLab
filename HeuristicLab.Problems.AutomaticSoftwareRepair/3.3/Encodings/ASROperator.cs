@@ -30,16 +30,13 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings {
   [Item("ASROperator", "Represents an ASR operator.")]
   [StorableClass]
   public abstract class ASROperator : InstrumentedOperator, IASROperator {
-    private const string RandomParameterName = "Random";
     private const string ProblemInstanceParameterName = "ProblemInstance";
 
     public ILookupParameter<IASRProblemInstance> ProblemInstanceParameter {
       get { return (LookupParameter<IASRProblemInstance>)Parameters[ProblemInstanceParameterName]; }
     }
 
-    public ILookupParameter<IRandom> RandomParameter {
-      get { return (LookupParameter<IRandom>) Parameters[RandomParameterName]; }
-    }
+   
 
     public IASRProblemInstance ProblemInstance {
       get { return ProblemInstanceParameter.ActualValue; }
@@ -51,7 +48,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings {
     public ASROperator()
         : base() {
       Parameters.Add(new LookupParameter<IASRProblemInstance>(ProblemInstanceParameterName, "The ASR problem instance"));
-      Parameters.Add(new LookupParameter<IRandom>(RandomParameterName,  "The pseudo random number generator which should be used for symbolic expression tree operators."));
     }
 
     protected ASROperator(ASROperator original, Cloner cloner)

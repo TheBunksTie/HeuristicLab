@@ -19,14 +19,13 @@
  */
 #endregion
 
+using System;
+using System.Collections.Generic;
 using HeuristicLab.Core;
-using HeuristicLab.Optimization;
 
-namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces {
-  /// <summary>
-  /// Interface for operators that manipulate automatic software repair solutions/representations.
-  /// </summary>
-  public interface IASRManipulator : IASROperator, IManipulator {
-    ILookupParameter<IASREncoding> ASRSolutionParameter { get; }
+namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces
+{
+  public interface IMultiASROperator : IASROperator {
+    void SetOperators(IEnumerable<IOperator> operators);
   }
 }

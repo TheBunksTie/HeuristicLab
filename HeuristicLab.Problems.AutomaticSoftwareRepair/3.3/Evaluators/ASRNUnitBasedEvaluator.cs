@@ -64,6 +64,7 @@ namespace ASRNUnitBasedEvaluator.Evaluation
   }}
 }}";
 
+    // TODO RequiredAssembliesSection in Instance File und alle dort spezifizierten Asms. dann als Metadataref mitgeben
     private static readonly MetadataReference coreLibReference = MetadataReference.CreateFromFile (typeof (object).Assembly.Location);
     private static readonly MetadataReference nunitReference = MetadataReference.CreateFromFile (typeof (TestFixtureAttribute).Assembly.Location);
     private static readonly MetadataReference enumerableReference = MetadataReference.CreateFromFile (typeof (Enumerable).Assembly.Location);
@@ -92,7 +93,7 @@ namespace ASRNUnitBasedEvaluator.Evaluation
 
       var evaluationAssembly = CompileToAssembly (tree);
       if (evaluationAssembly == null)
-        return -1;
+        return double.MinValue;
 
       // run tests from test code assembly and calculate fitness for current candidate
       var nUnitTestAssemblyRunner = new NUnitTestAssemblyRunner (defaultTestAssemblyBuilder);
