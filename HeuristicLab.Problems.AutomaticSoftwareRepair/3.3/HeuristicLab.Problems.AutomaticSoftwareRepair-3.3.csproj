@@ -63,6 +63,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\ExpressionReplaceMutator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Util\StatementExtractionUtility.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\StatementAddMutator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\StatementRemoveMutator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\StatementReplaceMutator.cs" />
+    <Compile Include="Interfaces\IMultiASROperator.cs" />
+    <Compile Include="Encodings\General\MultiASRSolutionManipulator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Manipulators\SyntaxTreeManipulator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Crossovers\SyntaxTreeCrossover.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\DiffPatchBasedEncoding.cs" />
@@ -74,8 +81,7 @@
     <Compile Include="Encodings\ASROperator.cs" />
     <Compile Include="Encodings\General\ASRCrossover.cs" />
     <Compile Include="Encodings\General\ASRManipulator.cs" />
-    <Compile Include="Encodings\NetCompilerPlatform\Crossovers\IfStatementNumericOperandMutator.cs" />
-    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\IfStatementNumericOperandMutator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Crossovers\StatementCrossover.cs" />
     <Compile Include="Encodings\General\ASREncoding.cs" />
     <Compile Include="Interfaces\IASRCrossover.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Creators\ProductionCodeVariableBasedSolutionCreator.cs" />

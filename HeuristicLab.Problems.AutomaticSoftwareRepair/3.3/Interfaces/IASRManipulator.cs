@@ -27,6 +27,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces {
   /// Interface for operators that manipulate automatic software repair solutions/representations.
   /// </summary>
   public interface IASRManipulator : IASROperator, IManipulator {
-    
+    ILookupParameter<IASREncoding> ASRSolutionParameter { get; }
   }
 }

@@ -49,5 +49,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
       else
         this.ProblemInstance = original.ProblemInstance;
     }
+
+    public abstract string GetSolutionProgram ();
   }
 }

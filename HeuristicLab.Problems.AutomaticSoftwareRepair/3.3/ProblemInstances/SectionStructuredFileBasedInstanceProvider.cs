@@ -24,8 +24,8 @@ using System.IO;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
   public abstract class SectionStructuredFileBasedInstanceProvider : ASRInstanceProvider<ASRData> {
-    private const string CorrectnessSpecificationSectionName = "<CorrectnessSpecificationSection>";
-    private const string ProductionCodeSectionName = "<ProductionCodeSection>";
+    private const string CorrectnessSpecificationSectionName = "//<CorrectnessSpecificationSection>";
+    private const string ProductionCodeSectionName = "//<ProductionCodeSection>";
 
     protected override ASRData LoadData(Stream stream) {
       using (var reader = new StreamReader(stream)) {

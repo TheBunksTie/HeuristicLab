@@ -20,49 +20,43 @@
 #endregion
 
 using System;
-using System.Linq;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
-using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Crossovers
 {
-  [Item("IfStatementCrossover", "A simple crossover operator which crosses two ASR synatx trees by a crossover point of an if statement.")]
+  [Item("StatementCrossover", "A simple crossover operator which crosses two ASR synatx trees at a randomly selected statement.")]
   [StorableClass]
-  public sealed class IfStatementCrossover : SyntaxTreeCrossover {
+  public sealed class StatementCrossover : SyntaxTreeCrossover {
     [StorableConstructor]
-    private IfStatementCrossover(bool deserializing) : base(deserializing) { }
+    private StatementCrossover(bool deserializing) : base(deserializing) { }
 
-    public IfStatementCrossover()
+    public StatementCrossover()
         : base() {
     }
 
     public override IDeepCloneable Clone(Cloner cloner) {
-      return new IfStatementCrossover(this, cloner);
+      return new StatementCrossover(this, cloner);
     }
 
-    private IfStatementCrossover(IfStatementCrossover original, Cloner cloner)
+    private StatementCrossover(StatementCrossover original, Cloner cloner)
         : base(original, cloner) {
     }
 
-    protected override IASREncoding Crossover (IRandom random, SyntaxTreeEncoding parent1, SyntaxTreeEncoding parent2) {
-      var tree1 = parent1.SyntaxTree.GetRoot ();
-      var ifStatements1 = tree1.DescendantNodesAndSelf ().OfType<IfStatementSyntax> ().ToArray ();
-      var ifStatements2 = parent2.SyntaxTree.GetRoot ().DescendantNodesAndSelf ().OfType<IfStatementSyntax> ().ToArray ();
+    protected override SyntaxTreeEncoding Crossover (IRandom random, SyntaxTreeEncoding parent1, SyntaxTreeEncoding parent2) {
 
-      if (ifStatements1.Length == 0)
-        return parent2;
+      var statements = GetAllStatements(parent1.SyntaxTree.GetRoot());
+      var selectedStatement = statements[random.Next (statements.Length)];
 
-      if (ifStatements2.Length == 0)
+      var statements2 = GetAllStatements (parent2.SyntaxTree.GetRoot(), s => s.Kind() == selectedStatement.Kind());
+      if (statements2.Length == 0)
         return parent1;
 
-      var selectedIfStat1 = ifStatements1[random.Next (ifStatements1.Length)];
-      var selectedIfStat2 = ifStatements2[random.Next (ifStatements2.Length)];
+      var selectedExpression2 = statements2[random.Next (statements2.Length)];
 
-      var syntaxTree = tree1.ReplaceNode (selectedIfStat1, selectedIfStat2).SyntaxTree;
+      var syntaxTree = parent1.SyntaxTree.GetRoot().ReplaceNode (selectedStatement, selectedExpression2).SyntaxTree;
 
       parent1.SyntaxTree = syntaxTree;
 

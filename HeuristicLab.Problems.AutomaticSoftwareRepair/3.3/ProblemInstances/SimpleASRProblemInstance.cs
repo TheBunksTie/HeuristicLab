@@ -36,8 +36,8 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances
   [StorableClass]
   public sealed class SimpleASRProblemInstance : ASRProblemInstance {
 
-    protected override IEnumerable<IOperator> GetOperators() {
-      return ApplicationManager.Manager.GetInstances<IASROperator>().Cast<IOperator>();
+    protected override IEnumerable<IOperator> GetOperators () {
+      return new IOperator[0];
     }
 
     protected override IEnumerable<IOperator> GetAnalyzers () {

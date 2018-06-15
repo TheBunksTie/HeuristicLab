@@ -22,32 +22,52 @@
 using System;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
+using HeuristicLab.Parameters;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General;
+using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Util;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using IOperation = HeuristicLab.Core.IOperation;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators
 {
-  [Item("SyntaxTreeManipulator", "A base class for manipulating syntax tree encoded automatic software repair solutions.")]
+  [Item ("SyntaxTreeManipulator", "A base class for manipulating syntax tree encoded automatic software repair solutions.")]
   [StorableClass]
   public abstract class SyntaxTreeManipulator : ASRManipulator {
+    private const string RandomParameterName = "Random";
+
+    public ILookupParameter<IRandom> RandomParameter {
+      get { return (LookupParameter<IRandom>) Parameters[RandomParameterName]; }
+    }
 
     [StorableConstructor]
-    protected SyntaxTreeManipulator(bool deserializing) : base(deserializing) { }
+    protected SyntaxTreeManipulator (bool deserializing)
+        : base (deserializing) {
+    }
 
-    public SyntaxTreeManipulator()
+    public SyntaxTreeManipulator ()
         : base() {
+      Parameters.Add (
+          new LookupParameter<IRandom> (
+              RandomParameterName,
+              "The pseudo random number generator which should be used for symbolic expression tree operators."));
     }
 
-    protected SyntaxTreeManipulator(SyntaxTreeManipulator original, Cloner cloner)
-        : base(original, cloner) {
+    protected SyntaxTreeManipulator (SyntaxTreeManipulator original, Cloner cloner)
+        : base (original, cloner) {
     }
 
-    public override IOperation InstrumentedApply() {  
-      Manipulate (RandomParameter.ActualValue, ASRSolutionParameter.ActualValue as SyntaxTreeEncoding);
-
+    public override IOperation InstrumentedApply () {
+      var mutatedIndividual = ApplyMutation (RandomParameter.ActualValue, ASRSolutionParameter.ActualValue as SyntaxTreeEncoding);
+      ASRSolutionParameter.ActualValue = mutatedIndividual;
       return base.InstrumentedApply();
     }
 
-    protected abstract void Manipulate (IRandom random, SyntaxTreeEncoding individual);
+    protected abstract SyntaxTreeEncoding ApplyMutation (IRandom random, SyntaxTreeEncoding individual);
+
+    protected StatementSyntax[] GetAllStatements (SyntaxNode rootNode, Func<StatementSyntax, bool> whereCondition = null) {
+      return StatementExtractionUtility.GetAllStatements (rootNode, whereCondition);
+    }
   }
 }

@@ -23,38 +23,39 @@ using System;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
-using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General;
-using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
+using Microsoft.CodeAnalysis;
 
-namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform
+namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators
 {
-  // just for conceptional reasons, wont be used and will probably be dumped later in this iteration
-  [Item ("DiffPatchBasedEncoding", "Represents a diff patch based encoding of an ASR solution. It is implemented in a prototypical way loosely based on Le Goues et. al (2012): GenProg:...")]
+  [Item ("StatementRemoveMutator", "A mutation operator which randomly removes an expression from the syntax tree.")]
   [StorableClass]
-  public class DiffPatchBasedEncoding : ASREncoding {
-    public DiffPatchBasedEncoding(string differences, IASRProblemInstance instance)
-        : base(instance) {
-      this.Differences = differences;
-    }
+  public sealed class StatementRemoveMutator : SyntaxTreeManipulator {
 
     [StorableConstructor]
-    protected DiffPatchBasedEncoding(bool serializing)
-        : base(serializing) {
+    private StatementRemoveMutator (bool deserializing) : base(deserializing) { }
+
+    public StatementRemoveMutator  ()
+        : base () {
     }
 
     public override IDeepCloneable Clone(Cloner cloner) {
-      return new DiffPatchBasedEncoding(this, cloner);
+      return new StatementRemoveMutator (this, cloner);
     }
 
-    protected DiffPatchBasedEncoding(DiffPatchBasedEncoding original, Cloner cloner)
+    private StatementRemoveMutator (StatementRemoveMutator  original, Cloner cloner)
         : base(original, cloner) {
-
-      Differences = original.Differences;
     }
-    public string Differences { get; set; }
 
-    public override string GetSolutionProgram () {
-      return ToString();
+    protected override SyntaxTreeEncoding ApplyMutation (IRandom random, SyntaxTreeEncoding individual) {
+      var statements = GetAllStatements (individual.SyntaxTree.GetRoot());
+
+      var removee = statements[random.Next (statements.Length)];
+
+      var mutatedSyntaxTree = individual.SyntaxTree.GetRoot().RemoveNode(removee, SyntaxRemoveOptions.KeepNoTrivia).SyntaxTree;
+
+      individual.SyntaxTree = mutatedSyntaxTree;
+
+      return individual;
     }
   }
 }
