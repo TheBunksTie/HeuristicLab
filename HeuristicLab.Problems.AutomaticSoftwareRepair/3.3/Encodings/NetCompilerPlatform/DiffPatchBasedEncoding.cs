@@ -52,5 +52,9 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
       Differences = original.Differences;
     }
     public string Differences { get; set; }
+
+    public override string GetSolutionProgram () {
+      return ToString();
+    }
   }
 }

@@ -20,47 +20,54 @@
 #endregion
 
 using System;
-using System.Linq;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators
 {
-  [Item ("ExpressionReplaceMutator", "A mutation operator which randomly replaces an expression with another one from the same syntax tree.")]
+  [Item ("StatementAddMutator", "A mutation operator which randomly adds a statement from the same syntax tree.")]
   [StorableClass]
-  public sealed class ExpressionReplaceMutator : SyntaxTreeManipulator {
+  public sealed class StatementAddMutator : SyntaxTreeManipulator {
 
     [StorableConstructor]
-    private ExpressionReplaceMutator(bool deserializing) : base(deserializing) { }
+    private StatementAddMutator(bool deserializing) : base(deserializing) {
+    }
 
-    public ExpressionReplaceMutator ()
+    public StatementAddMutator ()
         : base () {
     }
 
     public override IDeepCloneable Clone(Cloner cloner) {
-      return new ExpressionReplaceMutator(this, cloner);
+      return new StatementAddMutator(this, cloner);
     }
 
-    private ExpressionReplaceMutator(ExpressionReplaceMutator original, Cloner cloner)
+    private StatementAddMutator(StatementAddMutator original, Cloner cloner)
         : base(original, cloner) {
     }
 
     protected override SyntaxTreeEncoding ApplyMutation (IRandom random, SyntaxTreeEncoding individual) {
-      var expressions = individual.SyntaxTree.GetRoot().DescendantNodes().OfType<ExpressionSyntax>().ToArray();
-      var replacee = expressions[random.Next (expressions.Length)];
+      var statements = GetAllStatements(individual.SyntaxTree.GetRoot());
+      var addee = statements[random.Next (statements.Length)];
+      var addingLocation = statements[random.Next (statements.Length)];
 
-      var fittingStatements = expressions.Where(s => s.Kind() == replacee.Kind()).ToArray();
-      if (!fittingStatements.Any())
+      if (addee.Equals (addingLocation))
         return individual;
 
-      var replacement = fittingStatements[random.Next (fittingStatements.Length)];
-      if (replacement.Equals (replacee))
-        return individual;
+      BlockSyntax combinedStatementBlock;
+      SyntaxNode replacementLocation = addingLocation;
+      var blockParent = addingLocation.Parent as BlockSyntax;
+      if (blockParent != null) {
+        combinedStatementBlock = blockParent.AddStatements(addee);
+        replacementLocation = addingLocation.Parent;
+      }
+      else
+        combinedStatementBlock = SyntaxFactory.Block(addingLocation, addee);
 
-      var mutatedSyntaxTree = individual.SyntaxTree.GetRoot().ReplaceNode(replacee, replacement).SyntaxTree;
+      var mutatedSyntaxTree = individual.SyntaxTree.GetRoot().ReplaceNode(replacementLocation, combinedStatementBlock).SyntaxTree;
 
       individual.SyntaxTree = mutatedSyntaxTree;
 

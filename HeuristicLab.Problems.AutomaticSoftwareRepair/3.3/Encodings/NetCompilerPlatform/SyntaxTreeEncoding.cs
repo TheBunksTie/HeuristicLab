@@ -65,5 +65,9 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
     public override string ToString () {
       return SyntaxTree != null ? SyntaxTree.ToString() : string.Empty;
     }
+
+    public override string GetSolutionProgram () {
+      return ToString();
+    }
   }
 }

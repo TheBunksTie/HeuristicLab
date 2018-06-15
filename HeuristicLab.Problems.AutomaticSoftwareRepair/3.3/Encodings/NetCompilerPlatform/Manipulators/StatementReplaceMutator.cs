@@ -25,34 +25,33 @@ using HeuristicLab.Common;
 using HeuristicLab.Core;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators
 {
-  [Item ("ExpressionReplaceMutator", "A mutation operator which randomly replaces an expression with another one from the same syntax tree.")]
+  [Item ("StatementReplaceMutator", "A mutation operator which randomly replaces an expression with another one from the same syntax tree.")]
   [StorableClass]
-  public sealed class ExpressionReplaceMutator : SyntaxTreeManipulator {
+  public sealed class StatementReplaceMutator : SyntaxTreeManipulator {
 
     [StorableConstructor]
-    private ExpressionReplaceMutator(bool deserializing) : base(deserializing) { }
+    private StatementReplaceMutator(bool deserializing) : base(deserializing) { }
 
-    public ExpressionReplaceMutator ()
+    public StatementReplaceMutator ()
         : base () {
     }
 
     public override IDeepCloneable Clone(Cloner cloner) {
-      return new ExpressionReplaceMutator(this, cloner);
+      return new StatementReplaceMutator(this, cloner);
     }
 
-    private ExpressionReplaceMutator(ExpressionReplaceMutator original, Cloner cloner)
+    private StatementReplaceMutator(StatementReplaceMutator original, Cloner cloner)
         : base(original, cloner) {
     }
 
     protected override SyntaxTreeEncoding ApplyMutation (IRandom random, SyntaxTreeEncoding individual) {
-      var expressions = individual.SyntaxTree.GetRoot().DescendantNodes().OfType<ExpressionSyntax>().ToArray();
-      var replacee = expressions[random.Next (expressions.Length)];
+      var statements = GetAllStatements(individual.SyntaxTree.GetRoot());
+      var replacee = statements[random.Next (statements.Length)];
 
-      var fittingStatements = expressions.Where(s => s.Kind() == replacee.Kind()).ToArray();
+      var fittingStatements = statements.Where(s => s.Kind() == replacee.Kind()).ToArray();
       if (!fittingStatements.Any())
         return individual;
 

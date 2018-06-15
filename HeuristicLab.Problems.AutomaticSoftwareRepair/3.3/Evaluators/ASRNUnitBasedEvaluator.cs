@@ -113,7 +113,7 @@ namespace ASRNUnitBasedEvaluator.Evaluation
       var positiveTestCount = testRunResult.PassCount;
       var negativeTestCount = testRunResult.FailCount + testRunResult.InconclusiveCount + testRunResult.SkipCount;
 
-      return (positiveWeight * positiveTestCount - negativeWeight * negativeTestCount) - testRunResult.Duration;
+      return (positiveWeight * positiveTestCount - negativeWeight * negativeTestCount);
     }
 
     private Assembly CompileToAssembly (SyntaxTree tree)
@@ -121,7 +121,9 @@ namespace ASRNUnitBasedEvaluator.Evaluation
       var comp = CSharpCompilation.Create (
           "ASRNUnitBasedEvaluator_" + Guid.NewGuid ().ToString ("D"),
           syntaxTrees: new[] { tree },
-          references: new[] { coreLibReference, nunitReference, enumerableReference },
+          references: new[] { coreLibReference, nunitReference,
+                                enumerableReference ,
+                            },
           options: new CSharpCompilationOptions (OutputKind.DynamicallyLinkedLibrary));
 
       var evaluationAssembly = EmitToAssembly (comp);
