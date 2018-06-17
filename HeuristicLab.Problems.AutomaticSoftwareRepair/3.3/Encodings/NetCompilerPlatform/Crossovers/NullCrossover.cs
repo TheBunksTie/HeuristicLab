@@ -19,38 +19,33 @@
  */
 #endregion
 
+using System;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
-using HeuristicLab.Operators;
-using HeuristicLab.Parameters;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
-using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
-namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings {
-  [Item("ASROperator", "Represents an ASR operator.")]
+namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Crossovers
+{
+  [Item("NullCrossover", "A null crossover strategy operator wich just returns parent 1 syntax tree.")]
   [StorableClass]
-  public abstract class ASROperator : InstrumentedOperator, IASROperator {
-    private const string ProblemInstanceParameterName = "ProblemInstance";
-
-    public ILookupParameter<IASRProblemInstance> ProblemInstanceParameter {
-      get { return (LookupParameter<IASRProblemInstance>)Parameters[ProblemInstanceParameterName]; }
-    }
-
-    public IASRProblemInstance ProblemInstance {
-      get { return ProblemInstanceParameter.ActualValue; }
-    }
-
+  public sealed class NullCrossover : SyntaxTreeCrossover {
     [StorableConstructor]
-    protected ASROperator(bool deserializing) : base(deserializing) { }
+    private NullCrossover (bool deserializing) : base(deserializing) { }
 
-    public ASROperator()
+    public NullCrossover ()
         : base() {
-      Parameters.Add(new LookupParameter<IASRProblemInstance>(ProblemInstanceParameterName, "The ASR problem instance"));
     }
 
-    protected ASROperator(ASROperator original, Cloner cloner)
+    public override IDeepCloneable Clone(Cloner cloner) {
+      return new NullCrossover (this, cloner);
+    }
+
+    private NullCrossover (NullCrossover original, Cloner cloner)
         : base(original, cloner) {
     }
 
+    protected override SyntaxTreeEncoding Crossover (IRandom random, SyntaxTreeEncoding parent1, SyntaxTreeEncoding parent2) {
+      return parent1;
+    }
   }
 }

@@ -21,11 +21,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
-using HeuristicLab.PluginInfrastructure;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Creators;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;

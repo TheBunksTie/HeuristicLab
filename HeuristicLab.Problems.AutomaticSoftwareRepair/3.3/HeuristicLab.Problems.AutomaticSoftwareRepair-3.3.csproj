@@ -63,6 +63,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Encodings\NetCompilerPlatform\Crossovers\NullCrossover.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Manipulators\ExpressionReplaceMutator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Util\StatementExtractionUtility.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Manipulators\StatementAddMutator.cs" />
