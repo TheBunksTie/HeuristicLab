@@ -35,19 +35,27 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
   [Item("ASREvaluator", "A base class for operators which evaluate ASR solutions.")]
   [StorableClass]
   public abstract class ASREvaluator : ASROperator, IASREvaluator {
-    
-    public override bool CanChangeName {
-      get { return false; }
+    private const string SolutionParameterName = "ASRSolution";
+
+    public ILookupParameter<IASREncoding> ASRSolutionParameter {
+      get { return (ILookupParameter<IASREncoding>) Parameters[SolutionParameterName]; }
     }
 
+    #region ISingleObjectiveEvaluator Members
     public ILookupParameter<DoubleValue> QualityParameter {
       get { return (ILookupParameter<DoubleValue>)Parameters["Quality"]; }
+    }
+    #endregion
+
+    public override bool CanChangeName {
+      get { return false; }
     }
 
     [StorableConstructor]
     protected ASREvaluator(bool deserializing) : base(deserializing) { }
     protected ASREvaluator(ASREvaluator original, Cloner cloner) : base(original, cloner) { }
     protected ASREvaluator(){
+      Parameters.Add(new LookupParameter<IASREncoding>(SolutionParameterName, "The ASR solution which should be evaluated."));
       Parameters.Add(new LookupParameter<DoubleValue>("Quality", "The evaluated quality of the ASR solution."));
     }
   }

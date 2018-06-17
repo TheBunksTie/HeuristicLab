@@ -30,8 +30,8 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
     public static StatementSyntax[] GetAllStatements (SyntaxNode rootNode, Func<StatementSyntax, bool> whereCondition = null) {
       var statements = rootNode.DescendantNodesAndSelf()
           .OfType<StatementSyntax>()
-          .SelectMany (s => GetAllStatementsInternal (s));
-          //.Distinct();
+          .SelectMany (s => GetAllStatementsInternal (s))
+          .Distinct();
 
       if (whereCondition != null)
         statements = statements.Where (whereCondition);

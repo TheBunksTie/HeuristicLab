@@ -34,12 +34,8 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
   public sealed class ProductionCodeVariableBasedSolutionCreator :  ASRCreator {
     private const string ProductionCodeParameterName = "ProductionCode";
 
-    public ILookupParameter<StringValue> SourceCodeParameter {
+    public ILookupParameter<StringValue> ProductionCodeParameter {
       get { return (LookupParameter<StringValue>)Parameters[ProductionCodeParameterName]; }
-    }
-
-    public string SourceCode {
-      get { return SourceCodeParameter.ActualValue.Value; }
     }
 
     [StorableConstructor]
@@ -59,13 +55,12 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
     }
 
     public override IOperation InstrumentedApply() {
-      ASRSolutionParameter.ActualValue = CreateSolution(ProblemInstance);
-
+      ASRSolutionParameter.ActualValue = CreateSolution(ProductionCodeParameter.ActualValue.Value, ProblemInstance);
       return base.InstrumentedApply();
     }
 
-    public IASREncoding CreateSolution (IASRProblemInstance instance) {
-      var result = new SyntaxTreeEncoding(SourceCode, instance);
+    private IASREncoding CreateSolution (string productionCode, IASRProblemInstance instance) {
+      var result = new SyntaxTreeEncoding(productionCode, instance);
       return result;
     }
   }

@@ -34,12 +34,8 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
   [StorableClass]
   [Item("ASRTestSuiteBasedEvaluator", "A base class for operators which evaluate ASR solutions as source code against a given test suite.")]
   public abstract class ASRTestSuiteBasedEvaluator : ASREvaluator {
-    private const string ProductionCodeParameterName = "ProductionCode";
     private const string CorrectnesSpecificationParameterName = "CorrectnessSpecification";
-
-    public ILookupParameter<StringValue> ProductionCode {
-      get { return (ILookupParameter<StringValue>)Parameters[ProductionCodeParameterName]; }
-    }
+  
     public ILookupParameter<StringValue> TestCode {
       get { return (ILookupParameter<StringValue>)Parameters[CorrectnesSpecificationParameterName]; }
     }
@@ -48,12 +44,12 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
     protected ASRTestSuiteBasedEvaluator(bool deserializing) : base(deserializing) { }
     protected ASRTestSuiteBasedEvaluator(ASRTestSuiteBasedEvaluator original, Cloner cloner) : base(original, cloner) { }
     protected ASRTestSuiteBasedEvaluator() {
-      Parameters.Add(new LookupParameter<StringValue>(ProductionCodeParameterName, "The ASR solution given in string representation which should be evaluated."));
       Parameters.Add(new LookupParameter<StringValue>(CorrectnesSpecificationParameterName, "The test suite acting as an orcale for correctness."));
     }
+
     public override IOperation InstrumentedApply () {
 
-      var qualityValue = Evaluate(ProductionCode.ActualValue.Value, TestCode.ActualValue.Value);
+      var qualityValue = Evaluate(ASRSolutionParameter.ActualValue.GetSolutionProgram(), TestCode.ActualValue.Value);
 
       QualityParameter.ActualValue = new DoubleValue(qualityValue);
 
