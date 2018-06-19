@@ -35,9 +35,17 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
   [Item("ASRTestSuiteBasedEvaluator", "A base class for operators which evaluate ASR solutions as source code against a given test suite.")]
   public abstract class ASRTestSuiteBasedEvaluator : ASREvaluator {
     private const string CorrectnesSpecificationParameterName = "CorrectnessSpecification";
-  
+    private const string PassingTestsParameterName = "PassingTests";
+    private const string FailingTestsParameterName = "FailingTests";
+
     public ILookupParameter<StringValue> TestCode {
       get { return (ILookupParameter<StringValue>)Parameters[CorrectnesSpecificationParameterName]; }
+    }
+    public ILookupParameter<ItemArray<StringValue>> PassingTestsParameter {
+      get { return (ILookupParameter<ItemArray<StringValue>>)Parameters[PassingTestsParameterName]; }
+    }
+    public ILookupParameter<ItemArray<StringValue>> FailingTestsParameter {
+      get { return (ILookupParameter<ItemArray<StringValue>>)Parameters[FailingTestsParameterName]; }
     }
 
     [StorableConstructor]
@@ -45,6 +53,8 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
     protected ASRTestSuiteBasedEvaluator(ASRTestSuiteBasedEvaluator original, Cloner cloner) : base(original, cloner) { }
     protected ASRTestSuiteBasedEvaluator() {
       Parameters.Add(new LookupParameter<StringValue>(CorrectnesSpecificationParameterName, "The test suite acting as an orcale for correctness."));
+      Parameters.Add(new LookupParameter<ItemArray<StringValue>>(PassingTestsParameterName, "The initially passing tests"));
+      Parameters.Add(new LookupParameter<ItemArray<StringValue>>(FailingTestsParameterName, "The initially failing tests"));
     }
 
     public override IOperation InstrumentedApply () {

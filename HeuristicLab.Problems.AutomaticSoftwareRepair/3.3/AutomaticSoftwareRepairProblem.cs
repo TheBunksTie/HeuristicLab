@@ -43,6 +43,8 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
     private const string CorrectnessSpecificationParameterName = "CorrectnessSpecification";
     private const string ProductionCodeParameterName = "ProductionCode";
     private const string ProblemInstanceParameterName = "ProblemInstance";
+    private const string PassingTestsParameterName = "PassingTests";
+    private const string FailingTestsParameterName = "FailingTests";
 
     public string Filename { get; set; }
 
@@ -52,6 +54,12 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
     }
     public ValueParameter<StringValue> ProductionCodeParameter {
       get { return (ValueParameter<StringValue>)Parameters[ProductionCodeParameterName]; }
+    }
+    public ValueParameter<ItemArray<StringValue>> PassingTestsParameter {
+      get { return (ValueParameter<ItemArray<StringValue>>)Parameters[PassingTestsParameterName]; }
+    }
+    public ValueParameter<ItemArray<StringValue>> FailingTestsParameter {
+      get { return (ValueParameter<ItemArray<StringValue>>)Parameters[FailingTestsParameterName]; }
     }
     public ValueParameter<IASRProblemInstance> ProblemInstanceParameter {
       get { return (ValueParameter<IASRProblemInstance>)Parameters[ProblemInstanceParameterName]; }
@@ -92,17 +100,17 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
       Parameters.Add(new ValueParameter<StringValue>(CorrectnessSpecificationParameterName, "The correctness specification for the production code."));
       Parameters.Add(new ValueParameter<StringValue>(ProductionCodeParameterName, "The buggy production code to be repaired."));
       Parameters.Add(new ValueParameter<IASRProblemInstance>(ProblemInstanceParameterName, "The ASR problem instance."));
-     
+      Parameters.Add(new ValueParameter<ItemArray<StringValue>>(PassingTestsParameterName, "The initially passing tests"));
+      Parameters.Add(new ValueParameter<ItemArray<StringValue>>(FailingTestsParameterName, "The initially failing tests"));
+           
       Maximization.Value = true;
       MaximizationParameter.Hidden = true; 
-
-      InitializeASRProblemInstance();
-      InitializeOperators();
     }
 
     private void InitializeASRProblemInstance () {
       var asrProblemInstance = new SimpleASRProblemInstance();
       asrProblemInstance.ProductionCode.Value = ProductionCode.Value;
+      asrProblemInstance.CorrectnessSpecification.Value = CorrectnessSpecification.Value;
 
       ProblemInstance = asrProblemInstance;
     }
@@ -139,6 +147,12 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
     public void Load (ASRData data) {
       CorrectnessSpecification.Value = data.CorrectnessSpecification;
       ProductionCode.Value = data.ProductionCode;
+      BestKnownQuality = new DoubleValue(data.BestKnownQuality);
+      PassingTestsParameter.Value = new ItemArray<StringValue>(data.PassingTests.Select(s => new StringValue(s)));
+      FailingTestsParameter.Value = new ItemArray<StringValue>(data.FailingTests.Select(s => new StringValue(s)));
+
+      InitializeASRProblemInstance();
+      InitializeOperators();
     }
   }
 }

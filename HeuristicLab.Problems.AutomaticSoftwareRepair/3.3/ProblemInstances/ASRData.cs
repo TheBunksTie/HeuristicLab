@@ -20,6 +20,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
@@ -45,5 +46,20 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
     /// The correctness specification.
     /// </summary>
     public string CorrectnessSpecification { get; set; }
+
+    /// <summary>
+    /// The list of the initially failing tests.
+    /// </summary>
+    public IEnumerable<string> FailingTests { get; set; }
+    
+    /// <summary>
+    /// The list of the initially passing tests.
+    /// </summary>
+    public IEnumerable<string> PassingTests { get; set; }
+
+    /// <summary>
+    /// The maximum quality to be achieved for the specific instance.
+    /// </summary>
+    public double BestKnownQuality { get; set; }
   }
 }

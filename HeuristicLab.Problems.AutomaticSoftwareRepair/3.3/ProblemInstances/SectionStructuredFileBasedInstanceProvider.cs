@@ -20,10 +20,15 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
   public abstract class SectionStructuredFileBasedInstanceProvider : ASRInstanceProvider<ASRData> {
+    private const string PassingTestsSectionName = "//<PassingTestsSection>";
+    private const string FailingTestsSectionName = "//<FailingTestsSection>";
+    private const string BestKnownQualitySectionName = "//<BestKnownQualitySection>";
     private const string CorrectnessSpecificationSectionName = "//<CorrectnessSpecificationSection>";
     private const string ProductionCodeSectionName = "//<ProductionCodeSection>";
 
@@ -45,15 +50,30 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
 
     private static ASRData CreateInstanceFromFileContent (string fileContent) {
       var structuredFileContent = fileContent.Split (
-          new[] { CorrectnessSpecificationSectionName, ProductionCodeSectionName },
-          StringSplitOptions.RemoveEmptyEntries);
+          new[] {
+                    PassingTestsSectionName,
+                    FailingTestsSectionName,
+                    BestKnownQualitySectionName,
+                    CorrectnessSpecificationSectionName,
+                    ProductionCodeSectionName
+                },
+          StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToArray();
 
       var instance = new ASRData {
-                                     CorrectnessSpecification = structuredFileContent[0],
-                                     ProductionCode = structuredFileContent[1]
+                                     PassingTests = ExtractTests(structuredFileContent[0]),
+                                     FailingTests = ExtractTests(structuredFileContent[1]),
+                                     BestKnownQuality = double.Parse(structuredFileContent[2]),
+                                     CorrectnessSpecification = structuredFileContent[3],
+                                     ProductionCode = structuredFileContent[4]
                                  };
 
       return instance;
+    }
+
+    private static IEnumerable<string> ExtractTests (string testString) {
+      if (testString == "-")
+        return new string[0];
+      return testString.Split(new [] {','},StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim());
     }
   }
 }

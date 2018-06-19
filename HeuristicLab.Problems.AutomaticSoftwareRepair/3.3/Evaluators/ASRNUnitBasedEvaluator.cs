@@ -70,7 +70,7 @@ namespace ASRNUnitBasedEvaluator.Evaluation
     private static readonly MetadataReference enumerableReference = MetadataReference.CreateFromFile (typeof (Enumerable).Assembly.Location);
 
     private readonly Dictionary<string, object> testSettings = new Dictionary<string, object>();
-    private static readonly NullTestListener nullTestListener = new NullTestListener ();
+    //private static readonly DiagnosticTestListener diagnosticTestListener = new DiagnosticTestListener ();
     private static readonly DefaultTestAssemblyBuilder defaultTestAssemblyBuilder = new DefaultTestAssemblyBuilder ();
 
     [StorableConstructor]
@@ -93,27 +93,42 @@ namespace ASRNUnitBasedEvaluator.Evaluation
 
       var evaluationAssembly = CompileToAssembly (tree);
       if (evaluationAssembly == null)
-        return double.MinValue;
+        return 0;
 
       // run tests from test code assembly and calculate fitness for current candidate
       var nUnitTestAssemblyRunner = new NUnitTestAssemblyRunner (defaultTestAssemblyBuilder);
       nUnitTestAssemblyRunner.Load (evaluationAssembly, testSettings);
 
-      var testRunResult = nUnitTestAssemblyRunner.Run (nullTestListener, TestFilter.Empty);
-      var solutionCandidateQuality = CalculateFitness (testRunResult);
+       var diagnosticTestListener = new DiagnosticTestListener ();
+
+      nUnitTestAssemblyRunner.Run (diagnosticTestListener, TestFilter.Empty);
+
+      var solutionCandidateQuality = CalculateFitness (diagnosticTestListener);
 
       return solutionCandidateQuality;
     }
 
-    private double CalculateFitness (ITestResult testRunResult)
+    private double CalculateFitness (IDetailedTestResult testRunResult)
     {
       const int positiveWeight = 1;
       const int negativeWeight = 10;
 
-      var positiveTestCount = testRunResult.PassCount;
-      var negativeTestCount = testRunResult.FailCount + testRunResult.InconclusiveCount + testRunResult.SkipCount;
 
-      return (positiveWeight * positiveTestCount - negativeWeight * negativeTestCount);
+      var fitnessValue = 0L;
+
+      foreach (var testName in PassingTestsParameter.ActualValue) {
+        if (testRunResult.PassedTests.Contains(testName.Value)) {
+          fitnessValue += positiveWeight;          
+        }
+      }
+
+      foreach (var testName in FailingTestsParameter.ActualValue) {
+        if (testRunResult.PassedTests.Contains(testName.Value)) {
+          fitnessValue += negativeWeight;          
+        }
+      }
+
+      return fitnessValue;
     }
 
     private Assembly CompileToAssembly (SyntaxTree tree)
@@ -146,11 +161,29 @@ namespace ASRNUnitBasedEvaluator.Evaluation
 
     }
 
-    private class NullTestListener : ITestListener
+    private class DiagnosticTestListener : ITestListener, IDetailedTestResult
     {
+      public DiagnosticTestListener () {
+        PassedTests = new HashSet<string>();
+      }
+
       public void TestStarted (ITest test) { }
-      public void TestFinished (ITestResult result) { }
+      public void TestFinished (ITestResult result) {
+        var testName = result.Test.Name;
+        var passed = result.PassCount >= 1;
+
+        if (passed)
+          PassedTests.Add (testName);
+
+      }
+
       public void TestOutput (TestOutput output) { }
+
+      public ISet<string> PassedTests { get; private set; }
+    }
+
+    private interface IDetailedTestResult {
+      ISet<string> PassedTests { get; }
     }
   }
 }
