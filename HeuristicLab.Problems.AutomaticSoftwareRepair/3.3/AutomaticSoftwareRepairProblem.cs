@@ -28,6 +28,7 @@ using HeuristicLab.Optimization;
 using HeuristicLab.Parameters;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
 using HeuristicLab.PluginInfrastructure;
+using HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Creators;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
@@ -130,6 +131,8 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
       if (ProblemInstance != null) {
         Operators.AddRange (ProblemInstance.Operators.Concat (ApplicationManager.Manager.GetInstances<IASROperator>().Cast<IOperator>()).OrderBy (op => op.Name));
       }
+
+      Operators.Add(new BestASRSolutionAnalyzer());
 
       ParameterizeOperators();
     }
