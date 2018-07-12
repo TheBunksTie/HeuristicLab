@@ -69,7 +69,6 @@
     <Compile Include="Analyzer\BestASRSolutionAnalyzer.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Creators\ModifyingProductionCodeSolutionCreator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Creators\ProductionCodeBasedSolutionCreator.cs" />
-    <Compile Include="Encodings\NetCompilerPlatform\Crossovers\NullCrossover.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Manipulators\ExpressionReplaceMutator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Manipulators\InitialProductionCodeReInserter.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Util\StatementExtractionUtility.cs" />
