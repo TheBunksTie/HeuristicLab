@@ -43,13 +43,11 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances
     }
 
     protected override IASREvaluator Evaluator {
-      get {
-        return new ASRNUnitBasedEvaluator();
-      }
+      get { return new ASRNUnitBasedEvaluator(); }
     }
 
     protected override IASRCreator Creator {
-      get { return new ProductionCodeVariableBasedSolutionCreator(); }
+      get { return new NonModifyingProductionCodeSolutionCreator(); }
     }
 
     [StorableConstructor]

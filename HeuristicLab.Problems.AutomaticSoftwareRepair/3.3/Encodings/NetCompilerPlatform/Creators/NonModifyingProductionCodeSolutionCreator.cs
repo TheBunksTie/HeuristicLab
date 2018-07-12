@@ -22,44 +22,30 @@
 using System;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
-using HeuristicLab.Data;
-using HeuristicLab.Parameters;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
-using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General.Creators;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Creators {
-  [Item("ProductionCodeVariableBasedSolutionCreator", "Creates a ASR solution from production code stored in variable.")]
+  [Item("NonModifyingProductionCodeSolutionCreator", "Creates an ASR solution from production code stored in variable.")]
   [StorableClass]
-  public sealed class ProductionCodeVariableBasedSolutionCreator :  ASRCreator {
-    private const string ProductionCodeParameterName = "ProductionCode";
-
-    public ILookupParameter<StringValue> ProductionCodeParameter {
-      get { return (LookupParameter<StringValue>)Parameters[ProductionCodeParameterName]; }
-    }
+  public sealed class NonModifyingProductionCodeSolutionCreator :  ProductionCodeBasedSolutionCreator {
 
     [StorableConstructor]
-    private ProductionCodeVariableBasedSolutionCreator(bool deserializing) : base(deserializing) { }
+    private NonModifyingProductionCodeSolutionCreator(bool deserializing) : base(deserializing) { }
 
-    public ProductionCodeVariableBasedSolutionCreator()
+    public NonModifyingProductionCodeSolutionCreator()
         : base() {
-      Parameters.Add(new LookupParameter<StringValue>(ProductionCodeParameterName, "The source code of the buggy program."));
     }
 
     public override IDeepCloneable Clone(Cloner cloner) {
-      return new ProductionCodeVariableBasedSolutionCreator(this, cloner);
+      return new NonModifyingProductionCodeSolutionCreator(this, cloner);
     }
 
-    private ProductionCodeVariableBasedSolutionCreator(ProductionCodeVariableBasedSolutionCreator original, Cloner cloner)
+    private NonModifyingProductionCodeSolutionCreator(NonModifyingProductionCodeSolutionCreator original, Cloner cloner)
         : base(original, cloner) {
     }
-
-    public override IOperation InstrumentedApply() {
-      ASRSolutionParameter.ActualValue = CreateSolution(ProductionCodeParameter.ActualValue.Value, ProblemInstance);
-      return base.InstrumentedApply();
-    }
-
-    private IASREncoding CreateSolution (string productionCode, IASRProblemInstance instance) {
+ 
+    protected override IASREncoding CreateSolution (string productionCode, IASRProblemInstance instance) {
       var result = new SyntaxTreeEncoding(productionCode, instance);
       return result;
     }

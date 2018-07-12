@@ -30,11 +30,14 @@ using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
-  [Item ("ASRProblemInstance", "Represents a ASR problem instance.")]
+  [Item ("ASRProblemInstance", "Represents an ASR problem instance.")]
   [StorableClass]
   public abstract class ASRProblemInstance : ParameterizedNamedItem, IASRProblemInstance, IStatefulItem {
     private const string CorrectnessSpecificationParameterName = "CorrectnessSpecification";
     private const string ProductionCodeParameterName = "ProductionCode";
+    private const string CorrectSolutionParameterName = "CorrectSolutionParameter";
+    private const string PassingTestsParameterName = "PassingTests";
+    private const string FailingTestsParameterName = "FailingTests";
 
     IASREvaluator evaluator;
 
@@ -67,6 +70,17 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
       get { return (ValueParameter<StringValue>)Parameters[ProductionCodeParameterName]; }
     }
 
+    protected ValueParameter<StringValue> CorrectSolutionParameter {
+      get { return (ValueParameter<StringValue>)Parameters[CorrectSolutionParameterName]; }
+    }
+
+    public ValueParameter<ItemArray<StringValue>> PassingTestsParameter {
+      get { return (ValueParameter<ItemArray<StringValue>>)Parameters[PassingTestsParameterName]; }
+    }
+    public ValueParameter<ItemArray<StringValue>> FailingTestsParameter {
+      get { return (ValueParameter<ItemArray<StringValue>>)Parameters[FailingTestsParameterName]; }
+    }
+
     public StringValue CorrectnessSpecification {
       get { return CorrectnessSpecificationParameter.Value; }
       set { CorrectnessSpecificationParameter.Value = value; }
@@ -75,7 +89,20 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
       get { return ProductionCodeParameter.Value; }
       set { ProductionCodeParameter.Value = value; }
     }
+    public StringValue CorrectSolution {
+      get { return CorrectSolutionParameter.Value; }
+      set { CorrectSolutionParameter.Value = value; }
+    }
 
+    public ItemArray<StringValue> PassingTests {
+      get { return PassingTestsParameter.Value; }
+      set { PassingTestsParameter.Value = value; }
+    }
+
+    public ItemArray<StringValue> FailingTests {
+      get { return FailingTestsParameter.Value; }
+      set { FailingTestsParameter.Value = value; }
+    }
     
     protected abstract IASREvaluator Evaluator { get; }
     protected abstract IASRCreator Creator { get; }
@@ -85,16 +112,19 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
 
     public ASRProblemInstance()
         : base() {
-      Parameters.Add(new ValueParameter<StringValue>(CorrectnessSpecificationParameterName, "The correctness specification for the buggy program.", new StringValue()));
-      Parameters.Add(new ValueParameter<StringValue>(ProductionCodeParameterName, "The buggy production code to repair.", new StringValue()));
-      
-      evaluator = Evaluator;
+      Parameters.Add(new ValueParameter<StringValue>(CorrectnessSpecificationParameterName, "The correctness specification for the buggy program."));
+      Parameters.Add(new ValueParameter<StringValue>(ProductionCodeParameterName, "The buggy production code to repair."));
+      Parameters.Add(new ValueParameter<StringValue>(CorrectSolutionParameterName, "A correct version of the buggy production code, fulfilling the tests."));
+      Parameters.Add(new ValueParameter<ItemArray<StringValue>>(FailingTestsParameterName, "The initially failing tests")); 
+      Parameters.Add(new ValueParameter<ItemArray<StringValue>>(PassingTestsParameterName, "The initially passing tests"));
+
+      SolutionEvaluator = Evaluator;
       AttachEventHandlers();
     }
 
     protected ASRProblemInstance(ASRProblemInstance original, Cloner cloner)
         : base(original, cloner) {
-      evaluator = Evaluator;
+      SolutionEvaluator = Evaluator;
       AttachEventHandlers();
     }
 

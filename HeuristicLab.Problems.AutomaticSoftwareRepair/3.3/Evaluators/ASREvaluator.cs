@@ -32,19 +32,27 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
   /// <summary>
   /// A base class for operators which evaluate ASR solutions.
   /// </summary>
-  [Item("ASREvaluator", "A base class for operators which evaluate ASR solutions.")]
+  [Item ("ASREvaluator", "A base class for operators which evaluate ASR solutions.")]
   [StorableClass]
   public abstract class ASREvaluator : ASROperator, IASREvaluator {
     private const string SolutionParameterName = "ASRSolution";
+    private const string QualityParameterName = "Quality";
+    private const string SolutionSimilarityParameterName = "SolutionSimilarity";
 
     public ILookupParameter<IASREncoding> ASRSolutionParameter {
       get { return (ILookupParameter<IASREncoding>) Parameters[SolutionParameterName]; }
     }
 
-    #region ISingleObjectiveEvaluator Members
-    public ILookupParameter<DoubleValue> QualityParameter {
-      get { return (ILookupParameter<DoubleValue>)Parameters["Quality"]; }
+    public ILookupParameter<DoubleValue> SolutionSimilarityParameter {
+      get { return (ILookupParameter<DoubleValue>) Parameters[SolutionSimilarityParameterName]; }
     }
+
+    #region ISingleObjectiveEvaluator Members
+
+    public ILookupParameter<DoubleValue> QualityParameter {
+      get { return (ILookupParameter<DoubleValue>) Parameters[QualityParameterName]; }
+    }
+
     #endregion
 
     public override bool CanChangeName {
@@ -52,11 +60,54 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
     }
 
     [StorableConstructor]
-    protected ASREvaluator(bool deserializing) : base(deserializing) { }
-    protected ASREvaluator(ASREvaluator original, Cloner cloner) : base(original, cloner) { }
-    protected ASREvaluator(){
-      Parameters.Add(new LookupParameter<IASREncoding>(SolutionParameterName, "The ASR solution which should be evaluated."));
-      Parameters.Add(new LookupParameter<DoubleValue>("Quality", "The evaluated quality of the ASR solution."));
+    protected ASREvaluator (bool deserializing) : base (deserializing) { }
+    protected ASREvaluator (ASREvaluator original, Cloner cloner) : base (original, cloner) { }
+    protected ASREvaluator () {
+      Parameters.Add (new LookupParameter<IASREncoding> (SolutionParameterName, "The ASR solution which should be evaluated."));
+      Parameters.Add (new LookupParameter<DoubleValue> (QualityParameterName, "The evaluated quality of the ASR solution."));
+      Parameters.Add (new LookupParameter<DoubleValue> (SolutionSimilarityParameterName, "The structural similarity of the current solution to an optional provided correct solution"));
     }
+
+    public override IOperation InstrumentedApply () {
+      var currentSolutionProgram = ASRSolutionParameter.ActualValue.GetSolutionProgram ();
+
+      var qualityValue = Evaluate (currentSolutionProgram, ProblemInstance.CorrectnessSpecification.Value);
+      QualityParameter.ActualValue = new DoubleValue (qualityValue);
+
+      return base.InstrumentedApply ();
+    }
+
+    /// <summary>
+    /// Calculates the quality of production code.
+    /// </summary>
+    /// <param name="solutionCandidateProductionCode">The ASR solution candidate given in string representation which should be evaluated</param>
+    /// <param name="correctessSpecification">The test suite acting as an orcale for correctness.</param>
+    /// <returns>The calculated quality measurement.</returns>
+    protected abstract double Evaluate (string solutionCandidateProductionCode, string correctessSpecification);
+
+    /// <summary>
+    /// Calculates the syntactical similarity between the current solution candidate and a provided correct version of the production code 
+    /// </summary>
+    /// <param name="currentSolutionProgram"></param>
+    /// <param name="correctSolutionValue"></param>
+    /// <returns></returns>
+    protected abstract double CalculateSimilarity (string currentSolutionProgram, string correctSolutionValue);
+
+    //public override IOperation InstrumentedApply () {
+    //  var currentSolutionProgram = ASRSolutionParameter.ActualValue.GetSolutionProgram();
+
+    //  var similarityValue = 1D;
+    //  if (ProblemInstance.CorrectSolution.Value != null) {
+    //    similarityValue = CalculateSimilarity (currentSolutionProgram, ProblemInstance.CorrectSolution.Value);
+    //  }
+
+    //  SolutionSimilarityParameter.ActualValue = new DoubleValue(similarityValue);
+
+    //  return base.InstrumentedApply();
+    //}
+
+    //private double CalculateSimilarity (string currentSolutionProgram, string correctSolutionValue) {
+    //  return 0;
+    //}
   }
 }

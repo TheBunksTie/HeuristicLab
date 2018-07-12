@@ -61,5 +61,10 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
     /// The maximum quality to be achieved for the specific instance.
     /// </summary>
     public double BestKnownQuality { get; set; }
+
+    /// <summary>
+    /// Optional! A corrected version of the buggy production code, fulfilling the tests.
+    /// </summary>
+    public string CorrectSolution { get; set; }
   }
 }

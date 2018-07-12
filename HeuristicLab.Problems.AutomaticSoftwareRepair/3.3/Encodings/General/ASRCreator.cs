@@ -26,7 +26,7 @@ using HeuristicLab.Parameters;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
-namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General.Creators {
+namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
   [Item("ASRCreator", "Creates an ASR solution.")]
   [StorableClass]
   public abstract class ASRCreator : ASROperator, IASRCreator {

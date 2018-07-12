@@ -67,6 +67,8 @@
   <ItemGroup>
     <Compile Include="Analyzer\ASRSolution.cs" />
     <Compile Include="Analyzer\BestASRSolutionAnalyzer.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Creators\ModifyingProductionCodeSolutionCreator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Creators\ProductionCodeBasedSolutionCreator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Crossovers\NullCrossover.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Manipulators\ExpressionReplaceMutator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Util\StatementExtractionUtility.cs" />
@@ -88,12 +90,11 @@
     <Compile Include="Encodings\NetCompilerPlatform\Crossovers\StatementCrossover.cs" />
     <Compile Include="Encodings\General\ASREncoding.cs" />
     <Compile Include="Interfaces\IASRCrossover.cs" />
-    <Compile Include="Encodings\NetCompilerPlatform\Creators\ProductionCodeVariableBasedSolutionCreator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Creators\NonModifyingProductionCodeSolutionCreator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\SyntaxTreeEncoding.cs" />
     <Compile Include="Evaluators\ASRNUnitBasedEvaluator.cs" />
-    <Compile Include="Evaluators\ASRTestSuiteBasedEvaluator.cs" />
     <Compile Include="Evaluators\ASREvaluator.cs" />
-    <Compile Include="Encodings\General\Creators\ASRCreator.cs" />
+    <Compile Include="Encodings\General\ASRCreator.cs" />
     <Compile Include="Interfaces\IASRCreator.cs" />
     <Compile Include="Interfaces\IASREncoding.cs" />
     <Compile Include="Interfaces\IASREvaluator.cs" />
@@ -131,6 +132,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\HeuristicLab.Analysis\3.3\HeuristicLab.Analysis-3.3.csproj">
+      <Project>{887425B4-4348-49ED-A457-B7D2C26DDBF9}</Project>
+      <Name>HeuristicLab.Analysis-3.3</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\HeuristicLab.Collections\3.3\HeuristicLab.Collections-3.3.csproj">
       <Project>{958B43BC-CC5C-4FA2-8628-2B3B01D890B6}</Project>
       <Name>HeuristicLab.Collections-3.3</Name>
@@ -196,6 +201,10 @@
       <Project>{3540E29E-4793-49E7-8EE2-FEA7F61C3994}</Project>
       <Name>HeuristicLab.Problems.Instances-3.3</Name>
       <Private>False</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\HeuristicLab.Random\3.3\HeuristicLab.Random-3.3.csproj">
+      <Project>{F4539FB6-4708-40C9-BE64-0A1390AEA197}</Project>
+      <Name>HeuristicLab.Random-3.3</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

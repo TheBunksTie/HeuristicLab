@@ -41,7 +41,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
   /// </summary>
   [Item("ASRNUnitBasedEvaluator", "An operator which evaluates ASR solutions given ASR as source code against a given test suite using NUnit.")]
   [StorableClass]
-  public sealed class ASRNUnitBasedEvaluator : ASRTestSuiteBasedEvaluator
+  public sealed class ASRNUnitBasedEvaluator : ASREvaluator
   {
     private const string c_evaluationClassTemplate = @"using System;
 using System.Linq;
@@ -70,14 +70,17 @@ namespace ASRNUnitBasedEvaluator.Evaluation
     private static readonly MetadataReference enumerableReference = MetadataReference.CreateFromFile (typeof (Enumerable).Assembly.Location);
 
     private readonly Dictionary<string, object> testSettings = new Dictionary<string, object>();
-    //private static readonly DiagnosticTestListener diagnosticTestListener = new DiagnosticTestListener ();
     private static readonly DefaultTestAssemblyBuilder defaultTestAssemblyBuilder = new DefaultTestAssemblyBuilder ();
+    private SyntaxTree originalProductionCodeTree;
+
+    private SyntaxTree OriginalProductionCodeTree {
+      get { return originalProductionCodeTree ?? (originalProductionCodeTree = CSharpSyntaxTree.ParseText (ProblemInstance.ProductionCode.Value)); }
+    }
 
     [StorableConstructor]
     private ASRNUnitBasedEvaluator(bool deserializing) : base(deserializing) { }
     private ASRNUnitBasedEvaluator(ASRNUnitBasedEvaluator original, Cloner cloner) : base(original, cloner) { }
     public ASRNUnitBasedEvaluator() : base() {
-
       testSettings.Add(FrameworkPackageSettings.NumberOfTestWorkers, 0);
       testSettings.Add(FrameworkPackageSettings.InternalTraceLevel, "Off");
     }
@@ -86,12 +89,12 @@ namespace ASRNUnitBasedEvaluator.Evaluation
       return new ASRNUnitBasedEvaluator(this, cloner);
     }
 
-    protected override double Evaluate (string productionCode, string testCode) {
+    protected override double Evaluate (string solutionCandidateProductionCode, string correctessSpecification) {
       
-      var completeCode = string.Format (c_evaluationClassTemplate, testCode, productionCode);
-      var tree = CSharpSyntaxTree.ParseText (completeCode);
+      var completeEvaluationCode = string.Format (c_evaluationClassTemplate, correctessSpecification, solutionCandidateProductionCode);
+      var solutionCandidateSyntaxTree = CSharpSyntaxTree.ParseText (completeEvaluationCode);
 
-      var evaluationAssembly = CompileToAssembly (tree);
+      var evaluationAssembly = CompileToAssembly (solutionCandidateSyntaxTree);
       if (evaluationAssembly == null)
         return 0;
 
@@ -99,13 +102,17 @@ namespace ASRNUnitBasedEvaluator.Evaluation
       var nUnitTestAssemblyRunner = new NUnitTestAssemblyRunner (defaultTestAssemblyBuilder);
       nUnitTestAssemblyRunner.Load (evaluationAssembly, testSettings);
 
-       var diagnosticTestListener = new DiagnosticTestListener ();
+      var diagnosticTestListener = new DiagnosticTestListener();
 
       nUnitTestAssemblyRunner.Run (diagnosticTestListener, TestFilter.Empty);
 
       var solutionCandidateQuality = CalculateFitness (diagnosticTestListener);
 
       return solutionCandidateQuality;
+    }
+
+    protected override double CalculateSimilarity (string currentSolutionProgram, string correctSolutionValue) {
+      return 0;
     }
 
     private double CalculateFitness (IDetailedTestResult testRunResult)
@@ -116,13 +123,13 @@ namespace ASRNUnitBasedEvaluator.Evaluation
 
       var fitnessValue = 0L;
 
-      foreach (var testName in PassingTestsParameter.ActualValue) {
+      foreach (var testName in ProblemInstance.PassingTests) {
         if (testRunResult.PassedTests.Contains(testName.Value)) {
           fitnessValue += positiveWeight;          
         }
       }
 
-      foreach (var testName in FailingTestsParameter.ActualValue) {
+      foreach (var testName in ProblemInstance.FailingTests) {
         if (testRunResult.PassedTests.Contains(testName.Value)) {
           fitnessValue += negativeWeight;          
         }
@@ -169,11 +176,9 @@ namespace ASRNUnitBasedEvaluator.Evaluation
 
       public void TestStarted (ITest test) { }
       public void TestFinished (ITestResult result) {
-        var testName = result.Test.Name;
-        var passed = result.PassCount >= 1;
-
-        if (passed)
-          PassedTests.Add (testName);
+        var testPassed = result.PassCount >= 1;
+        if (testPassed)
+          PassedTests.Add (result.Test.Name);
 
       }
 

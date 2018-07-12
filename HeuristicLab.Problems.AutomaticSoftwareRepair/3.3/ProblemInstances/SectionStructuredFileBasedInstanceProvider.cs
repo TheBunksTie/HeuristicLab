@@ -31,6 +31,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
     private const string BestKnownQualitySectionName = "//<BestKnownQualitySection>";
     private const string CorrectnessSpecificationSectionName = "//<CorrectnessSpecificationSection>";
     private const string ProductionCodeSectionName = "//<ProductionCodeSection>";
+    private const string CorrectSolutionSectionName = "//<CorrectSolutionSection>";
 
     protected override ASRData LoadData(Stream stream) {
       using (var reader = new StreamReader(stream)) {
@@ -55,7 +56,8 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
                     FailingTestsSectionName,
                     BestKnownQualitySectionName,
                     CorrectnessSpecificationSectionName,
-                    ProductionCodeSectionName
+                    ProductionCodeSectionName,
+                    CorrectSolutionSectionName
                 },
           StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim()).ToArray();
 
@@ -64,7 +66,8 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
                                      FailingTests = ExtractTests(structuredFileContent[1]),
                                      BestKnownQuality = double.Parse(structuredFileContent[2]),
                                      CorrectnessSpecification = structuredFileContent[3],
-                                     ProductionCode = structuredFileContent[4]
+                                     ProductionCode = structuredFileContent[4],
+                                     CorrectSolution = structuredFileContent[5],
                                  };
 
       return instance;
