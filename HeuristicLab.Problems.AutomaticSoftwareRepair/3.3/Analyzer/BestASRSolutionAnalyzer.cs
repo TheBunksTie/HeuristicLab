@@ -82,7 +82,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
       Parameters.Add(new LookupParameter<IASRProblemInstance>(ProblemInstanceParameterName, "The initial buggy production source code."));
       Parameters.Add(new ScopeTreeLookupParameter<IASREncoding>(ASRSolutionParameterName, "The ASR solutions given in source code as string representation from which the best solution should be analyzed."));
       Parameters.Add(new ScopeTreeLookupParameter<DoubleValue>(QualityParameterName, "The qualities of the ASR solutions which should be analyzed."));
-      Parameters.Add(new LookupParameter<ASRSolution>(BestSolutionParameterName, "The best TSP solution."));
+      Parameters.Add(new LookupParameter<ASRSolution>(BestSolutionParameterName, "The best ASR solution."));
       Parameters.Add(new ValueLookupParameter<ResultCollection>(ResultsParameterName, "The result collection where the best ASR solution should be stored."));
       Parameters.Add(new LookupParameter<DoubleValue>(BestKnownQualityParameterName, "The quality of the best known solution of this ASR instance."));
       Parameters.Add(new LookupParameter<IASREncoding>(BestKnownSolutionParameterName, "The best known solution of this ASR instance."));
@@ -110,10 +110,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
       if (solution == null) {
         solution = new ASRSolution(problemInstance, best.Clone() as IASREncoding, new DoubleValue(qualities[i].Value));
         BestSolutionParameter.ActualValue = solution;
-        results.Add(new Result("Best ASR Solution", solution));
-
-        //results.Add(new Result("Best VRP Solution Distance", new DoubleValue(distances[i].Value)));
-        //results.Add(new Result("Best VRP Solution VehicleUtilization", new DoubleValue(vehiclesUtilizations[i].Value)));
+        results.Add(new Result("CurrentBestSolutionProgram", solution));
       } else {
         if (solution.Quality.Value < qualities[i].Value) {
           solution.ProblemInstance = problemInstance;

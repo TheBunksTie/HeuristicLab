@@ -77,7 +77,6 @@
     <Compile Include="Encodings\General\MultiASRSolutionManipulator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Manipulators\SyntaxTreeManipulator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Crossovers\SyntaxTreeCrossover.cs" />
-    <Compile Include="Encodings\NetCompilerPlatform\DiffPatchBasedEncoding.cs" />
     <Compile Include="ProblemInstances\ASRData.cs" />
     <Compile Include="ProblemInstances\ASRDataDescriptor.cs" />
     <Compile Include="ProblemInstances\ASRInstanceProvider.cs" />
