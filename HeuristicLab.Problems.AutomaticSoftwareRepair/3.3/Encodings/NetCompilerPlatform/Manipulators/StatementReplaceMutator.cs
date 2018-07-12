@@ -28,7 +28,7 @@ using Microsoft.CodeAnalysis;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators
 {
-  [Item ("StatementReplaceMutator", "A mutation operator which randomly replaces an expression with another one from the same syntax tree.")]
+  [Item ("StatementReplaceMutator", "A mutation operator which randomly replaces a statement with another one from the same syntax tree.")]
   [StorableClass]
   public sealed class StatementReplaceMutator : SyntaxTreeManipulator {
 

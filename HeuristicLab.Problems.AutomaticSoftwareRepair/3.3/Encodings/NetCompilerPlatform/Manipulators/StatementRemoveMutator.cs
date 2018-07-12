@@ -27,7 +27,7 @@ using Microsoft.CodeAnalysis;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators
 {
-  [Item ("StatementRemoveMutator", "A mutation operator which randomly removes an expression from the syntax tree.")]
+  [Item ("StatementRemoveMutator", "A mutation operator which randomly removes a statement from the syntax tree.")]
   [StorableClass]
   public sealed class StatementRemoveMutator : SyntaxTreeManipulator {
 

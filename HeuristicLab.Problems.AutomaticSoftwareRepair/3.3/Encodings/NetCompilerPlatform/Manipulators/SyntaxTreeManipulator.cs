@@ -48,7 +48,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
 
     public SyntaxTreeManipulator ()
         : base() {
-      Parameters.Add (new LookupParameter<IRandom> (RandomParameterName, "The pseudo random number generator which should be used for symbolic expression tree operators."));
+      Parameters.Add (new LookupParameter<IRandom> (RandomParameterName, "The pseudo random number generator which should be used for syntax tree operators."));
     }
 
     protected SyntaxTreeManipulator (SyntaxTreeManipulator original, Cloner cloner)
