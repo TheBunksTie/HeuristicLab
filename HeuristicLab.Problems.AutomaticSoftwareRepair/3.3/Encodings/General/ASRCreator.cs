@@ -30,10 +30,10 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
   [Item("ASRCreator", "Creates an ASR solution.")]
   [StorableClass]
   public abstract class ASRCreator : ASROperator, IASRCreator {
-    private const string AsrSolutionParameterName = "ASRSolution";
+    private const string SolutionParameterName = "ASRSolution";
 
     public ILookupParameter<IASREncoding> ASRSolutionParameter {
-      get { return (ILookupParameter<IASREncoding>) Parameters[AsrSolutionParameterName]; }
+      get { return (ILookupParameter<IASREncoding>) Parameters[SolutionParameterName]; }
     }
  
     [StorableConstructor]
@@ -41,7 +41,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
 
     public ASRCreator()
         : base() {
-      Parameters.Add(new LookupParameter<IASREncoding>(AsrSolutionParameterName, "The ASR solution to be created."));
+      Parameters.Add(new LookupParameter<IASREncoding>(SolutionParameterName, "The ASR solution to be created."));
     }
 
     protected ASRCreator(ASRCreator original, Cloner cloner)
