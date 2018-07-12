@@ -51,6 +51,9 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
 
     protected override SyntaxTreeEncoding ApplyMutation (IRandom random, SyntaxTreeEncoding individual) {
       var statements = GetAllStatements(individual.SyntaxTree.GetRoot());
+      if (statements.Length == 0)
+        return individual;
+
       var addee = statements[random.Next (statements.Length)];
       var addingLocation = statements[random.Next (statements.Length)];
 

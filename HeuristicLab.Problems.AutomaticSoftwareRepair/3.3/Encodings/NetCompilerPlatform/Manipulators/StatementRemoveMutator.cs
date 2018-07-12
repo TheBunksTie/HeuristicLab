@@ -48,6 +48,8 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
 
     protected override SyntaxTreeEncoding ApplyMutation (IRandom random, SyntaxTreeEncoding individual) {
       var statements = GetAllStatements (individual.SyntaxTree.GetRoot());
+      if (statements.Length == 0)
+        return individual;
 
       var removee = statements[random.Next (statements.Length)];
 

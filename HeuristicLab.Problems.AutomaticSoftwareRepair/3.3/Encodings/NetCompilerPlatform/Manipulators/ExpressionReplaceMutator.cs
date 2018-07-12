@@ -50,6 +50,9 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
 
     protected override SyntaxTreeEncoding ApplyMutation (IRandom random, SyntaxTreeEncoding individual) {
       var expressions = individual.SyntaxTree.GetRoot().DescendantNodes().OfType<ExpressionSyntax>().ToArray();
+      if (expressions.Length == 0)
+        return individual;
+
       var replacee = expressions[random.Next (expressions.Length)];
 
       var fittingStatements = expressions.Where(s => s.Kind() == replacee.Kind()).ToArray();

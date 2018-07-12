@@ -20,53 +20,34 @@
 #endregion
 
 using System;
-using System.Linq;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
-using Microsoft.CodeAnalysis;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators
 {
-  [Item ("StatementReplaceMutator", "A mutation operator which randomly replaces an expression with another one from the same syntax tree.")]
+  [Item ("InitialProductionCodeReInserter", "A mutation operator which inserts the original buggy production code (Arcuri/Yao. \"A novel co-evolutionary approach to automatic software bug fixing.\" In: IEEE Congress on Evolutionary Computation. IEEE, 2008,).")]
   [StorableClass]
-  public sealed class StatementReplaceMutator : SyntaxTreeManipulator {
+  public sealed class InitialProductionCodeReInserter : SyntaxTreeManipulator {
 
     [StorableConstructor]
-    private StatementReplaceMutator(bool deserializing) : base(deserializing) { }
+    private InitialProductionCodeReInserter(bool deserializing) : base(deserializing) { }
 
-    public StatementReplaceMutator ()
+    public InitialProductionCodeReInserter ()
         : base () {
     }
 
     public override IDeepCloneable Clone(Cloner cloner) {
-      return new StatementReplaceMutator(this, cloner);
+      return new InitialProductionCodeReInserter(this, cloner);
     }
 
-    private StatementReplaceMutator(StatementReplaceMutator original, Cloner cloner)
+    private InitialProductionCodeReInserter(InitialProductionCodeReInserter original, Cloner cloner)
         : base(original, cloner) {
     }
 
     protected override SyntaxTreeEncoding ApplyMutation (IRandom random, SyntaxTreeEncoding individual) {
-      var statements = GetAllStatements(individual.SyntaxTree.GetRoot());
-      if (statements.Length == 0)
-        return individual;
-
-      var replacee = statements[random.Next (statements.Length)];
-
-      var fittingStatements = statements.Where(s => s.Kind() == replacee.Kind()).ToArray();
-      if (!fittingStatements.Any())
-        return individual;
-
-      var replacement = fittingStatements[random.Next (fittingStatements.Length)];
-      if (replacement.Equals (replacee))
-        return individual;
-
-      var mutatedSyntaxTree = individual.SyntaxTree.GetRoot().ReplaceNode(replacee, replacement).SyntaxTree;
-
-      individual.SyntaxTree = mutatedSyntaxTree;
-
-      return individual;
+      var originalProductionCodeSyntaxTree = new SyntaxTreeEncoding (ProblemInstance.ProductionCode.Value, ProblemInstance);
+      return originalProductionCodeSyntaxTree;
     }
   }
 }
