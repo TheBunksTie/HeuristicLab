@@ -67,12 +67,19 @@
   <ItemGroup>
     <Compile Include="Analyzer\ASRSolution.cs" />
     <Compile Include="Analyzer\BestASRSolutionAnalyzer.cs" />
+    <Compile Include="Analyzer\OperatorPerformanceASRSolutionAnalyzer.cs" />
+    <Compile Include="Analyzer\OperatorPerformanceResultsCollection.cs" />
+    <Compile Include="Encodings\General\AdaptingMultiASRSolutionManipulator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Creators\ModifyingProductionCodeSolutionCreator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Creators\ProductionCodeBasedSolutionCreator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Manipulators\ExpressionReplaceMutator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Manipulators\InitialProductionCodeReInserter.cs" />
-    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\Specific\BinaryOperationMutator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\Specific\ArithmeticOperationMutator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\Specific\BitwiseOperationMutator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\Specific\IdentifierReplacer.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\Specific\LogicalConditionMutator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Manipulators\Specific\OffByOneExpressionMutator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\Specific\SpecificManipulator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Util\StatementExtractionUtility.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Manipulators\StatementAddMutator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Manipulators\StatementRemoveMutator.cs" />

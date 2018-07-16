@@ -27,6 +27,7 @@ using HeuristicLab.Operators;
 using HeuristicLab.Optimization;
 using HeuristicLab.Parameters;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
+using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators.Specific;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
@@ -36,7 +37,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
   public class MultiASRSolutionManipulator :  StochasticMultiBranch<IASRManipulator>, IASRManipulator, IMultiASROperator, IStochasticOperator {
     private const string ProblemInstanceParameterName = "ProblemInstance";
     private const string SolutionParameterName = "ASRSolution";
-    private const string SelectedManipulatorParameterName = "SelectedManipulationOperator";
 
     public override bool CanChangeName {
       get { return false; }
@@ -53,14 +53,12 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
       get { return (LookupParameter<IASRProblemInstance>)Parameters[ProblemInstanceParameterName]; }
     }
 
-   [StorableConstructor]
+    [StorableConstructor]
     protected MultiASRSolutionManipulator(bool deserializing) : base(deserializing) { }
     public MultiASRSolutionManipulator()
         : base() {
-      Parameters.Add(new LookupParameter<IASRProblemInstance>(ProblemInstanceParameterName, "The ASR problem instance"));
-      Parameters.Add (new LookupParameter<IASREncoding> (SolutionParameterName, "The ASR solution program to be manipulated."));
-
-      SelectedOperatorParameter.ActualName = SelectedManipulatorParameterName;
+      Parameters.Add (new LookupParameter<IASRProblemInstance> (ProblemInstanceParameterName, "The ASR problem instance"));
+      Parameters.Add (new LookupParameter<IASREncoding> (SolutionParameterName, "The ASR solution to be manipulated."));
     }
 
     public override IDeepCloneable Clone(Cloner cloner) {
@@ -71,9 +69,9 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
         : base(original, cloner) {
     }
 
-    public void SetOperators (IEnumerable<IOperator> operators) {
+    public virtual void SetOperators (IEnumerable<IOperator> operators) {
       foreach (var op in operators) {
-        if (op is IASRManipulator && !(op is MultiASRSolutionManipulator)) {
+        if (op is IASRManipulator && !(op is MultiASRSolutionManipulator) && !(op is SpecificManipulator)) {
           Operators.Add(op.Clone() as IASRManipulator);
         }
       }

@@ -30,9 +30,9 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators.Specific {
-  [Item ("BinaryOperationMutator", "A specific mutation operator which replaces a binary bitwise operation with a randomly selected one.")]
+  [Item ("BitwiseOperationMutator", "A specific mutation operator which replaces a binary bitwise operation with a randomly selected one.")]
   [StorableClass]
-  public sealed class BinaryOperationMutator : SyntaxTreeManipulator {
+  public sealed class BitwiseOperationMutator : SpecificManipulator {
 
     private readonly IList<SyntaxKind> binaryOperations = new List<SyntaxKind> {
                                  SyntaxKind.ExclusiveOrExpression,
@@ -43,24 +43,26 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
                              };
 
     [StorableConstructor]
-    private BinaryOperationMutator (bool deserializing) : base (deserializing) { }
+    private BitwiseOperationMutator (bool deserializing) : base (deserializing) { }
 
-    public BinaryOperationMutator ()
+    public BitwiseOperationMutator ()
         : base () {
     }
 
     public override IDeepCloneable Clone (Cloner cloner) {
-      return new BinaryOperationMutator (this, cloner);
+      return new BitwiseOperationMutator (this, cloner);
     }
 
-    private BinaryOperationMutator (BinaryOperationMutator original, Cloner cloner)
+    private BitwiseOperationMutator (BitwiseOperationMutator original, Cloner cloner)
         : base (original, cloner) {
     }
 
     protected override SyntaxTreeEncoding ApplyMutation (IRandom random, SyntaxTreeEncoding individual) {
       var binaryExpressions = individual.SyntaxTree.GetRoot ().DescendantNodes ().OfType<BinaryExpressionSyntax> ().Where(e => binaryOperations.Contains(e.Kind())).ToArray ();
-      if (binaryExpressions.Length == 0)
+      if (binaryExpressions.Length == 0) {
+        OperatorPerformanceParameter.ActualValue.OperatorApplicable= false;
         return individual;
+      }
 
       var modifiyableBinaryExpression = binaryExpressions[random.Next (binaryExpressions.Length)];
       var operation = binaryOperations[random.Next (binaryOperations.Count)];

@@ -30,47 +30,52 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators.Specific {
-  [Item ("OffByOneExpressionMutator", "A specific mutation operator which adds or removes 1 to a randomly selected binary expression")]
+  [Item ("LogicalConditionMutator", "A specific mutation operator which randomly replaces logical condition operators")]
   [StorableClass]
-  public sealed class OffByOneExpressionMutator : SpecificManipulator {
+  public sealed class LogicalConditionMutator : SpecificManipulator {
 
-    private readonly IList<SyntaxKind> mathematicalOperations = new List<SyntaxKind> {
-                                                                                       SyntaxKind.AddExpression,
-                                                                                       SyntaxKind.SubtractExpression   
-                                                                                   };
+    private readonly IList<SyntaxKind> comparisonOperations = new List<SyntaxKind> {
+                                 SyntaxKind.LessThanExpression,
+                                 SyntaxKind.LessThanOrEqualExpression,
+                                 SyntaxKind.GreaterThanExpression,
+                                 SyntaxKind.GreaterThanOrEqualExpression,
+                                 SyntaxKind.EqualsExpression,
+                                 SyntaxKind.NotEqualsExpression,
+                             };
 
     [StorableConstructor]
-    private OffByOneExpressionMutator (bool deserializing) : base (deserializing) { }
+    private LogicalConditionMutator (bool deserializing) : base (deserializing) { }
 
-    public OffByOneExpressionMutator ()
+    public LogicalConditionMutator ()
         : base () {
     }
 
     public override IDeepCloneable Clone (Cloner cloner) {
-      return new OffByOneExpressionMutator (this, cloner);
+      return new LogicalConditionMutator (this, cloner);
     }
 
-    private OffByOneExpressionMutator (OffByOneExpressionMutator original, Cloner cloner)
+    private LogicalConditionMutator (LogicalConditionMutator original, Cloner cloner)
         : base (original, cloner) {
     }
 
     protected override SyntaxTreeEncoding ApplyMutation (IRandom random, SyntaxTreeEncoding individual) {
-      var binaryExpressions = individual.SyntaxTree.GetRoot ().DescendantNodes ().OfType<BinaryExpressionSyntax> ().ToArray ();
+      var binaryExpressions = individual.SyntaxTree.GetRoot ().DescendantNodes ().OfType<BinaryExpressionSyntax> ().Where (e => comparisonOperations.Contains (e.Kind ())).ToArray ();
       if (binaryExpressions.Length == 0) {
         OperatorPerformanceParameter.ActualValue.OperatorApplicable = false;
         return individual;
       }
 
-      var insertionPointBinaryExpression = binaryExpressions[random.Next (binaryExpressions.Length)].Right;
+      var modifiyableBinaryExpression = binaryExpressions[random.Next (binaryExpressions.Length)];
+      var operation = comparisonOperations[random.Next (comparisonOperations.Count)];
+      if (operation.Equals (modifiyableBinaryExpression.Kind ()))
+        return individual;
 
-      var operation = mathematicalOperations[random.Next (mathematicalOperations.Count)];
-
-      var extendedBinaryExpression = SyntaxFactory.BinaryExpression (
+      var operationChangedBinaryExpression = SyntaxFactory.BinaryExpression (
           operation,
-          insertionPointBinaryExpression,
-          SyntaxFactory.LiteralExpression (SyntaxKind.NullLiteralExpression, SyntaxFactory.Literal (1)));
-      
-      var mutatedSyntaxTree = individual.SyntaxTree.GetRoot ().ReplaceNode (insertionPointBinaryExpression, extendedBinaryExpression).SyntaxTree;
+          modifiyableBinaryExpression.Left,
+          modifiyableBinaryExpression.Right);
+
+      var mutatedSyntaxTree = individual.SyntaxTree.GetRoot ().ReplaceNode (modifiyableBinaryExpression, operationChangedBinaryExpression).SyntaxTree;
 
       individual.SyntaxTree = mutatedSyntaxTree;
 

@@ -25,6 +25,7 @@ using HeuristicLab.Core;
 using HeuristicLab.Data;
 using HeuristicLab.Parameters;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
+using HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
@@ -38,6 +39,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
     private const string SolutionParameterName = "ASRSolution";
     private const string QualityParameterName = "Quality";
     private const string SolutionSimilarityParameterName = "SolutionSimilarity";
+    private const string OperatorPerformanceParameterName = "OperatorPerformance";
 
     public ILookupParameter<IASREncoding> ASRSolutionParameter {
       get { return (ILookupParameter<IASREncoding>) Parameters[SolutionParameterName]; }
@@ -45,6 +47,10 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
 
     public ILookupParameter<DoubleValue> SolutionSimilarityParameter {
       get { return (ILookupParameter<DoubleValue>) Parameters[SolutionSimilarityParameterName]; }
+    }
+
+    public ILookupParameter<OperatorPerformanceResultsCollection> OperatorPerformanceParameter {
+      get { return (LookupParameter<OperatorPerformanceResultsCollection>)Parameters[OperatorPerformanceParameterName]; }
     }
 
     #region ISingleObjectiveEvaluator Members
@@ -66,13 +72,17 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
       Parameters.Add (new LookupParameter<IASREncoding> (SolutionParameterName, "The ASR solution which should be evaluated."));
       Parameters.Add (new LookupParameter<DoubleValue> (QualityParameterName, "The evaluated quality of the ASR solution."));
       Parameters.Add (new LookupParameter<DoubleValue> (SolutionSimilarityParameterName, "The structural similarity of the current solution to an optional provided correct solution"));
+      Parameters.Add (new LookupParameter<OperatorPerformanceResultsCollection> (OperatorPerformanceParameterName, "The performance data of operations on current solution."));
     }
 
     public override IOperation InstrumentedApply () {
-      var currentSolutionProgram = ASRSolutionParameter.ActualValue.GetSolutionProgram ();
+      var currentSolutionProgram = ASRSolutionParameter.ActualValue.GetSolutionCode ();
 
       var qualityValue = Evaluate (currentSolutionProgram, ProblemInstance.CorrectnessSpecification.Value);
       QualityParameter.ActualValue = new DoubleValue (qualityValue);
+
+      if (qualityValue < 0 && OperatorPerformanceParameter.ActualValue != null)
+        OperatorPerformanceParameter.ActualValue.OperatorCompilable = false;
 
       return base.InstrumentedApply ();
     }
@@ -84,30 +94,5 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
     /// <param name="correctessSpecification">The test suite acting as an orcale for correctness.</param>
     /// <returns>The calculated quality measurement.</returns>
     protected abstract double Evaluate (string solutionCandidateProductionCode, string correctessSpecification);
-
-    /// <summary>
-    /// Calculates the syntactical similarity between the current solution candidate and a provided correct version of the production code 
-    /// </summary>
-    /// <param name="currentSolutionProgram"></param>
-    /// <param name="correctSolutionValue"></param>
-    /// <returns></returns>
-    protected abstract double CalculateSimilarity (string currentSolutionProgram, string correctSolutionValue);
-
-    //public override IOperation InstrumentedApply () {
-    //  var currentSolutionProgram = ASRSolutionParameter.ActualValue.GetSolutionProgram();
-
-    //  var similarityValue = 1D;
-    //  if (ProblemInstance.CorrectSolution.Value != null) {
-    //    similarityValue = CalculateSimilarity (currentSolutionProgram, ProblemInstance.CorrectSolution.Value);
-    //  }
-
-    //  SolutionSimilarityParameter.ActualValue = new DoubleValue(similarityValue);
-
-    //  return base.InstrumentedApply();
-    //}
-
-    //private double CalculateSimilarity (string currentSolutionProgram, string correctSolutionValue) {
-    //  return 0;
-    //}
   }
 }

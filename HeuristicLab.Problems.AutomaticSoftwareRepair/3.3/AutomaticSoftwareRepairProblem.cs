@@ -88,6 +88,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
       }
 
       Operators.Add (new BestASRSolutionAnalyzer ());
+      Operators.Add (new OperatorPerformanceASRSolutionAnalyzer ());
 
       ParameterizeOperators ();
     }
