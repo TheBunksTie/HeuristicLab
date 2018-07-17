@@ -38,22 +38,20 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
   [StorableClass]
   public class AdaptingMultiASRSolutionManipulator : MultiASRSolutionManipulator {
     private const string ActualProbabilitiesParameterName = "ActualProbabilities";
-    private const string FactorParameterName = "Factor";
     private const string LowerBoundParameterName = "LowerBound";
-    private const string ResultsParameterName = "Results";
     private const string OperatorPerformanceParameterName = "OperatorPerformance";
     private const string SelectedManipulatorParameterName = "SelectedManipulationOperator";
+    private const string AggregatedOperatorPerformanceParameterName = "AggregatedOperatorPerformance";
+    private const string GenerationsParameterName = "Generations";
+
+    private int lastGeneration = -1;
 
     public ValueLookupParameter<DoubleArray> ActualProbabilitiesParameter {
       get { return (ValueLookupParameter<DoubleArray>)Parameters[ActualProbabilitiesParameterName]; }
     }
-    public ValueLookupParameter<DoubleValue> FactorParameter {
-      get { return (ValueLookupParameter<DoubleValue>)Parameters[FactorParameterName]; }
-    }
     public ValueParameter<DoubleValue> LowerBoundParameter {
       get { return (ValueParameter<DoubleValue>)Parameters[LowerBoundParameterName]; }
     }
-
     public ILookupParameter<OperatorPerformanceResultsCollection> OperatorPerformanceParameter {
       get { return (LookupParameter<OperatorPerformanceResultsCollection>)Parameters[OperatorPerformanceParameterName]; }
     }
@@ -64,7 +62,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
     public AdaptingMultiASRSolutionManipulator()
       : base() {
       Parameters.Add(new ValueLookupParameter<DoubleArray>(ActualProbabilitiesParameterName, "The array of relative probabilities for each operator.")); 
-      Parameters.Add(new ValueLookupParameter<DoubleValue>(FactorParameterName, "The factor with which the probabilities should be updated.", new DoubleValue(0.2)));
       Parameters.Add(new ValueParameter<DoubleValue>(LowerBoundParameterName, "The minimum weight an operator can be assigned during the adaptation process.", new DoubleValue(0.01)));
       Parameters.Add(new LookupParameter<OperatorPerformanceResultsCollection> (OperatorPerformanceParameterName, "The performance data of operations on current solution."));
       
@@ -92,43 +89,30 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
     }
 
     public override IOperation InstrumentedApply() {
-      IOperator successor = null;
-
-      if (ActualProbabilitiesParameter.ActualValue == null) {
+      // re-evaluate actual probabilities only once a generation
+      if (ActualProbabilitiesParameter.ActualValue == null)
         ActualProbabilitiesParameter.Value = ProbabilitiesParameter.ActualValue.Clone() as DoubleArray;
-      } else {
-        ResultCollection results = null;
-        var scope = ExecutionContext.Parent.Scope;
+      
+      var scope = ExecutionContext.Parent.Scope;
 
-        if (scope != null)
-          results = scope.Variables[ResultsParameterName].Value as ResultCollection;
+      if (scope != null && scope.Variables.ContainsKey (GenerationsParameterName)) {
+        var currentGeneration = ((IntValue) scope.Variables[GenerationsParameterName].Value).Value;
 
-        if (results != null) { 
-            for (var i = 0; i < Operators.Count; i++) {
-              var current = Operators[i];
-
-              if (results.ContainsKey (current.Name)) {
-                var operatorSuccesRate = results[current.Name].Value as DoubleValue;
-                ActualProbabilitiesParameter.ActualValue[i] += operatorSuccesRate.Value / ActualProbabilitiesParameter.ActualValue[i] * FactorParameter.Value.Value;
-            }
-          }
-        }
-
-        //normalize
-        var max = ActualProbabilitiesParameter.ActualValue.Max();
-        for (var i = 0; i < ActualProbabilitiesParameter.ActualValue.Length; i++) {
-          ActualProbabilitiesParameter.ActualValue[i] /= max;
-          ActualProbabilitiesParameter.ActualValue[i] = Math.Max(LowerBoundParameter.Value.Value, ActualProbabilitiesParameter.ActualValue[i]);
+        if (lastGeneration < currentGeneration) {
+          lastGeneration = currentGeneration;
+          ReevaluateProbabilities (scope);
         }
       }
-
-      //////////////// code has to be duplicated since ActualProbabilitiesParameter.ActualValue are updated and used for operator selection
+      
+      // actual selection of next manipulator based on current state of actual probabilities
       var random = RandomParameter.ActualValue;
       var probabilities = ActualProbabilitiesParameter.ActualValue;
 
       if (probabilities.Length != Operators.Count) {
         throw new InvalidOperationException(Name + ": The list of probabilities has to match the number of operators");
       }
+
+      IOperator successor = null;
       var checkedOperators = Operators.CheckedItems;
       if (checkedOperators.Any()) {
         // select a weighted random operator from the checked operators
@@ -153,6 +137,33 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
         OperatorPerformanceParameter.ActualValue = new OperatorPerformanceResultsCollection { OperatorName = SelectedOperatorParameter.ActualValue.Value, };
 
       return next;
+    }
+
+    private void ReevaluateProbabilities (IScope scope)
+    {
+      ResultCollection results = null;
+
+      if (scope.Variables.ContainsKey (AggregatedOperatorPerformanceParameterName))
+        results = scope.Variables[AggregatedOperatorPerformanceParameterName].Value as ResultCollection;
+
+      if (results == null)
+        return;
+
+      for (var i = 0; i < Operators.Count; i++){
+        var current = Operators[i];
+
+        if (results.ContainsKey (current.Name)){
+          var operatorSuccesRate = results[current.Name].Value as DoubleValue;
+          ActualProbabilitiesParameter.ActualValue[i] *= operatorSuccesRate.Value;
+        }
+      }
+
+      // normalize
+      var max = ActualProbabilitiesParameter.ActualValue.Max();
+      for (var i = 0; i < ActualProbabilitiesParameter.ActualValue.Length; i++){
+        ActualProbabilitiesParameter.ActualValue[i] /= max;
+        ActualProbabilitiesParameter.ActualValue[i] = Math.Max (LowerBoundParameter.Value.Value, ActualProbabilitiesParameter.ActualValue[i]);
+      }
     }
   }
 }

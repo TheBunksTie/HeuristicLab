@@ -20,6 +20,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
@@ -36,17 +37,17 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
   [Item("OperatorPerformanceASRSolutionAnalyzer", "An operator for analyzing the performance of specific operators")]
   [StorableClass]
   public sealed class OperatorPerformanceASRSolutionAnalyzer : SingleSuccessorOperator, IAnalyzer, ISingleObjectiveOperator {
-    private const string ResultsParameterName = "Results";
     private const string OperatorPerformanceParameterName = "OperatorPerformance";
+    private const string AggregatedOperatorPerformanceParameterName = "AggregatedOperatorPerformance";
 
     public bool EnabledByDefault {
       get { return false; }
     }
-    public ValueLookupParameter<ResultCollection> ResultsParameter {
-      get { return (ValueLookupParameter<ResultCollection>)Parameters[ResultsParameterName]; }
-    }
     public ScopeTreeLookupParameter<OperatorPerformanceResultsCollection> OperatorPerformanceParameter {
       get { return (ScopeTreeLookupParameter<OperatorPerformanceResultsCollection>) Parameters[OperatorPerformanceParameterName]; }
+    }
+    public ILookupParameter<ResultCollection> AggregatedOperatorPerformanceParameter {
+      get { return (LookupParameter<ResultCollection>) Parameters[AggregatedOperatorPerformanceParameterName]; }
     }
 
     [StorableConstructor]
@@ -57,21 +58,16 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
     }
     public OperatorPerformanceASRSolutionAnalyzer()
       : base() {
-      Parameters.Add(new ValueLookupParameter<ResultCollection>(ResultsParameterName, "The result collection where the best ASR solution should be stored."));
       Parameters.Add(new ScopeTreeLookupParameter<OperatorPerformanceResultsCollection>(OperatorPerformanceParameterName, "The performance data of operations on the solution candidate."));
-
-      ResultsParameter.Hidden = true;
+      Parameters.Add(new LookupParameter<ResultCollection>(AggregatedOperatorPerformanceParameterName, "The result collection where the aggregated operator performance values are stored."));
     }
 
     public override IOperation Apply() {
-      var results = ResultsParameter.ActualValue;
+      if (AggregatedOperatorPerformanceParameter.ActualValue == null)
+        AggregatedOperatorPerformanceParameter.ActualValue = new ResultCollection();
 
-      var operatorGroupedPerformance = OperatorPerformanceParameter.ActualValue
-          .GroupBy (g => g.OperatorName);
-         // .ToDictionary (g => g.Key, g => (double) g.Count (o => o.OperatorApplicable && o.OperatorCompilable) / g.Count());
-
-      foreach (var operatorPerformance in operatorGroupedPerformance) {
-        results.AddOrUpdateResult (operatorPerformance.Key, new DoubleValue((double) operatorPerformance.Count (o => o.OperatorApplicable && o.OperatorCompilable) / operatorPerformance.Count()));        
+      foreach (var operatorPerformance in OperatorPerformanceParameter.ActualValue.GroupBy (g => g.OperatorName)) {
+        AggregatedOperatorPerformanceParameter.ActualValue.AddOrUpdateResult (operatorPerformance.Key, new DoubleValue ((double) operatorPerformance.Count (o => o.OperatorApplicable && o.OperatorCompilable) / operatorPerformance.Count ()));        
       }
 
       return base.Apply();
