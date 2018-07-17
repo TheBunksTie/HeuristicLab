@@ -45,14 +45,13 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
   {
     private const string c_evaluationClassTemplate = @"using System;
 using System.Linq;
+using System.Collections;
 using System.Collections.Generic;
 using NUnit;
 using NUnit.Framework;
 
 namespace ASRNUnitBasedEvaluator.Evaluation
 {{
-  public class EvaluationClass
-  {{
     // --------------------- test code ----------------------------
 
     {0}
@@ -61,7 +60,6 @@ namespace ASRNUnitBasedEvaluator.Evaluation
 
     {1}
 
-  }}
 }}";
 
     // TODO RequiredAssembliesSection in Instance File und alle dort spezifizierten Asms. dann als Metadataref mitgeben
@@ -71,11 +69,6 @@ namespace ASRNUnitBasedEvaluator.Evaluation
 
     private readonly Dictionary<string, object> testSettings = new Dictionary<string, object>();
     private static readonly DefaultTestAssemblyBuilder defaultTestAssemblyBuilder = new DefaultTestAssemblyBuilder ();
-    private SyntaxTree originalProductionCodeTree;
-
-    private SyntaxTree OriginalProductionCodeTree {
-      get { return originalProductionCodeTree ?? (originalProductionCodeTree = CSharpSyntaxTree.ParseText (ProblemInstance.ProductionCode.Value)); }
-    }
 
     [StorableConstructor]
     private ASRNUnitBasedEvaluator(bool deserializing) : base(deserializing) { }
@@ -90,13 +83,12 @@ namespace ASRNUnitBasedEvaluator.Evaluation
     }
 
     protected override double Evaluate (string solutionCandidateProductionCode, string correctessSpecification) {
-      
       var completeEvaluationCode = string.Format (c_evaluationClassTemplate, correctessSpecification, solutionCandidateProductionCode);
       var solutionCandidateSyntaxTree = CSharpSyntaxTree.ParseText (completeEvaluationCode);
 
       var evaluationAssembly = CompileToAssembly (solutionCandidateSyntaxTree);
       if (evaluationAssembly == null)
-        return 0;
+        return -1;
 
       // run tests from test code assembly and calculate fitness for current candidate
       var nUnitTestAssemblyRunner = new NUnitTestAssemblyRunner (defaultTestAssemblyBuilder);
@@ -107,19 +99,12 @@ namespace ASRNUnitBasedEvaluator.Evaluation
       nUnitTestAssemblyRunner.Run (diagnosticTestListener, TestFilter.Empty);
 
       var solutionCandidateQuality = CalculateFitness (diagnosticTestListener);
-
       return solutionCandidateQuality;
     }
 
-    protected override double CalculateSimilarity (string currentSolutionProgram, string correctSolutionValue) {
-      return 0;
-    }
-
-    private double CalculateFitness (IDetailedTestResult testRunResult)
-    {
+    private double CalculateFitness (IDetailedTestResult testRunResult) {
       const int positiveWeight = 1;
       const int negativeWeight = 10;
-
 
       var fitnessValue = 0L;
 
@@ -138,8 +123,7 @@ namespace ASRNUnitBasedEvaluator.Evaluation
       return fitnessValue;
     }
 
-    private Assembly CompileToAssembly (SyntaxTree tree)
-    {
+    private Assembly CompileToAssembly (SyntaxTree tree) {
       var comp = CSharpCompilation.Create (
           "ASRNUnitBasedEvaluator_" + Guid.NewGuid ().ToString ("D"),
           syntaxTrees: new[] { tree },
@@ -152,14 +136,12 @@ namespace ASRNUnitBasedEvaluator.Evaluation
       return evaluationAssembly;
     }
 
-    private Assembly EmitToAssembly (Compilation compilation)
-    {
-      using (var compilationStream = new MemoryStream ())
-      {
+    private Assembly EmitToAssembly (Compilation compilation) {
+      using (var compilationStream = new MemoryStream ()) {
         var result = compilation.Emit (compilationStream);
 
         if (!result.Success)
-            //var failures = result.Diagnostics.Where (d => d.IsWarningAsError || d.Severity == DiagnosticSeverity.Error);
+          //var failures = result.Diagnostics.Where (d => d.IsWarningAsError || d.Severity == DiagnosticSeverity.Error);
           return null;
 
         compilationStream.Seek (0, SeekOrigin.Begin);

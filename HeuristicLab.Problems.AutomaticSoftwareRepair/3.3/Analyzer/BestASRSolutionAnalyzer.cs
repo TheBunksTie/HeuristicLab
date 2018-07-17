@@ -44,6 +44,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
     private const string BestKnownQualityParameterName = "BestKnownQuality";
     private const string BestKnownSolutionParameterName = "BestKnownSolution";
     private const string ASRSolutionParameterName = "ASRSolution";
+    private const string CurrentBestsolutionProgramResultName = "CurrentBestSolutionProgram";
 
     public bool EnabledByDefault {
       get { return true; }
@@ -110,7 +111,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
       if (solution == null) {
         solution = new ASRSolution(problemInstance, best.Clone() as IASREncoding, new DoubleValue(qualities[i].Value));
         BestSolutionParameter.ActualValue = solution;
-        results.Add(new Result("CurrentBestSolutionProgram", solution));
+        results.Add(new Result(CurrentBestsolutionProgramResultName, solution));
       } else {
         if (solution.Quality.Value < qualities[i].Value) {
           solution.ProblemInstance = problemInstance;

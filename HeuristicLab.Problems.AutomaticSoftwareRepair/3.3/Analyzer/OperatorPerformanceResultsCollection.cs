@@ -74,7 +74,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
  
     #endregion
 
-
     public void Reset() {
       OperatorApplicable = true;
       OperatorCompilable = true;

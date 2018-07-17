@@ -51,7 +51,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances
     }
 
     [StorableConstructor]
-    protected SimpleASRProblemInstance(bool deserializing) : base(deserializing) { }
+    public SimpleASRProblemInstance(bool deserializing) : base(deserializing) { }
 
     public SimpleASRProblemInstance() {
     }
@@ -60,7 +60,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances
       return new SimpleASRProblemInstance(this, cloner);
     }
 
-    protected SimpleASRProblemInstance(SimpleASRProblemInstance original, Cloner cloner)
+    private SimpleASRProblemInstance(SimpleASRProblemInstance original, Cloner cloner)
         : base(original, cloner) {
     }
 

@@ -31,7 +31,7 @@ using Microsoft.CodeAnalysis.CSharp;
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform {
   [Item ("SyntaxTreeEncoding", "Represents a simple encoding of ASR solutions as .NET Compiler Platform syntax tree.")]
   [StorableClass]
-  public class SyntaxTreeEncoding : ASREncoding {
+  public class SyntaxTreeEncoding : ASREncoding  {
     public SyntaxTreeEncoding(SyntaxTree syntaxTree, IASRProblemInstance instance)
         : base(instance) {
       this.SyntaxTree = syntaxTree;
@@ -66,7 +66,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
       return SyntaxTree != null ? SyntaxTree.ToString() : string.Empty;
     }
 
-    public override string GetSolutionProgram () {
+    public override string GetSolutionCode () {
       return ToString();
     }
   }

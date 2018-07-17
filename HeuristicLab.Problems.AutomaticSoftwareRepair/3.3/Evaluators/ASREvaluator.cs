@@ -38,15 +38,10 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
   public abstract class ASREvaluator : ASROperator, IASREvaluator {
     private const string SolutionParameterName = "ASRSolution";
     private const string QualityParameterName = "Quality";
-    private const string SolutionSimilarityParameterName = "SolutionSimilarity";
     private const string OperatorPerformanceParameterName = "OperatorPerformance";
 
     public ILookupParameter<IASREncoding> ASRSolutionParameter {
       get { return (ILookupParameter<IASREncoding>) Parameters[SolutionParameterName]; }
-    }
-
-    public ILookupParameter<DoubleValue> SolutionSimilarityParameter {
-      get { return (ILookupParameter<DoubleValue>) Parameters[SolutionSimilarityParameterName]; }
     }
 
     public ILookupParameter<OperatorPerformanceResultsCollection> OperatorPerformanceParameter {
@@ -71,7 +66,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
     protected ASREvaluator () {
       Parameters.Add (new LookupParameter<IASREncoding> (SolutionParameterName, "The ASR solution which should be evaluated."));
       Parameters.Add (new LookupParameter<DoubleValue> (QualityParameterName, "The evaluated quality of the ASR solution."));
-      Parameters.Add (new LookupParameter<DoubleValue> (SolutionSimilarityParameterName, "The structural similarity of the current solution to an optional provided correct solution"));
       Parameters.Add (new LookupParameter<OperatorPerformanceResultsCollection> (OperatorPerformanceParameterName, "The performance data of operations on current solution."));
     }
 

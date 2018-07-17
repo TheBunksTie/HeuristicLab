@@ -94,7 +94,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
     }
 
     private void ParameterizeOperators () {
-      foreach (IOperator op in Operators.OfType<IOperator> ()) {
+      foreach (var op in Operators.OfType<IOperator> ()) {
         if (op is IMultiASROperator) {
           (op as IMultiASROperator).SetOperators (Operators.OfType<IOperator> ());
         }
