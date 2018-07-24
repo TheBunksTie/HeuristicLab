@@ -28,7 +28,7 @@ using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Creators {
   [Item("NonModifyingProductionCodeSolutionCreator", "Creates an ASR solution from production code stored in variable.")]
   [StorableClass]
-  public sealed class NonModifyingProductionCodeSolutionCreator :  ProductionCodeBasedSolutionCreator {
+  public sealed class NonModifyingProductionCodeSolutionCreator : ProductionCodeBasedSolutionCreator {
 
     [StorableConstructor]
     private NonModifyingProductionCodeSolutionCreator(bool deserializing) : base(deserializing) { }

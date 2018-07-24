@@ -68,13 +68,14 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair {
     }
 
     public override IDeepCloneable Clone (Cloner cloner) {
+      cloner.Clone (ProblemInstance);
       return new AutomaticSoftwareRepairProblem (this, cloner);
     }
 
     public AutomaticSoftwareRepairProblem ()
-      : base (new ASRNUnitBasedEvaluator (), new ModifyingProductionCodeSolutionCreator ()) {
+      : base (new ASRNUnitBasedEvaluator (), new NonModifyingProductionCodeSolutionCreator ()) {
       Parameters.Add (new ValueParameter<IASRProblemInstance> (ProblemInstanceParameterName, "The ASR problem instance."));
-      Parameters.Add (new ValueParameter<PercentValue> (CreationModificationProbabilityParameterName, "The probability of modifications to the initial solution candidates", new PercentValue (0.5)));
+      Parameters.Add (new ValueParameter<PercentValue> (CreationModificationProbabilityParameterName, "The probability of modifications to the initial solution candidates", new PercentValue (0.1)));
 
       Maximization.Value = true;
       MaximizationParameter.Hidden = true;

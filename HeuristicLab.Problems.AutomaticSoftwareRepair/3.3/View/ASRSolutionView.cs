@@ -30,7 +30,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.View {
   /// </summary>
   [View("ASRSolution View")]
   [Content(typeof(ASRSolution), true)]
-  public sealed partial class ASRSolutionView : ItemView {
+  public partial class ASRSolutionView : ItemView {
     public new ASRSolution Content {
       get { return (ASRSolution)base.Content; }
       set { base.Content = value; }

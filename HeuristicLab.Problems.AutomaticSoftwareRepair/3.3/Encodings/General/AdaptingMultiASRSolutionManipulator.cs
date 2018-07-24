@@ -153,7 +153,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
         var current = Operators[i];
 
         if (results.ContainsKey (current.Name)){
-          var operatorSuccesRate = results[current.Name].Value as DoubleValue;
+          var operatorSuccesRate = (DoubleValue)results[current.Name].Value;
           ActualProbabilitiesParameter.ActualValue[i] *= operatorSuccesRate.Value;
         }
       }

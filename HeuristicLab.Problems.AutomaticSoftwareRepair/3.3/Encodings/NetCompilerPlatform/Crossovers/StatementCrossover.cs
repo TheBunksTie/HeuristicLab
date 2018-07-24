@@ -22,6 +22,7 @@
 using System;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
+using HeuristicLab.Optimization;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
 using Microsoft.CodeAnalysis;
 
@@ -29,7 +30,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
 {
   [Item("StatementCrossover", "A simple crossover operator which crosses two ASR synatx trees at a randomly selected statement.")]
   [StorableClass]
-  public sealed class StatementCrossover : SyntaxTreeCrossover {
+  public sealed class StatementCrossover : SyntaxTreeCrossover, IStochasticOperator {
     [StorableConstructor]
     private StatementCrossover(bool deserializing) : base(deserializing) { }
 

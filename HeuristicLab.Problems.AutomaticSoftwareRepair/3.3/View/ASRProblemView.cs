@@ -26,7 +26,7 @@ using HeuristicLab.Optimization.Views;
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.View {
   [View("Automatic Software Repair Problem View")]
   [Content(typeof(AutomaticSoftwareRepairProblem), true)]
-  public abstract partial class ASRProblemView : ProblemView {
+  public partial class ASRProblemView : ProblemView {
     public new AutomaticSoftwareRepairProblem Content {
       get { return (AutomaticSoftwareRepairProblem)base.Content; }
       set { base.Content = value; }

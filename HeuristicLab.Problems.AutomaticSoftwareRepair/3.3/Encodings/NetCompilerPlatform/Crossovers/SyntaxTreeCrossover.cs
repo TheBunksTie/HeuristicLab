@@ -69,7 +69,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
 
       ParentsParameter.ActualValue = parents;
 
-      if (RandomParameter.ActualValue.NextDouble() < ExecutionProbabilityParameter.Value.Value) {
+      if (RandomParameter.ActualValue.NextDouble() > ExecutionProbabilityParameter.Value.Value) {
         ChildParameter.ActualValue = parents[0];
         return base.InstrumentedApply();
       }

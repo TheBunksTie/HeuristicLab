@@ -101,15 +101,15 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
 
     private ASRSolution(ASRSolution original, Cloner cloner)
       : base(original, cloner) {
-      this.solution = (IASREncoding)cloner.Clone(original.solution);
-      this.quality = (DoubleValue)cloner.Clone(original.quality);
+      solution = cloner.Clone(original.solution);
+      quality = cloner.Clone(original.quality);
 
       if (original.ProblemInstance != null && cloner.ClonedObjectRegistered(original.ProblemInstance))
-        this.ProblemInstance = (IASRProblemInstance)cloner.Clone(original.ProblemInstance);
+        ProblemInstance = cloner.Clone(original.ProblemInstance);
       else
-        this.ProblemInstance = original.ProblemInstance;
+        ProblemInstance = original.ProblemInstance;
 
-      this.Initialize();
+      Initialize();
     }
 
     #region Events

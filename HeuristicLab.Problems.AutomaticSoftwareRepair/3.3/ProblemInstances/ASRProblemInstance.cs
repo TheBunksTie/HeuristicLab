@@ -39,21 +39,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
     private const string PassingTestsParameterName = "PassingTests";
     private const string FailingTestsParameterName = "FailingTests";
 
-    IASREvaluator evaluator;
-
-    private readonly object locker = new object();
-
-    public IASREvaluator SolutionEvaluator {
-      get {
-        return evaluator;
-      }
-      set {
-        lock (locker) {
-          evaluator = value;
-        }
-      }
-    }
-
     protected abstract IEnumerable<IOperator> GetOperators();
     protected abstract IEnumerable<IOperator> GetAnalyzers();
 
@@ -118,19 +103,16 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
       Parameters.Add(new ValueParameter<ItemArray<StringValue>>(FailingTestsParameterName, "The initially failing tests")); 
       Parameters.Add(new ValueParameter<ItemArray<StringValue>>(PassingTestsParameterName, "The initially passing tests"));
 
-      SolutionEvaluator = Evaluator;
       AttachEventHandlers();
     }
 
     protected ASRProblemInstance(ASRProblemInstance original, Cloner cloner)
         : base(original, cloner) {
-      SolutionEvaluator = Evaluator;
       AttachEventHandlers();
     }
 
     [StorableHook(HookType.AfterDeserialization)]
     private void AfterDeserialization() {
-      evaluator = Evaluator;
       AttachEventHandlers();
     }
 
