@@ -20,8 +20,6 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
 using HeuristicLab.Data;
@@ -38,15 +36,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
     private const string CorrectSolutionParameterName = "CorrectSolutionParameter";
     private const string PassingTestsParameterName = "PassingTests";
     private const string FailingTestsParameterName = "FailingTests";
-
-    protected abstract IEnumerable<IOperator> GetOperators();
-    protected abstract IEnumerable<IOperator> GetAnalyzers();
-
-    public IEnumerable<IOperator> Operators {
-      get {
-        return GetOperators().Union(GetAnalyzers());
-      }
-    }
 
     protected ValueParameter<StringValue> CorrectnessSpecificationParameter {
       get { return (ValueParameter<StringValue>)Parameters[CorrectnessSpecificationParameterName]; }
@@ -78,20 +67,15 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
       get { return CorrectSolutionParameter.Value; }
       set { CorrectSolutionParameter.Value = value; }
     }
-
     public ItemArray<StringValue> PassingTests {
       get { return PassingTestsParameter.Value; }
       set { PassingTestsParameter.Value = value; }
     }
-
     public ItemArray<StringValue> FailingTests {
       get { return FailingTestsParameter.Value; }
       set { FailingTestsParameter.Value = value; }
     }
     
-    protected abstract IASREvaluator Evaluator { get; }
-    protected abstract IASRCreator Creator { get; }
-
     [StorableConstructor]
     protected ASRProblemInstance(bool deserializing) : base(deserializing) { }
 
@@ -102,21 +86,10 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
       Parameters.Add(new ValueParameter<StringValue>(CorrectSolutionParameterName, "A correct version of the buggy production code, fulfilling the tests."));
       Parameters.Add(new ValueParameter<ItemArray<StringValue>>(FailingTestsParameterName, "The initially failing tests")); 
       Parameters.Add(new ValueParameter<ItemArray<StringValue>>(PassingTestsParameterName, "The initially passing tests"));
-
-      AttachEventHandlers();
     }
 
     protected ASRProblemInstance(ASRProblemInstance original, Cloner cloner)
         : base(original, cloner) {
-      AttachEventHandlers();
-    }
-
-    [StorableHook(HookType.AfterDeserialization)]
-    private void AfterDeserialization() {
-      AttachEventHandlers();
-    }
-
-    private void AttachEventHandlers () {
     }
 
     public virtual void InitializeState () {

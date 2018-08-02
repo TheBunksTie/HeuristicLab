@@ -47,8 +47,10 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
         : base (original, cloner) {
     }
 
-    protected override SyntaxTreeEncoding ApplyMutation (IRandom random, SyntaxTreeEncoding individual) {
-      var identifiers = individual.SyntaxTree.GetRoot ().DescendantNodes ().OfType<IdentifierNameSyntax> ().ToArray ();
+    protected override SyntaxTreeEncoding ApplyManipulation (SyntaxTreeEncoding individual) {
+      var random = RandomParameter.ActualValue;
+      var syntaxTreeRoot = individual.SyntaxTree.GetRoot();
+      var identifiers =syntaxTreeRoot.DescendantNodes ().OfType<IdentifierNameSyntax> ().ToArray ();
       if (identifiers.Length == 0) {
         OperatorPerformanceParameter.ActualValue.OperatorApplicable = false;
         return individual;
@@ -60,7 +62,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
       if (replacee == replacement)
         return individual;
             
-      var mutatedSyntaxTree = individual.SyntaxTree.GetRoot ().ReplaceNode (replacee, replacement).SyntaxTree;
+      var mutatedSyntaxTree =syntaxTreeRoot.ReplaceNode (replacee, replacement).SyntaxTree;
 
       individual.SyntaxTree = mutatedSyntaxTree;
 

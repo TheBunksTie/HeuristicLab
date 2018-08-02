@@ -20,11 +20,14 @@
 #endregion
 
 using System;
+using HeuristicLab.Core;
 using HeuristicLab.Optimization;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces {
   /// <summary>
   /// An interface which represents an evaluation operator for Automatic Software Repair Problems.
   /// </summary>
-  public interface IASREvaluator : ISingleObjectiveEvaluator { }
+  public interface IASREvaluator : ISingleObjectiveEvaluator, IASROperator {
+    ILookupParameter<IASREncoding> ASRSolutionParameter { get; }
+  }
 }

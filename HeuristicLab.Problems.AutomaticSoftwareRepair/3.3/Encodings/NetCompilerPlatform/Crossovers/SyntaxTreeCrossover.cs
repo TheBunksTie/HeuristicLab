@@ -74,7 +74,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
         return base.InstrumentedApply();
       }
 
-      var crossedIndividual = Crossover(RandomParameter.ActualValue, parents[0] as SyntaxTreeEncoding, parents[1] as SyntaxTreeEncoding);
+      var crossedIndividual = Crossover(parents[0] as SyntaxTreeEncoding, parents[1] as SyntaxTreeEncoding);
       ChildParameter.ActualValue = crossedIndividual;
 
       return base.InstrumentedApply();
@@ -84,6 +84,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
       return StatementExtractionUtility.GetAllStatements (rootNode, whereCondition);
     }
 
-    protected abstract SyntaxTreeEncoding Crossover (IRandom random, SyntaxTreeEncoding parent1, SyntaxTreeEncoding parent2);
+    protected abstract SyntaxTreeEncoding Crossover (SyntaxTreeEncoding parent1, SyntaxTreeEncoding parent2);
   }
 }

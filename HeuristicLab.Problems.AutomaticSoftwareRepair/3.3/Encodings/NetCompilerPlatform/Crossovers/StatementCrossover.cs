@@ -46,18 +46,18 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
         : base(original, cloner) {
     }
 
-    protected override SyntaxTreeEncoding Crossover (IRandom random, SyntaxTreeEncoding parent1, SyntaxTreeEncoding parent2) {
-
+    protected override SyntaxTreeEncoding Crossover (SyntaxTreeEncoding parent1, SyntaxTreeEncoding parent2) {
+      var random = RandomParameter.ActualValue;
       var statements = GetAllStatements(parent1.SyntaxTree.GetRoot());
-      var selectedStatement = statements[random.Next (statements.Length)];
+      var selectedStatement = statements[random.Next(statements.Length)];
 
-      var statements2 = GetAllStatements (parent2.SyntaxTree.GetRoot(), s => s.Kind() == selectedStatement.Kind());
+      var statements2 = GetAllStatements(parent2.SyntaxTree.GetRoot(), s => s.Kind() == selectedStatement.Kind());
       if (statements2.Length == 0)
         return parent1;
 
-      var selectedExpression2 = statements2[random.Next (statements2.Length)];
+      var selectedStatement2 = statements2[random.Next (statements2.Length)];
 
-      var syntaxTree = parent1.SyntaxTree.GetRoot().ReplaceNode (selectedStatement, selectedExpression2).SyntaxTree;
+      var syntaxTree = parent1.SyntaxTree.GetRoot().ReplaceNode(selectedStatement, selectedStatement2).SyntaxTree;
 
       parent1.SyntaxTree = syntaxTree;
 

@@ -30,9 +30,9 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators.Specific {
-  [Item ("ArithmeticOperationMutator", "A specific mutation operator which adds a basic arithmetical operation with a random identifier to a binary expression.")]
+  [Item ("ArithmeticOperationManipulator", "A specific mutation operator which adds a basic arithmetic operation with a random identifier to a binary expression.")]
   [StorableClass]
-  public sealed class ArithmeticOperationMutator : SpecificManipulator {
+  public sealed class ArithmeticOperationManipulator : SpecificManipulator {
 
     private readonly IList<SyntaxKind> arithmeticOperations = new List<SyntaxKind> {
                                  SyntaxKind.AddExpression,
@@ -42,41 +42,45 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
                              };
 
     [StorableConstructor]
-    private ArithmeticOperationMutator (bool deserializing) : base (deserializing) { }
+    private ArithmeticOperationManipulator (bool deserializing) : base (deserializing) { }
 
-    public ArithmeticOperationMutator ()
+    public ArithmeticOperationManipulator ()
         : base () {
     }
 
     public override IDeepCloneable Clone (Cloner cloner) {
-      return new ArithmeticOperationMutator (this, cloner);
+      return new ArithmeticOperationManipulator (this, cloner);
     }
 
-    private ArithmeticOperationMutator (ArithmeticOperationMutator original, Cloner cloner)
+    private ArithmeticOperationManipulator (ArithmeticOperationManipulator original, Cloner cloner)
         : base (original, cloner) {
     }
 
-    protected override SyntaxTreeEncoding ApplyMutation (IRandom random, SyntaxTreeEncoding individual) {
-      var rhsIdentifierInBinaryExpressions = individual.SyntaxTree.GetRoot ().DescendantNodes ().OfType<BinaryExpressionSyntax> ().Select(e => e.Right as IdentifierNameSyntax).Where(i => i != null).ToArray ();
+    protected override SyntaxTreeEncoding ApplyManipulation (SyntaxTreeEncoding individual) {
+      var random = RandomParameter.ActualValue;
+      var syntaxTreeRoot = individual.SyntaxTree.GetRoot ();
+      var rhsIdentifierInBinaryExpressions = syntaxTreeRoot.DescendantNodes ().OfType<BinaryExpressionSyntax> ().Select(e => e.Right as IdentifierNameSyntax).Where(i => i != null).ToArray ();
       if (rhsIdentifierInBinaryExpressions.Length == 0) {
         OperatorPerformanceParameter.ActualValue.OperatorApplicable = false;
         return individual;
       }
 
-      var overallIdentifierExpressions = individual.SyntaxTree.GetRoot ().DescendantNodes ().OfType<IdentifierNameSyntax> ().Distinct().ToArray ();
-      if (overallIdentifierExpressions.Length == 0)
+      var overallIdentifierExpressions = syntaxTreeRoot.DescendantNodes ().OfType<IdentifierNameSyntax> ().Distinct().ToArray ();
+      if (overallIdentifierExpressions.Length == 0) {
+        OperatorPerformanceParameter.ActualValue.OperatorApplicable = false;
         return individual;
+      }
 
-      var modifiyableRhsIdentifierInBinaryExpression = rhsIdentifierInBinaryExpressions[random.Next (rhsIdentifierInBinaryExpressions.Length)];
+      var modifiableRhsIdentifierInBinaryExpression = rhsIdentifierInBinaryExpressions[random.Next (rhsIdentifierInBinaryExpressions.Length)];
       var operation = arithmeticOperations[random.Next (arithmeticOperations.Count)];
       var operandIdentifier = overallIdentifierExpressions[random.Next (overallIdentifierExpressions.Length)];
 
       var operationChangedBinaryExpression = SyntaxFactory.BinaryExpression (
           operation,
-          modifiyableRhsIdentifierInBinaryExpression,
+          modifiableRhsIdentifierInBinaryExpression,
           operandIdentifier);
 
-      var mutatedSyntaxTree = individual.SyntaxTree.GetRoot ().ReplaceNode (modifiyableRhsIdentifierInBinaryExpression, operationChangedBinaryExpression).SyntaxTree;
+      var mutatedSyntaxTree = syntaxTreeRoot.ReplaceNode (modifiableRhsIdentifierInBinaryExpression, operationChangedBinaryExpression).SyntaxTree;
 
       individual.SyntaxTree = mutatedSyntaxTree;
 

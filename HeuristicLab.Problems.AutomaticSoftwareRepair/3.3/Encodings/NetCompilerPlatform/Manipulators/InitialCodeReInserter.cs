@@ -26,26 +26,26 @@ using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators
 {
-  [Item ("InitialProductionCodeReInserter", "A mutation operator which inserts the original buggy production code (Arcuri/Yao. \"A novel co-evolutionary approach to automatic software bug fixing.\" In: IEEE Congress on Evolutionary Computation. IEEE, 2008,).")]
+  [Item ("InitialCodeReInserter", "A mutation operator which inserts the original buggy production code (Arcuri/Yao. \"A novel co-evolutionary approach to automatic software bug fixing.\" In: IEEE Congress on Evolutionary Computation. IEEE, 2008,).")]
   [StorableClass]
-  public sealed class InitialProductionCodeReInserter : SyntaxTreeManipulator {
+  public sealed class InitialCodeReInserter : SyntaxTreeManipulator {
 
     [StorableConstructor]
-    private InitialProductionCodeReInserter(bool deserializing) : base(deserializing) { }
+    private InitialCodeReInserter(bool deserializing) : base(deserializing) { }
 
-    public InitialProductionCodeReInserter ()
+    public InitialCodeReInserter ()
         : base () {
     }
 
     public override IDeepCloneable Clone(Cloner cloner) {
-      return new InitialProductionCodeReInserter(this, cloner);
+      return new InitialCodeReInserter(this, cloner);
     }
 
-    private InitialProductionCodeReInserter(InitialProductionCodeReInserter original, Cloner cloner)
+    private InitialCodeReInserter(InitialCodeReInserter original, Cloner cloner)
         : base(original, cloner) {
     }
 
-    protected override SyntaxTreeEncoding ApplyMutation (IRandom random, SyntaxTreeEncoding individual) {
+    protected override SyntaxTreeEncoding ApplyManipulation (SyntaxTreeEncoding individual) {
       var originalProductionCodeSyntaxTree = new SyntaxTreeEncoding (ProblemInstance.ProductionCode.Value, ProblemInstance);
       return originalProductionCodeSyntaxTree;
     }

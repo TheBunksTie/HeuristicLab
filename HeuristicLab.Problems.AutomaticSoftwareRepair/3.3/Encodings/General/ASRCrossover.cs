@@ -32,7 +32,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
   public abstract class ASRCrossover : ASROperator, IASRCrossover {
     private const string ParentsParameterName = "Parents";
     private const string ChildParameterName = "Child";
-    private const string AsrSolutionParameterName = "ASRSolution";
+    private const string SolutionParameterName = "ASRSolution";
 
     public ILookupParameter<ItemArray<IASREncoding>> ParentsParameter {
       get { return (ScopeTreeLookupParameter<IASREncoding>)Parameters[ParentsParameterName]; }
@@ -47,10 +47,10 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
 
     public ASRCrossover()
         : base() {
-      Parameters.Add(new ScopeTreeLookupParameter<IASREncoding>(ParentsParameterName, "The parent ASR solutions which should be crossed."));
-      ParentsParameter.ActualName = AsrSolutionParameterName;
+      Parameters.Add(new ScopeTreeLookupParameter<IASREncoding>(ParentsParameterName, "The list of all current ASR solutions which could be potentials parents for crossover."));
+      ParentsParameter.ActualName = SolutionParameterName;
       Parameters.Add(new LookupParameter<IASREncoding>(ChildParameterName, "The child ASR solution resulting from the crossover."));
-      ChildParameter.ActualName = AsrSolutionParameterName;
+      ChildParameter.ActualName = SolutionParameterName;
     }
 
     protected ASRCrossover(ASRCrossover original, Cloner cloner)

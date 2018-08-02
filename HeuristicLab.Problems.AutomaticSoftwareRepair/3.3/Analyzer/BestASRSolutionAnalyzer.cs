@@ -24,10 +24,10 @@ using System.Linq;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
 using HeuristicLab.Data;
-using HeuristicLab.Operators;
 using HeuristicLab.Optimization;
 using HeuristicLab.Parameters;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
+using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
@@ -36,13 +36,11 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
   /// </summary>
   [Item("BestASRSolutionAnalyzer", "An operator for analyzing the best solution of Automatic Software Repair Problems given in source code as string representation.")]
   [StorableClass]
-  public sealed class BestASRSolutionAnalyzer : SingleSuccessorOperator, IAnalyzer, ISingleObjectiveOperator {
-    private const string ProblemInstanceParameterName = "ProblemInstance";
+  public sealed class BestASRSolutionAnalyzer : ASROperator, IASRAnalyzer {
     private const string QualityParameterName = "Quality";
     private const string BestSolutionParameterName = "BestSolution";
     private const string ResultsParameterName = "Results";
     private const string BestKnownQualityParameterName = "BestKnownQuality";
-    private const string BestKnownSolutionParameterName = "BestKnownSolution";
     private const string ASRSolutionParameterName = "ASRSolution";
     private const string CurrentBestsolutionProgramResultName = "CurrentBestSolutionProgram";
 
@@ -50,9 +48,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
       get { return true; }
     }
 
-    public ILookupParameter<IASRProblemInstance> ProblemInstanceParameter {
-      get { return (LookupParameter<IASRProblemInstance>)Parameters[ProblemInstanceParameterName]; }
-    }
     public ScopeTreeLookupParameter<IASREncoding> ASRSolutionParameter {
       get { return (ScopeTreeLookupParameter<IASREncoding>)Parameters[ASRSolutionParameterName]; }
     }
@@ -68,9 +63,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
     public LookupParameter<DoubleValue> BestKnownQualityParameter {
       get { return (LookupParameter<DoubleValue>) Parameters[BestKnownQualityParameterName]; }
     }
-    public LookupParameter<IASREncoding> BestKnownSolutionParameter {
-      get { return (LookupParameter<IASREncoding>) Parameters[BestKnownSolutionParameterName]; }
-    }
 
     [StorableConstructor]
     private BestASRSolutionAnalyzer(bool deserializing) : base(deserializing) { }
@@ -80,13 +72,11 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
     }
     public BestASRSolutionAnalyzer()
       : base() {
-      Parameters.Add(new LookupParameter<IASRProblemInstance>(ProblemInstanceParameterName, "The initial buggy production source code."));
       Parameters.Add(new ScopeTreeLookupParameter<IASREncoding>(ASRSolutionParameterName, "The ASR solutions given in source code as string representation from which the best solution should be analyzed."));
       Parameters.Add(new ScopeTreeLookupParameter<DoubleValue>(QualityParameterName, "The qualities of the ASR solutions which should be analyzed."));
       Parameters.Add(new LookupParameter<ASRSolution>(BestSolutionParameterName, "The best ASR solution."));
       Parameters.Add(new ValueLookupParameter<ResultCollection>(ResultsParameterName, "The result collection where the best ASR solution should be stored."));
-      Parameters.Add(new LookupParameter<DoubleValue>(BestKnownQualityParameterName, "The quality of the best known solution of this ASR instance."));
-      Parameters.Add(new LookupParameter<IASREncoding>(BestKnownSolutionParameterName, "The best known solution of this ASR instance."));
+      Parameters.Add (new LookupParameter<DoubleValue> (BestKnownQualityParameterName, "The quality of the best known solution of this ASR instance."));
 
       ProblemInstanceParameter.Hidden = true;
       ASRSolutionParameter.Hidden = true;
@@ -94,32 +84,30 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
       BestSolutionParameter.Hidden = true;
       ResultsParameter.Hidden = true;
       BestKnownQualityParameter.Hidden = true;
-      BestKnownSolutionParameter.Hidden = true;
     }
 
-    public override IOperation Apply() {
+    public override IOperation InstrumentedApply() {
       var problemInstance = ProblemInstanceParameter.ActualValue;
       var asrSolution = ASRSolutionParameter.ActualValue;
       var results = ResultsParameter.ActualValue;
-
       var qualities = QualityParameter.ActualValue;
 
-      var i = qualities.Select((x, index) => new { index, x.Value }).OrderByDescending(x => x.Value).First().index;
+      var bestQualityIndex = qualities.Select((x, index) => new { index, x.Value }).OrderByDescending(x => x.Value).First().index;
 
-      var best = asrSolution[i].Clone() as IASREncoding;
-      var solution = BestSolutionParameter.ActualValue;
-      if (solution == null) {
-        solution = new ASRSolution(problemInstance, best.Clone() as IASREncoding, new DoubleValue(qualities[i].Value));
-        BestSolutionParameter.ActualValue = solution;
-        results.Add(new Result(CurrentBestsolutionProgramResultName, solution));
+      var bestSolutionCurrentPopulation = asrSolution[bestQualityIndex].Clone() as IASREncoding;
+      var bestSolution = BestSolutionParameter.ActualValue;
+      if (bestSolution == null) {
+        bestSolution = new ASRSolution(problemInstance, bestSolutionCurrentPopulation.Clone() as IASREncoding, new DoubleValue(qualities[bestQualityIndex].Value));
+        BestSolutionParameter.ActualValue = bestSolution;
+        results.Add(new Result(CurrentBestsolutionProgramResultName, bestSolution));
       } else {
-        if (solution.Quality.Value < qualities[i].Value) {
-          solution.ProblemInstance = problemInstance;
-          solution.Solution = (IASREncoding)asrSolution[i].Clone();
-          solution.Quality.Value = qualities[i].Value;
+        if (bestSolution.Quality.Value < qualities[bestQualityIndex].Value) {
+          bestSolution.ProblemInstance = problemInstance;
+          bestSolution.Solution = bestSolutionCurrentPopulation.Clone() as IASREncoding;
+          bestSolution.Quality.Value = qualities[bestQualityIndex].Value;
         }
       }
-      return base.Apply();
+      return base.InstrumentedApply();
     }
   }
 }

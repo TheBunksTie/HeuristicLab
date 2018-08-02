@@ -20,15 +20,15 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
 using HeuristicLab.Data;
-using HeuristicLab.Operators;
 using HeuristicLab.Optimization;
 using HeuristicLab.Parameters;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
+using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings;
+using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
   /// <summary>
@@ -36,12 +36,16 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
   /// </summary>
   [Item("OperatorPerformanceASRSolutionAnalyzer", "An operator for analyzing the performance of specific operators")]
   [StorableClass]
-  public sealed class OperatorPerformanceASRSolutionAnalyzer : SingleSuccessorOperator, IAnalyzer, ISingleObjectiveOperator {
+  public sealed class OperatorPerformanceASRSolutionAnalyzer : ASROperator, IASRAnalyzer, ISingleObjectiveOperator {
+    private const string ASRSolutionParameterName = "ASRSolution";
     private const string OperatorPerformanceParameterName = "OperatorPerformance";
     private const string AggregatedOperatorPerformanceParameterName = "AggregatedOperatorPerformance";
 
     public bool EnabledByDefault {
       get { return false; }
+    }
+    public ScopeTreeLookupParameter<IASREncoding> ASRSolutionParameter {
+      get { return (ScopeTreeLookupParameter<IASREncoding>)Parameters[ASRSolutionParameterName]; }
     }
     public ScopeTreeLookupParameter<OperatorPerformanceResultsCollection> OperatorPerformanceParameter {
       get { return (ScopeTreeLookupParameter<OperatorPerformanceResultsCollection>) Parameters[OperatorPerformanceParameterName]; }
@@ -58,11 +62,12 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
     }
     public OperatorPerformanceASRSolutionAnalyzer()
       : base() {
+      Parameters.Add(new ScopeTreeLookupParameter<IASREncoding>(ASRSolutionParameterName, "The ASR solutions given in source code as string representation from which the best solution should be analyzed."));
       Parameters.Add(new ScopeTreeLookupParameter<OperatorPerformanceResultsCollection>(OperatorPerformanceParameterName, "The performance data of operations on the solution candidate."));
       Parameters.Add(new LookupParameter<ResultCollection>(AggregatedOperatorPerformanceParameterName, "The result collection where the aggregated operator performance values are stored."));
     }
 
-    public override IOperation Apply() {
+    public override IOperation InstrumentedApply() {
       if (AggregatedOperatorPerformanceParameter.ActualValue == null)
         AggregatedOperatorPerformanceParameter.ActualValue = new ResultCollection();
 
@@ -70,7 +75,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
         AggregatedOperatorPerformanceParameter.ActualValue.AddOrUpdateResult (operatorPerformance.Key, new DoubleValue ((double) operatorPerformance.Count (o => o.OperatorApplicable && o.OperatorCompilable) / operatorPerformance.Count ()));        
       }
 
-      return base.Apply();
+      return base.InstrumentedApply();
     }
   }
 }

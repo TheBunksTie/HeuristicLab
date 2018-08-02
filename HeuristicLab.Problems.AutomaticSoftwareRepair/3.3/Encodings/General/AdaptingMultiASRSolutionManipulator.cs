@@ -119,22 +119,32 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
         successor = checkedOperators.SampleProportional(random, 1, checkedOperators.Select(x => probabilities[x.Index]), false, false).First().Value;
       }
 
-      IOperation successorOp = null;
-      if (Successor != null)
-        successorOp = ExecutionContext.CreateOperation(Successor);
-      var next = new OperationCollection(successorOp);
-      if (successor != null) {
-        SelectedOperatorParameter.ActualValue = new StringValue(successor.Name);
-
-        if (CreateChildOperation)
-          next.Insert(0, ExecutionContext.CreateChildOperation(successor));
-        else next.Insert(0, ExecutionContext.CreateOperation(successor));
-      } else {
-        SelectedOperatorParameter.ActualValue = new StringValue("");
-      }
+      var nextOperation = AddSelectedManipulatorAsNextOperation (successor);
 
       if (OperatorPerformanceParameter.ActualValue == null)
         OperatorPerformanceParameter.ActualValue = new OperatorPerformanceResultsCollection { OperatorName = SelectedOperatorParameter.ActualValue.Value, };
+
+      return nextOperation;
+    }
+
+    private IOperation AddSelectedManipulatorAsNextOperation (IOperator successor)
+    {
+      IOperation successorOp = null;
+      if (Successor != null)
+        successorOp = ExecutionContext.CreateOperation (Successor);
+      var next = new OperationCollection (successorOp);
+      if (successor != null)
+      {
+        SelectedOperatorParameter.ActualValue = new StringValue (successor.Name);
+
+        if (CreateChildOperation)
+          next.Insert (0, ExecutionContext.CreateChildOperation (successor));
+        else next.Insert (0, ExecutionContext.CreateOperation (successor));
+      }
+      else
+      {
+        SelectedOperatorParameter.ActualValue = new StringValue ("");
+      }
 
       return next;
     }

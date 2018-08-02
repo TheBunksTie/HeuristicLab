@@ -19,7 +19,7 @@
  */
 #endregion
 
-using System.Linq;
+using System;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.View {
   partial class ASRSolutionView {
@@ -46,90 +46,59 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.View {
     /// the contents of this method with the code editor.
     /// </summary>
     private void InitializeComponent () {
-      this.tabControl1 = new HeuristicLab.MainForm.WindowsForms.DragOverTabControl ();
-      this.tabPage1 = new System.Windows.Forms.TabPage ();
-      this.problemInstanceView = new HeuristicLab.MainForm.WindowsForms.ViewHost ();
-      this.tabPage2 = new System.Windows.Forms.TabPage ();
-      this.valueTextBox = new System.Windows.Forms.TextBox ();
-      this.tabControl1.SuspendLayout ();
-      this.tabPage1.SuspendLayout ();
-      this.tabPage2.SuspendLayout ();
+      this.tabControl = new HeuristicLab.MainForm.WindowsForms.DragOverTabControl ();
+      this.tabPage = new System.Windows.Forms.TabPage ();
+      this.solutionCodeTextBox = new System.Windows.Forms.TextBox ();
+      this.tabControl.SuspendLayout ();
+      this.tabPage.SuspendLayout ();
       this.SuspendLayout ();
       // 
-      // tabControl1
+      // tabControl
       // 
-      this.tabControl1.Controls.Add (this.tabPage1);
-      this.tabControl1.Controls.Add (this.tabPage2);
-      this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.tabControl1.Location = new System.Drawing.Point (0, 0);
-      this.tabControl1.Name = "tabControl1";
-      this.tabControl1.SelectedIndex = 0;
-      this.tabControl1.Size = new System.Drawing.Size (468, 415);
-      this.tabControl1.TabIndex = 0;
+      this.tabControl.Controls.Add (this.tabPage);
+      this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.tabControl.Location = new System.Drawing.Point (0, 0);
+      this.tabControl.Name = "tabControl";
+      this.tabControl.SelectedIndex = 0;
+      this.tabControl.Size = new System.Drawing.Size (468, 415);
+      this.tabControl.TabIndex = 0;
       // 
-      // tabPage1
+      // tabPage
       // 
-      this.tabPage1.Controls.Add (this.problemInstanceView);
-      this.tabPage1.Location = new System.Drawing.Point (4, 22);
-      this.tabPage1.Name = "tabPage1";
-      this.tabPage1.Padding = new System.Windows.Forms.Padding (3);
-      this.tabPage1.Size = new System.Drawing.Size (460, 389);
-      this.tabPage1.TabIndex = 0;
-      this.tabPage1.Text = "Problem Instance";
-      this.tabPage1.UseVisualStyleBackColor = true;
+      this.tabPage.Controls.Add (solutionCodeTextBox);
+      this.tabPage.Location = new System.Drawing.Point (4, 22);
+      this.tabPage.Name = "tabPage";
+      this.tabPage.Padding = new System.Windows.Forms.Padding (3);
+      this.tabPage.Size = new System.Drawing.Size (460, 389);
+      this.tabPage.TabIndex = 1;
+      this.tabPage.Text = "Current Best Solution Program";
+      this.tabPage.UseVisualStyleBackColor = true; 
       // 
-      // problemInstanceView
+      // solutionCodeTextBox
       // 
-      this.problemInstanceView.Caption = "View";
-      this.problemInstanceView.Content = null;
-      this.problemInstanceView.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.problemInstanceView.Location = new System.Drawing.Point (3, 3);
-      this.problemInstanceView.Name = "problemInstanceView";
-      this.problemInstanceView.ReadOnly = false;
-      this.problemInstanceView.Size = new System.Drawing.Size (454, 383);
-      this.problemInstanceView.TabIndex = 0;
-      this.problemInstanceView.ViewType = null;
-      // 
-      // tabPage2
-      // 
-      this.tabPage2.Controls.Add (valueTextBox);
-      this.tabPage2.Location = new System.Drawing.Point (4, 22);
-      this.tabPage2.Name = "tabPage2";
-      this.tabPage2.Padding = new System.Windows.Forms.Padding (3);
-      this.tabPage2.Size = new System.Drawing.Size (460, 389);
-      this.tabPage2.TabIndex = 1;
-      this.tabPage2.Text = "Current Best Solution Program";
-      this.tabPage2.UseVisualStyleBackColor = true; 
-      // 
-      // valueTextBox
-      // 
-      this.valueTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.valueTextBox.Location = new System.Drawing.Point (3, 16);
-      this.valueTextBox.Multiline = true;
-      this.valueTextBox.Name = "valueTextBox";
-      this.valueTextBox.Size = new System.Drawing.Size (403, 507);
-      this.valueTextBox.TabIndex = 0;
-      this.valueTextBox.ReadOnly = true;
+      this.solutionCodeTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.solutionCodeTextBox.Location = new System.Drawing.Point (3, 16);
+      this.solutionCodeTextBox.Multiline = true;
+      this.solutionCodeTextBox.Name = "solutionCodeTextBox";
+      this.solutionCodeTextBox.Size = new System.Drawing.Size (403, 507);
+      this.solutionCodeTextBox.TabIndex = 0;
+      this.solutionCodeTextBox.ReadOnly = true;
       // 
       // ASRSolutionView
       // 
       this.AutoScaleDimensions = new System.Drawing.SizeF (6F, 13F);
-      this.Controls.Add (this.tabControl1);
+      this.Controls.Add (this.tabControl);
       this.Name = "ASRSolutionView";
       this.Size = new System.Drawing.Size (468, 415);
-      this.tabControl1.ResumeLayout (false);
-      this.tabPage1.ResumeLayout (false);
-      this.tabPage2.ResumeLayout (false);
+      this.tabControl.ResumeLayout (false);
+      this.tabPage.ResumeLayout (false);
       this.ResumeLayout (false);
-
     }
 
     #endregion
 
-    private HeuristicLab.MainForm.WindowsForms.DragOverTabControl tabControl1;
-    private System.Windows.Forms.TabPage tabPage1;
-    private MainForm.WindowsForms.ViewHost problemInstanceView;
-    private System.Windows.Forms.TabPage tabPage2;
-    private System.Windows.Forms.TextBox valueTextBox;
+    private HeuristicLab.MainForm.WindowsForms.DragOverTabControl tabControl;
+    private System.Windows.Forms.TabPage tabPage;
+    private System.Windows.Forms.TextBox solutionCodeTextBox;
   }
 }

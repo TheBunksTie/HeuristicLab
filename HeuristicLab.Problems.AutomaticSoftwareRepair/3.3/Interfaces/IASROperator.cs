@@ -21,9 +21,10 @@
 
 using System;
 using HeuristicLab.Core;
+using HeuristicLab.Optimization;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces {
-  public interface IASROperator : IItem {
+  public interface IASROperator : IItem, ISingleObjectiveOperator {
     ILookupParameter<IASRProblemInstance> ProblemInstanceParameter { get; }   
   }
 }

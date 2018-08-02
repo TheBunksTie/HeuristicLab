@@ -56,12 +56,12 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
     }
 
     public override IOperation InstrumentedApply () {
-      var mutatedIndividual = ApplyMutation (RandomParameter.ActualValue, ASRSolutionParameter.ActualValue as SyntaxTreeEncoding);
-      ASRSolutionParameter.ActualValue = mutatedIndividual;
+      var manipulatedIndividual = ApplyManipulation (ASRSolutionParameter.ActualValue as SyntaxTreeEncoding);
+      ASRSolutionParameter.ActualValue = manipulatedIndividual;
       return base.InstrumentedApply();
     }
 
-    protected abstract SyntaxTreeEncoding ApplyMutation (IRandom random, SyntaxTreeEncoding individual);
+    protected abstract SyntaxTreeEncoding ApplyManipulation (SyntaxTreeEncoding individual);
 
     protected StatementSyntax[] GetAllStatements (SyntaxNode rootNode, Func<StatementSyntax, bool> whereCondition = null) {
       return StatementExtractionUtility.GetAllStatements (rootNode, whereCondition);

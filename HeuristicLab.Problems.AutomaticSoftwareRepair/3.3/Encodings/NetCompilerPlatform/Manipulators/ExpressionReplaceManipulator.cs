@@ -25,36 +25,38 @@ using HeuristicLab.Common;
 using HeuristicLab.Core;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
 using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators
 {
-  [Item ("StatementReplaceMutator", "A mutation operator which randomly replaces a statement with another one from the same syntax tree.")]
+  [Item ("ExpressionReplaceManipulator", "A mutation operator which randomly replaces an expression with another one from the same syntax tree.")]
   [StorableClass]
-  public sealed class StatementReplaceMutator : SyntaxTreeManipulator {
+  public sealed class ExpressionReplaceManipulator : SyntaxTreeManipulator {
 
     [StorableConstructor]
-    private StatementReplaceMutator(bool deserializing) : base(deserializing) { }
+    private ExpressionReplaceManipulator(bool deserializing) : base(deserializing) { }
 
-    public StatementReplaceMutator ()
+    public ExpressionReplaceManipulator ()
         : base () {
     }
 
     public override IDeepCloneable Clone(Cloner cloner) {
-      return new StatementReplaceMutator(this, cloner);
+      return new ExpressionReplaceManipulator(this, cloner);
     }
 
-    private StatementReplaceMutator(StatementReplaceMutator original, Cloner cloner)
+    private ExpressionReplaceManipulator(ExpressionReplaceManipulator original, Cloner cloner)
         : base(original, cloner) {
     }
 
-    protected override SyntaxTreeEncoding ApplyMutation (IRandom random, SyntaxTreeEncoding individual) {
-      var statements = GetAllStatements(individual.SyntaxTree.GetRoot());
-      if (statements.Length == 0)
+    protected override SyntaxTreeEncoding ApplyManipulation (SyntaxTreeEncoding individual) {
+      var random = RandomParameter.ActualValue;
+      var expressions = individual.SyntaxTree.GetRoot().DescendantNodes().OfType<ExpressionSyntax>().ToArray();
+      if (expressions.Length == 0)
         return individual;
 
-      var replacee = statements[random.Next (statements.Length)];
+      var replacee = expressions[random.Next (expressions.Length)];
 
-      var fittingStatements = statements.Where(s => s.Kind() == replacee.Kind()).ToArray();
+      var fittingStatements = expressions.Where(s => s.Kind() == replacee.Kind()).ToArray();
       if (!fittingStatements.Any())
         return individual;
 

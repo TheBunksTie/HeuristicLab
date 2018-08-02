@@ -34,7 +34,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
   
   [Item("MultiASRSolutionManipulator", "Randomly selects and applies one of its manipulators every time it is called.")]
   [StorableClass]
-  public class MultiASRSolutionManipulator :  StochasticMultiBranch<IASRManipulator>, IASRManipulator, IMultiASROperator, IStochasticOperator {
+  public class MultiASRSolutionManipulator : StochasticMultiBranch<IASRManipulator>, IMultiASRManipulator, IStochasticOperator {
     private const string ProblemInstanceParameterName = "ProblemInstance";
     private const string SolutionParameterName = "ASRSolution";
 

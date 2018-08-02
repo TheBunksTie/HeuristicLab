@@ -43,7 +43,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
       where T: StatementSyntax {
 
       var subStatements = GetAllStatementsInternal (statementFunc (statementSyntax));
-      //subStatements.Add (statementSyntax);
       return subStatements;
     }
 
@@ -51,7 +50,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
       where T: StatementSyntax {
       
       var subStatements = statements.SelectMany(s => GetAllStatementsInternal(s)).ToList();
-      //subStatements.Add (statementSyntax);
       return subStatements;
     }
 

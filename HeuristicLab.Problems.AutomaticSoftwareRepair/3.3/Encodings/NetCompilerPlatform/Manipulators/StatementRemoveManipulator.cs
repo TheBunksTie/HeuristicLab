@@ -24,53 +24,36 @@ using HeuristicLab.Common;
 using HeuristicLab.Core;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
 using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators
 {
-  [Item ("StatementAddMutator", "A mutation operator which randomly adds a statement from the same syntax tree.")]
+  [Item ("StatementRemoveManipulator", "A mutation operator which randomly removes a statement from the syntax tree.")]
   [StorableClass]
-  public sealed class StatementAddMutator : SyntaxTreeManipulator {
+  public sealed class StatementRemoveManipulator : SyntaxTreeManipulator {
 
     [StorableConstructor]
-    private StatementAddMutator(bool deserializing) : base(deserializing) {
-    }
+    private StatementRemoveManipulator (bool deserializing) : base(deserializing) { }
 
-    public StatementAddMutator ()
+    public StatementRemoveManipulator  ()
         : base () {
     }
 
     public override IDeepCloneable Clone(Cloner cloner) {
-      return new StatementAddMutator(this, cloner);
+      return new StatementRemoveManipulator (this, cloner);
     }
 
-    private StatementAddMutator(StatementAddMutator original, Cloner cloner)
+    private StatementRemoveManipulator (StatementRemoveManipulator  original, Cloner cloner)
         : base(original, cloner) {
     }
 
-    protected override SyntaxTreeEncoding ApplyMutation (IRandom random, SyntaxTreeEncoding individual) {
-      var statements = GetAllStatements(individual.SyntaxTree.GetRoot());
+    protected override SyntaxTreeEncoding ApplyManipulation (SyntaxTreeEncoding individual) {
+      var statements = GetAllStatements (individual.SyntaxTree.GetRoot());
       if (statements.Length == 0)
         return individual;
 
-      var addee = statements[random.Next (statements.Length)];
-      var addingLocation = statements[random.Next (statements.Length)];
+      var removee = statements[RandomParameter.ActualValue.Next (statements.Length)];
 
-      if (addee.Equals (addingLocation))
-        return individual;
-
-      BlockSyntax combinedStatementBlock;
-      SyntaxNode replacementLocation = addingLocation;
-      var blockParent = addingLocation.Parent as BlockSyntax;
-      if (blockParent != null) {
-        combinedStatementBlock = blockParent.AddStatements(addee);
-        replacementLocation = addingLocation.Parent;
-      }
-      else
-        combinedStatementBlock = SyntaxFactory.Block(addingLocation, addee);
-
-      var mutatedSyntaxTree = individual.SyntaxTree.GetRoot().ReplaceNode(replacementLocation, combinedStatementBlock).SyntaxTree;
+      var mutatedSyntaxTree = individual.SyntaxTree.GetRoot().RemoveNode(removee, SyntaxRemoveOptions.KeepNoTrivia).SyntaxTree;
 
       individual.SyntaxTree = mutatedSyntaxTree;
 

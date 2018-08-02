@@ -38,7 +38,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.View {
 
     public ASRSolutionView() {
       InitializeComponent();
-      problemInstanceView.ViewsLabelVisible = false;
     }
 
     protected override void DeregisterContentEvents() {
@@ -50,17 +49,16 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.View {
       Content.SolutionChanged += Content_SolutionChanged;
     }
 
-    private void UpdateContent() {
-      problemInstanceView.Content = Content.ProblemInstance;
-      UpdateSolutionView();
+    private void UpdateContentView() {
+      if (Content != null && Content.Solution != null) {
+        solutionCodeTextBox.Text = Content.Solution.GetSolutionCode();
+      }
     }
 
     protected override void OnContentChanged() {
       base.OnContentChanged();
-      if (Content == null) {
-        problemInstanceView.Content = null;
-      } else {
-        UpdateContent();
+      if (Content != null) {
+        UpdateContentView();
       }
     }
 
@@ -68,7 +66,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.View {
       if (InvokeRequired)
         Invoke(new EventHandler(Content_SolutionChanged), sender, e);
       else {
-        UpdateContent();
+        UpdateContentView();
       }
     }
 
@@ -79,14 +77,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.View {
 
     protected override void SetEnabledStateOfControls() {
       base.SetEnabledStateOfControls();
-      tabControl1.Enabled = Content != null;
-      problemInstanceView.Enabled = Content != null;
-    }
-
-    private void UpdateSolutionView() {
-      if (Content != null && Content.Solution != null) {
-        valueTextBox.Text = Content.Solution.GetSolutionCode();
-      }
+      tabControl.Enabled = Content != null;
     }
   }
 }

@@ -28,7 +28,7 @@ using HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators.Specific 
 {
-  [Item ("SpecificManipulator", "A base class for specific syntax tree manipulations collection performance data of the manipulation operation.")]
+  [Item ("SpecificManipulator", "A base class for specific syntax tree manipulations, which are collecting performance data of the manipulation operation.")]
   [StorableClass]
   public abstract class SpecificManipulator : SyntaxTreeManipulator {
     private const string OperatorPerformanceParameterName = "OperatorPerformance";

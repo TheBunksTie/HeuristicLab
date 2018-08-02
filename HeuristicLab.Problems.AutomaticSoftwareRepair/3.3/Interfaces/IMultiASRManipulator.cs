@@ -20,10 +20,12 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+using HeuristicLab.Core;
 
-namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces {
-  public interface IASRInstanceProvider<TData> where TData : IASRData {
-    TData Import(string instancePath);
-    void Export(TData instance, string instancePath);
+namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces
+{
+  public interface IMultiASRManipulator : IASRManipulator {
+    void SetOperators(IEnumerable<IOperator> operators);
   }
 }

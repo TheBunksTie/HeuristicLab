@@ -49,7 +49,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
       return CreateInstanceFromFileContent(fileContent);
     }
 
-    private static ASRData CreateInstanceFromFileContent (string fileContent) {
+    private ASRData CreateInstanceFromFileContent (string fileContent) {
       var structuredFileContent = fileContent.Split (
           new[] {
                     PassingTestsSectionName,
@@ -73,7 +73,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
       return instance;
     }
 
-    private static IEnumerable<string> ExtractTests (string testString) {
+    private IEnumerable<string> ExtractTests (string testString) {
       if (testString == "-")
         return new string[0];
       return testString.Split(new [] {','},StringSplitOptions.RemoveEmptyEntries).Select(s => s.Trim());

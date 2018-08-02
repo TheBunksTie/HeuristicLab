@@ -20,15 +20,11 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using HeuristicLab.Core;
 using HeuristicLab.Data;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces {
   public interface IASRProblemInstance : IParameterizedNamedItem {
-    //IASREvaluator SolutionEvaluator { get; set; }
-    IEnumerable<IOperator> Operators { get; }
-
     StringValue CorrectnessSpecification { get; }
     StringValue ProductionCode { get; }
     StringValue CorrectSolution { get; }

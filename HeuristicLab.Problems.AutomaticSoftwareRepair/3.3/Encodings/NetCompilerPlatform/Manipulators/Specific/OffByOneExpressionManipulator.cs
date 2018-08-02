@@ -30,9 +30,9 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators.Specific {
-  [Item ("OffByOneExpressionMutator", "A specific mutation operator which adds or removes 1 to a randomly selected binary expression")]
+  [Item ("OffByOneExpressionManipulator", "A specific mutation operator which adds or removes 1 to a randomly selected binary expression")]
   [StorableClass]
-  public sealed class OffByOneExpressionMutator : SpecificManipulator {
+  public sealed class OffByOneExpressionManipulator : SpecificManipulator {
 
     private readonly IList<SyntaxKind> mathematicalOperations = new List<SyntaxKind> {
                                                                                        SyntaxKind.AddExpression,
@@ -40,22 +40,25 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
                                                                                    };
 
     [StorableConstructor]
-    private OffByOneExpressionMutator (bool deserializing) : base (deserializing) { }
+    private OffByOneExpressionManipulator (bool deserializing) : base (deserializing) { }
 
-    public OffByOneExpressionMutator ()
+    public OffByOneExpressionManipulator ()
         : base () {
     }
 
     public override IDeepCloneable Clone (Cloner cloner) {
-      return new OffByOneExpressionMutator (this, cloner);
+      return new OffByOneExpressionManipulator (this, cloner);
     }
 
-    private OffByOneExpressionMutator (OffByOneExpressionMutator original, Cloner cloner)
+    private OffByOneExpressionManipulator (OffByOneExpressionManipulator original, Cloner cloner)
         : base (original, cloner) {
     }
 
-    protected override SyntaxTreeEncoding ApplyMutation (IRandom random, SyntaxTreeEncoding individual) {
-      var binaryExpressions = individual.SyntaxTree.GetRoot ().DescendantNodes ().OfType<BinaryExpressionSyntax> ().ToArray ();
+    protected override SyntaxTreeEncoding ApplyManipulation (SyntaxTreeEncoding individual) {
+      var random = RandomParameter.ActualValue;
+      var syntaxTreeRoot = individual.SyntaxTree.GetRoot();
+      var binaryExpressions = syntaxTreeRoot.DescendantNodes().OfType<BinaryExpressionSyntax>()
+          .Where (e => e.Right is IdentifierNameSyntax).ToArray();
       if (binaryExpressions.Length == 0) {
         OperatorPerformanceParameter.ActualValue.OperatorApplicable = false;
         return individual;
@@ -70,7 +73,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
           insertionPointBinaryExpression,
           SyntaxFactory.LiteralExpression (SyntaxKind.NullLiteralExpression, SyntaxFactory.Literal (1)));
       
-      var mutatedSyntaxTree = individual.SyntaxTree.GetRoot ().ReplaceNode (insertionPointBinaryExpression, extendedBinaryExpression).SyntaxTree;
+      var mutatedSyntaxTree = syntaxTreeRoot.ReplaceNode (insertionPointBinaryExpression, extendedBinaryExpression).SyntaxTree;
 
       individual.SyntaxTree = mutatedSyntaxTree;
 

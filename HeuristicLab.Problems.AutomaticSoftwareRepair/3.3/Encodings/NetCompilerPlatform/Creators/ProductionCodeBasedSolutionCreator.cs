@@ -43,10 +43,10 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
     }
  
     public override IOperation InstrumentedApply() {
-      ASRSolutionParameter.ActualValue = CreateSolution(ProblemInstance.ProductionCode.Value, ProblemInstance);
+      ASRSolutionParameter.ActualValue = CreateSolution();
       return base.InstrumentedApply();
     }
 
-    protected abstract IASREncoding CreateSolution (string productionCode, IASRProblemInstance instance);
+    protected abstract IASREncoding CreateSolution ();
   }
 }

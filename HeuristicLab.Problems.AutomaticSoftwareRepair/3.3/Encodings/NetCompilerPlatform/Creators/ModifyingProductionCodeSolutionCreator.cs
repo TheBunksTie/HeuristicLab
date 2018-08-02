@@ -32,7 +32,7 @@ using Microsoft.CodeAnalysis;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Creators
 {
-  [Item("ModifyingProductionCodeSolutionCreator", "Creates a ASR solution from production code stored in variable.")]
+  [Item("ModifyingProductionCodeSolutionCreator", "Creates a ASR solution from production code stored in variable and modifies it slightly by a given probability.")]
   [StorableClass]
   public sealed class ModifyingProductionCodeSolutionCreator :  ProductionCodeBasedSolutionCreator {
     private const string RandomParameterName = "Random";
@@ -63,8 +63,8 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
         : base(original, cloner) {
     }
 
-    protected override IASREncoding CreateSolution (string productionCode, IASRProblemInstance instance) {
-      var result = new SyntaxTreeEncoding(productionCode, instance);
+    protected override IASREncoding CreateSolution () {
+      var result = new SyntaxTreeEncoding(ProblemInstance.ProductionCode.Value, ProblemInstance);
 
       if (RandomParameter.ActualValue.NextDouble() < CreationModificationProbabilityParameter.ActualValue.Value)
         result.SyntaxTree = ModifySyntaxTree(result.SyntaxTree);

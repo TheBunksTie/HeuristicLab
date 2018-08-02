@@ -30,9 +30,9 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators.Specific {
-  [Item ("BitwiseOperationMutator", "A specific mutation operator which replaces a binary bitwise operation with a randomly selected one.")]
+  [Item ("BitwiseOperationManipulator", "A specific mutation operator which replaces a binary bitwise operation with a randomly selected one.")]
   [StorableClass]
-  public sealed class BitwiseOperationMutator : SpecificManipulator {
+  public sealed class BitwiseOperationManipulator : SpecificManipulator {
 
     private readonly IList<SyntaxKind> binaryOperations = new List<SyntaxKind> {
                                  SyntaxKind.ExclusiveOrExpression,
@@ -43,38 +43,40 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
                              };
 
     [StorableConstructor]
-    private BitwiseOperationMutator (bool deserializing) : base (deserializing) { }
+    private BitwiseOperationManipulator (bool deserializing) : base (deserializing) { }
 
-    public BitwiseOperationMutator ()
+    public BitwiseOperationManipulator ()
         : base () {
     }
 
     public override IDeepCloneable Clone (Cloner cloner) {
-      return new BitwiseOperationMutator (this, cloner);
+      return new BitwiseOperationManipulator (this, cloner);
     }
 
-    private BitwiseOperationMutator (BitwiseOperationMutator original, Cloner cloner)
+    private BitwiseOperationManipulator (BitwiseOperationManipulator original, Cloner cloner)
         : base (original, cloner) {
     }
 
-    protected override SyntaxTreeEncoding ApplyMutation (IRandom random, SyntaxTreeEncoding individual) {
-      var binaryExpressions = individual.SyntaxTree.GetRoot ().DescendantNodes ().OfType<BinaryExpressionSyntax> ().Where(e => binaryOperations.Contains(e.Kind())).ToArray ();
+    protected override SyntaxTreeEncoding ApplyManipulation (SyntaxTreeEncoding individual) {
+      var random = RandomParameter.ActualValue;
+      var syntaxTreeRoot = individual.SyntaxTree.GetRoot();
+      var binaryExpressions = syntaxTreeRoot.DescendantNodes ().OfType<BinaryExpressionSyntax> ().Where(e => binaryOperations.Contains(e.Kind())).ToArray ();
       if (binaryExpressions.Length == 0) {
         OperatorPerformanceParameter.ActualValue.OperatorApplicable= false;
         return individual;
       }
 
-      var modifiyableBinaryExpression = binaryExpressions[random.Next (binaryExpressions.Length)];
+      var modifiableBinaryExpression = binaryExpressions[random.Next (binaryExpressions.Length)];
       var operation = binaryOperations[random.Next (binaryOperations.Count)];
-      if (operation.Equals (modifiyableBinaryExpression.Kind()))
+      if (operation.Equals (modifiableBinaryExpression.Kind()))
         return individual;
 
       var operationChangedBinaryExpression = SyntaxFactory.BinaryExpression (
           operation,
-          modifiyableBinaryExpression.Left,
-          modifiyableBinaryExpression.Right);
+          modifiableBinaryExpression.Left,
+          modifiableBinaryExpression.Right);
       
-      var mutatedSyntaxTree = individual.SyntaxTree.GetRoot ().ReplaceNode (modifiyableBinaryExpression, operationChangedBinaryExpression).SyntaxTree;
+      var mutatedSyntaxTree = syntaxTreeRoot.ReplaceNode (modifiableBinaryExpression, operationChangedBinaryExpression).SyntaxTree;
 
       individual.SyntaxTree = mutatedSyntaxTree;
 

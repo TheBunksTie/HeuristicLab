@@ -84,9 +84,9 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators {
     /// <summary>
     /// Calculates the quality of production code.
     /// </summary>
-    /// <param name="solutionCandidateProductionCode">The ASR solution candidate given in string representation which should be evaluated</param>
-    /// <param name="correctessSpecification">The test suite acting as an orcale for correctness.</param>
+    /// <param name="productionCode">The ASR solution candidate given in string representation which should be evaluated</param>
+    /// <param name="correctnessSpecification">The test suite acting as an orcale for correctness.</param>
     /// <returns>The calculated quality measurement.</returns>
-    protected abstract double Evaluate (string solutionCandidateProductionCode, string correctessSpecification);
+    protected abstract double Evaluate (string productionCode, string correctnessSpecification);
   }
 }

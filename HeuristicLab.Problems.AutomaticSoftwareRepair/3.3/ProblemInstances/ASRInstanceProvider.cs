@@ -38,8 +38,8 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
 
       public override IEnumerable<IDataDescriptor> GetDataDescriptors() {
         var instanceArchiveName = GetResourceName (FileName + @"\.zip");
-        if (string.IsNullOrEmpty (instanceArchiveName)) yield break;
-
+        if (string.IsNullOrEmpty (instanceArchiveName))
+          yield break;
         using (var instanceStream = new ZipArchive(GetType().Assembly.GetManifestResourceStream(instanceArchiveName), ZipArchiveMode.Read)) {
           foreach (var entry in instanceStream.Entries.Select (x => x.Name).OrderBy (x => x, new NaturalStringComparer())) {
             yield return new ASRDataDescriptor (Path.GetFileNameWithoutExtension (entry), GetInstanceDescription(), entry);
@@ -67,8 +67,8 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
       return data;
     }
 
-    public void Export(TData instance, string path) {
-      ExportData(instance, path);
+    public void Export(TData instance, string instancePath) {
+      ExportData(instance, instancePath);
     }
     #endregion
 

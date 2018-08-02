@@ -133,22 +133,22 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
     }
 
     private void RegisterProblemInstanceEvents() {
-      ProblemInstance.ToStringChanged += new EventHandler(ProblemInstance_ToStringChanged);
+      ProblemInstance.ToStringChanged += ProblemInstance_ToStringChanged;
     }
     private void DeregisterProblemInstanceEvents() {
-      ProblemInstance.ToStringChanged -= new EventHandler(ProblemInstance_ToStringChanged);
+      ProblemInstance.ToStringChanged -= ProblemInstance_ToStringChanged;
     }
     private void RegisterSolutionEvents() {
-      Solution.ToStringChanged += new EventHandler(Solution_ToStringChanged);
+      Solution.ToStringChanged += Solution_ToStringChanged;
     }
     private void DeregisterSolutionEvents() {
-      Solution.ToStringChanged -= new EventHandler(Solution_ToStringChanged);
+      Solution.ToStringChanged -= Solution_ToStringChanged;
     }
     private void RegisterQualityEvents() {
-      Quality.ValueChanged += new EventHandler(Quality_ValueChanged);
+      Quality.ValueChanged += Quality_ValueChanged;
     }
     private void DeregisterQualityEvents() {
-      Quality.ValueChanged -= new EventHandler(Quality_ValueChanged);
+      Quality.ValueChanged -= Quality_ValueChanged;
     }
 
     private void ProblemInstance_ToStringChanged(object sender, EventArgs e) {

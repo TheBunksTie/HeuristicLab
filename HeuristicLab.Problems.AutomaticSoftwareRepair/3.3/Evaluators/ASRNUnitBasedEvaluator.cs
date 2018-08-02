@@ -82,11 +82,12 @@ namespace ASRNUnitBasedEvaluator.Evaluation
       return new ASRNUnitBasedEvaluator(this, cloner);
     }
 
-    protected override double Evaluate (string solutionCandidateProductionCode, string correctessSpecification) {
-      var completeEvaluationCode = string.Format (c_evaluationClassTemplate, correctessSpecification, solutionCandidateProductionCode);
+    protected override double Evaluate (string productionCode, string correctnessSpecification) {
+
+      var completeEvaluationCode = string.Format (c_evaluationClassTemplate, correctnessSpecification, productionCode);
       var solutionCandidateSyntaxTree = CSharpSyntaxTree.ParseText (completeEvaluationCode);
 
-      var evaluationAssembly = CompileToAssembly (solutionCandidateSyntaxTree);
+      var evaluationAssembly = CompileAndEmitToAssembly (solutionCandidateSyntaxTree);
       if (evaluationAssembly == null)
         return -1;
 
@@ -106,7 +107,7 @@ namespace ASRNUnitBasedEvaluator.Evaluation
       const int positiveWeight = 1;
       const int negativeWeight = 10;
 
-      var fitnessValue = 0L;
+      var fitnessValue = 0.0;
 
       foreach (var testName in ProblemInstance.PassingTests) {
         if (testRunResult.PassedTests.Contains(testName.Value)) {
@@ -123,7 +124,7 @@ namespace ASRNUnitBasedEvaluator.Evaluation
       return fitnessValue;
     }
 
-    private Assembly CompileToAssembly (SyntaxTree tree) {
+    private Assembly CompileAndEmitToAssembly (SyntaxTree tree) {
       var comp = CSharpCompilation.Create (
           "ASRNUnitBasedEvaluator_" + Guid.NewGuid ().ToString ("D"),
           syntaxTrees: new[] { tree },

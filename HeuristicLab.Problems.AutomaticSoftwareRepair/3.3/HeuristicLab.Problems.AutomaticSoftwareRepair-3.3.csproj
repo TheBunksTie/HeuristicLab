@@ -72,19 +72,20 @@
     <Compile Include="Encodings\General\AdaptingMultiASRSolutionManipulator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Creators\ModifyingProductionCodeSolutionCreator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Creators\ProductionCodeBasedSolutionCreator.cs" />
-    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\ExpressionReplaceMutator.cs" />
-    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\InitialProductionCodeReInserter.cs" />
-    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\Specific\ArithmeticOperationMutator.cs" />
-    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\Specific\BitwiseOperationMutator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\ExpressionReplaceManipulator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\InitialCodeReInserter.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\Specific\ArithmeticOperationManipulator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\Specific\BitwiseOperationManipulator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Manipulators\Specific\IdentifierReplacer.cs" />
-    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\Specific\LogicalConditionMutator.cs" />
-    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\Specific\OffByOneExpressionMutator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\Specific\CompareOperationManipulator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\Specific\OffByOneExpressionManipulator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Manipulators\Specific\SpecificManipulator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Util\StatementExtractionUtility.cs" />
-    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\StatementAddMutator.cs" />
-    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\StatementRemoveMutator.cs" />
-    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\StatementReplaceMutator.cs" />
-    <Compile Include="Interfaces\IMultiASROperator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\StatementAddManipulator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\StatementRemoveManipulator.cs" />
+    <Compile Include="Encodings\NetCompilerPlatform\Manipulators\StatementReplaceManipulator.cs" />
+    <Compile Include="Interfaces\IASRAnalyzer.cs" />
+    <Compile Include="Interfaces\IMultiASRManipulator.cs" />
     <Compile Include="Encodings\General\MultiASRSolutionManipulator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Manipulators\SyntaxTreeManipulator.cs" />
     <Compile Include="Encodings\NetCompilerPlatform\Crossovers\SyntaxTreeCrossover.cs" />
@@ -110,32 +111,23 @@
     <Compile Include="Interfaces\IASRManipulator.cs" />
     <Compile Include="Interfaces\IASROperator.cs" />
     <Compile Include="Interfaces\IASRProblemInstance.cs" />
-    <Compile Include="View\ASRProblemView.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="View\ASRProblemView.Designer.cs">
-      <DependentUpon>ASRProblemView.cs</DependentUpon>
-    </Compile>
     <Compile Include="View\ASRSolutionView.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="View\ASRSolutionView.Designer.cs">
       <DependentUpon>ASRSolutionView.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Include="View\ASRProblemView.resx">
-      <DependentUpon>ASRProblemView.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
     <None Include="Plugin.cs.frame" />
     <Compile Include="Plugin.cs" />
-    <EmbeddedResource Include="ProblemInstances\Data\Quix.zip" />
+    <EmbeddedResource Include="ProblemInstances\Data\QuixBugs.zip" />
     <None Include="Properties\AssemblyInfo.cs.frame" />
     <Compile Include="Interfaces\IASRData.cs" />
     <Compile Include="Interfaces\IASRInstanceProvider.cs" />
-    <Compile Include="ProblemInstances\QuixBugInstanceProvider.cs" />
+    <Compile Include="ProblemInstances\QuixBugsInstanceProvider.cs" />
     <Compile Include="ProblemInstances\SectionStructuredFileBasedInstanceProvider.cs" />
     <Compile Include="ProblemInstances\SimpleASRProblemInstance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

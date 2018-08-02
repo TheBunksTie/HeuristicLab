@@ -20,6 +20,7 @@
 #endregion
 
 using System;
+using System.Linq;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
@@ -27,33 +28,42 @@ using Microsoft.CodeAnalysis;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators
 {
-  [Item ("StatementRemoveMutator", "A mutation operator which randomly removes a statement from the syntax tree.")]
+  [Item ("StatementReplaceManipulator", "A mutation operator which randomly replaces a statement with another one from the same syntax tree.")]
   [StorableClass]
-  public sealed class StatementRemoveMutator : SyntaxTreeManipulator {
+  public sealed class StatementReplaceManipulator : SyntaxTreeManipulator {
 
     [StorableConstructor]
-    private StatementRemoveMutator (bool deserializing) : base(deserializing) { }
+    private StatementReplaceManipulator(bool deserializing) : base(deserializing) { }
 
-    public StatementRemoveMutator  ()
+    public StatementReplaceManipulator ()
         : base () {
     }
 
     public override IDeepCloneable Clone(Cloner cloner) {
-      return new StatementRemoveMutator (this, cloner);
+      return new StatementReplaceManipulator(this, cloner);
     }
 
-    private StatementRemoveMutator (StatementRemoveMutator  original, Cloner cloner)
+    private StatementReplaceManipulator(StatementReplaceManipulator original, Cloner cloner)
         : base(original, cloner) {
     }
 
-    protected override SyntaxTreeEncoding ApplyMutation (IRandom random, SyntaxTreeEncoding individual) {
-      var statements = GetAllStatements (individual.SyntaxTree.GetRoot());
+    protected override SyntaxTreeEncoding ApplyManipulation (SyntaxTreeEncoding individual) {
+      var random = RandomParameter.ActualValue;
+      var statements = GetAllStatements(individual.SyntaxTree.GetRoot());
       if (statements.Length == 0)
         return individual;
 
-      var removee = statements[random.Next (statements.Length)];
+      var replacee = statements[random.Next(statements.Length)];
 
-      var mutatedSyntaxTree = individual.SyntaxTree.GetRoot().RemoveNode(removee, SyntaxRemoveOptions.KeepNoTrivia).SyntaxTree;
+      var fittingStatements = statements.Where(s => s.Kind() == replacee.Kind()).ToArray();
+      if (!fittingStatements.Any())
+        return individual;
+
+      var replacement = fittingStatements[random.Next (fittingStatements.Length)];
+      if (replacement.Equals (replacee))
+        return individual;
+
+      var mutatedSyntaxTree = individual.SyntaxTree.GetRoot().ReplaceNode(replacee, replacement).SyntaxTree;
 
       individual.SyntaxTree = mutatedSyntaxTree;
 

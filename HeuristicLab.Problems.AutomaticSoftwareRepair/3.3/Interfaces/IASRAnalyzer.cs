@@ -20,28 +20,16 @@
 #endregion
 
 using System;
+using HeuristicLab.Core;
+using HeuristicLab.Optimization;
+using HeuristicLab.Parameters;
 
-namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances
+namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces
 {
-  public class QuixBugInstanceProvider : SectionStructuredFileBasedInstanceProvider {
-    public override string Name {
-      get { return "Quix Bugs for C#"; }
-    }
-
-    public override string Description {
-      get { return "Manual C# port of subset of Quix Bugs from buggy Java programs"; }
-    }
-
-    public override Uri WebLink {
-      get { return new Uri("https://github.com/jkoppel/QuixBugs"); }
-    }
-
-    public override string ReferencePublication {
-      get { return "Lin et al. 2017 \"QuixBugs: A Multi-Lingual Program Repair Benchmark Set Based on the Quixey Challenge\", in Proceedings of SPLASH (Companion), pp 55-56"; }
-    }
-
-    protected override string FileName {
-      get { return "Quix"; }
-    }
+  /// <summary>
+  /// An interface which represents an analyzer for Automatic Software Repair Problems.
+  /// </summary>
+  public interface IASRAnalyzer : IAnalyzer, IASROperator {
+    ScopeTreeLookupParameter<IASREncoding> ASRSolutionParameter { get; }
   }
 }

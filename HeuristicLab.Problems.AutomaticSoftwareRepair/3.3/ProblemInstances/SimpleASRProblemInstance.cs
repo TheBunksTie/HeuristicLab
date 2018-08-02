@@ -20,36 +20,15 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
 using HeuristicLab.Common;
 using HeuristicLab.Core;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
-using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Creators;
-using HeuristicLab.Problems.AutomaticSoftwareRepair.Evaluators;
-using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances
 {
   [Item("SimpleASRProblemInstance", "Represents a small single source file based ASR problem instance.")]
   [StorableClass]
   public sealed class SimpleASRProblemInstance : ASRProblemInstance {
-
-    protected override IEnumerable<IOperator> GetOperators () {
-      return new IOperator[0];
-    }
-
-    protected override IEnumerable<IOperator> GetAnalyzers () {
-      return new IOperator[0];
-    }
-
-    protected override IASREvaluator Evaluator {
-      get { return new ASRNUnitBasedEvaluator(); }
-    }
-
-    protected override IASRCreator Creator {
-      get { return new NonModifyingProductionCodeSolutionCreator(); }
-    }
-
     [StorableConstructor]
     public SimpleASRProblemInstance(bool deserializing) : base(deserializing) { }
 
@@ -62,8 +41,6 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances
 
     private SimpleASRProblemInstance(SimpleASRProblemInstance original, Cloner cloner)
         : base(original, cloner) {
-    }
-
-  
+    } 
   }
 }

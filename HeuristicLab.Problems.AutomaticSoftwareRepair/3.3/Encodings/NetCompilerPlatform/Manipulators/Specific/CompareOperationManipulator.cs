@@ -30,9 +30,9 @@ using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators.Specific {
-  [Item ("LogicalConditionMutator", "A specific mutation operator which randomly replaces logical condition operators")]
+  [Item ("CompareOperationManipulator", "A specific mutation operator which randomly replaces comparison operators in logical conditions.")]
   [StorableClass]
-  public sealed class LogicalConditionMutator : SpecificManipulator {
+  public sealed class CompareOperationManipulator : SpecificManipulator {
 
     private readonly IList<SyntaxKind> comparisonOperations = new List<SyntaxKind> {
                                  SyntaxKind.LessThanExpression,
@@ -44,38 +44,40 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
                              };
 
     [StorableConstructor]
-    private LogicalConditionMutator (bool deserializing) : base (deserializing) { }
+    private CompareOperationManipulator (bool deserializing) : base (deserializing) { }
 
-    public LogicalConditionMutator ()
+    public CompareOperationManipulator ()
         : base () {
     }
 
     public override IDeepCloneable Clone (Cloner cloner) {
-      return new LogicalConditionMutator (this, cloner);
+      return new CompareOperationManipulator (this, cloner);
     }
 
-    private LogicalConditionMutator (LogicalConditionMutator original, Cloner cloner)
+    private CompareOperationManipulator (CompareOperationManipulator original, Cloner cloner)
         : base (original, cloner) {
     }
 
-    protected override SyntaxTreeEncoding ApplyMutation (IRandom random, SyntaxTreeEncoding individual) {
-      var binaryExpressions = individual.SyntaxTree.GetRoot ().DescendantNodes ().OfType<BinaryExpressionSyntax> ().Where (e => comparisonOperations.Contains (e.Kind ())).ToArray ();
+    protected override SyntaxTreeEncoding ApplyManipulation (SyntaxTreeEncoding individual) {
+      var random = RandomParameter.ActualValue;
+      var syntaxTreeRoot = individual.SyntaxTree.GetRoot ();
+      var binaryExpressions = syntaxTreeRoot.DescendantNodes ().OfType<BinaryExpressionSyntax> ().Where (e => comparisonOperations.Contains (e.Kind ())).ToArray ();
       if (binaryExpressions.Length == 0) {
         OperatorPerformanceParameter.ActualValue.OperatorApplicable = false;
         return individual;
       }
 
-      var modifiyableBinaryExpression = binaryExpressions[random.Next (binaryExpressions.Length)];
+      var modifiableBinaryExpression = binaryExpressions[random.Next (binaryExpressions.Length)];
       var operation = comparisonOperations[random.Next (comparisonOperations.Count)];
-      if (operation.Equals (modifiyableBinaryExpression.Kind ()))
+      if (operation.Equals (modifiableBinaryExpression.Kind ()))
         return individual;
 
       var operationChangedBinaryExpression = SyntaxFactory.BinaryExpression (
           operation,
-          modifiyableBinaryExpression.Left,
-          modifiyableBinaryExpression.Right);
+          modifiableBinaryExpression.Left,
+          modifiableBinaryExpression.Right);
 
-      var mutatedSyntaxTree = individual.SyntaxTree.GetRoot ().ReplaceNode (modifiyableBinaryExpression, operationChangedBinaryExpression).SyntaxTree;
+      var mutatedSyntaxTree = syntaxTreeRoot.ReplaceNode (modifiableBinaryExpression, operationChangedBinaryExpression).SyntaxTree;
 
       individual.SyntaxTree = mutatedSyntaxTree;
 

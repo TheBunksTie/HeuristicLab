@@ -45,8 +45,8 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
         : base(original, cloner) {
     }
  
-    protected override IASREncoding CreateSolution (string productionCode, IASRProblemInstance instance) {
-      var result = new SyntaxTreeEncoding(productionCode, instance);
+    protected override IASREncoding CreateSolution () {
+      var result = new SyntaxTreeEncoding(ProblemInstance.ProductionCode.Value, ProblemInstance);
       return result;
     }
   }
