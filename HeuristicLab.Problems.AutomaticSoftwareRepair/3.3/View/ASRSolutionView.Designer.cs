@@ -46,16 +46,20 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.View {
     /// the contents of this method with the code editor.
     /// </summary>
     private void InitializeComponent () {
-      this.tabControl = new HeuristicLab.MainForm.WindowsForms.DragOverTabControl ();
-      this.tabPage = new System.Windows.Forms.TabPage ();
-      this.solutionCodeTextBox = new System.Windows.Forms.TextBox ();
-      this.tabControl.SuspendLayout ();
-      this.tabPage.SuspendLayout ();
-      this.SuspendLayout ();
+      this.tabControl = new HeuristicLab.MainForm.WindowsForms.DragOverTabControl();
+      this.currentBestSolutionTabPage = new System.Windows.Forms.TabPage();
+      this.evaluatedSolutionsTabPage = new System.Windows.Forms.TabPage();
+      this.solutionCodeTextBox = new System.Windows.Forms.TextBox();
+      this.evaluatedSolutionsTextBox = new System.Windows.Forms.TextBox();
+      this.tabControl.SuspendLayout();
+      this.currentBestSolutionTabPage.SuspendLayout();
+      this.SuspendLayout();
       // 
       // tabControl
       // 
-      this.tabControl.Controls.Add (this.tabPage);
+      this.tabControl.AllowDrop = true;
+      this.tabControl.Controls.Add(this.currentBestSolutionTabPage);
+      this.tabControl.Controls.Add(this.evaluatedSolutionsTabPage);
       this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
       this.tabControl.Location = new System.Drawing.Point (0, 0);
       this.tabControl.Name = "tabControl";
@@ -63,42 +67,66 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.View {
       this.tabControl.Size = new System.Drawing.Size (468, 415);
       this.tabControl.TabIndex = 0;
       // 
-      // tabPage
+      // currentBestSolutionTabPage
       // 
-      this.tabPage.Controls.Add (solutionCodeTextBox);
-      this.tabPage.Location = new System.Drawing.Point (4, 22);
-      this.tabPage.Name = "tabPage";
-      this.tabPage.Padding = new System.Windows.Forms.Padding (3);
-      this.tabPage.Size = new System.Drawing.Size (460, 389);
-      this.tabPage.TabIndex = 1;
-      this.tabPage.Text = "Current Best Solution Program";
-      this.tabPage.UseVisualStyleBackColor = true; 
+      this.currentBestSolutionTabPage.Controls.Add(this.solutionCodeTextBox);
+      this.currentBestSolutionTabPage.Location = new System.Drawing.Point(4, 22);
+      this.currentBestSolutionTabPage.Name = "currentBestSolutionTabPage";
+      this.currentBestSolutionTabPage.Padding = new System.Windows.Forms.Padding(3);
+      this.currentBestSolutionTabPage.Size = new System.Drawing.Size(460, 389);
+      this.currentBestSolutionTabPage.TabIndex = 1;
+      this.currentBestSolutionTabPage.Text = "Current Best Solution Program";
+      this.currentBestSolutionTabPage.UseVisualStyleBackColor = true;
+      // 
+      // evaluatedSolutionsTabPage
+      // 
+      this.evaluatedSolutionsTabPage.Controls.Add(this.evaluatedSolutionsTextBox);
+      this.evaluatedSolutionsTabPage.Location = new System.Drawing.Point(4, 22);
+      this.evaluatedSolutionsTabPage.Name = "evaluatedSolutionsTabPage";
+      this.evaluatedSolutionsTabPage.Padding = new System.Windows.Forms.Padding(3);
+      this.evaluatedSolutionsTabPage.Size = new System.Drawing.Size(460, 389);
+      this.evaluatedSolutionsTabPage.TabIndex = 2;
+      this.evaluatedSolutionsTabPage.Text = "Evaluated solutions for current best";
+      this.evaluatedSolutionsTabPage.UseVisualStyleBackColor = true;
       // 
       // solutionCodeTextBox
       // 
       this.solutionCodeTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
-      this.solutionCodeTextBox.Location = new System.Drawing.Point (3, 16);
+      this.solutionCodeTextBox.Location = new System.Drawing.Point(3, 3);
       this.solutionCodeTextBox.Multiline = true;
       this.solutionCodeTextBox.Name = "solutionCodeTextBox";
-      this.solutionCodeTextBox.Size = new System.Drawing.Size (403, 507);
-      this.solutionCodeTextBox.TabIndex = 0;
       this.solutionCodeTextBox.ReadOnly = true;
+      this.solutionCodeTextBox.Size = new System.Drawing.Size(454, 383);
+      this.solutionCodeTextBox.TabIndex = 0;
+      // 
+      // evaluatedSolutionsTextBox
+      // 
+      this.evaluatedSolutionsTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+      this.evaluatedSolutionsTextBox.Location = new System.Drawing.Point(3, 3);
+      this.evaluatedSolutionsTextBox.Name = "evaluatedSolutionsTextBox";
+      this.evaluatedSolutionsTextBox.ReadOnly = true;
+      this.evaluatedSolutionsTextBox.Size = new System.Drawing.Size(454, 20);
+      this.evaluatedSolutionsTextBox.TabIndex = 0;
       // 
       // ASRSolutionView
       // 
-      this.AutoScaleDimensions = new System.Drawing.SizeF (6F, 13F);
-      this.Controls.Add (this.tabControl);
+      this.Controls.Add(this.tabControl);
       this.Name = "ASRSolutionView";
-      this.Size = new System.Drawing.Size (468, 415);
-      this.tabControl.ResumeLayout (false);
-      this.tabPage.ResumeLayout (false);
-      this.ResumeLayout (false);
+      this.Size = new System.Drawing.Size(468, 415);
+      this.tabControl.ResumeLayout(false);
+      this.currentBestSolutionTabPage.ResumeLayout(false);
+      this.currentBestSolutionTabPage.PerformLayout();
+      this.evaluatedSolutionsTabPage.ResumeLayout(false);
+      this.evaluatedSolutionsTabPage.PerformLayout();
+      this.ResumeLayout(false);
     }
 
     #endregion
 
     private HeuristicLab.MainForm.WindowsForms.DragOverTabControl tabControl;
-    private System.Windows.Forms.TabPage tabPage;
+    private System.Windows.Forms.TabPage currentBestSolutionTabPage;
+    private System.Windows.Forms.TabPage evaluatedSolutionsTabPage;
     private System.Windows.Forms.TextBox solutionCodeTextBox;
+    private System.Windows.Forms.TextBox evaluatedSolutionsTextBox;
   }
 }

@@ -43,6 +43,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
     private const string BestKnownQualityParameterName = "BestKnownQuality";
     private const string ASRSolutionParameterName = "ASRSolution";
     private const string CurrentBestsolutionProgramResultName = "CurrentBestSolutionProgram";
+    private const string EvaluatedSolutionsParameterName = "EvaluatedSolutions";
 
     public bool EnabledByDefault {
       get { return true; }
@@ -63,6 +64,9 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
     public LookupParameter<DoubleValue> BestKnownQualityParameter {
       get { return (LookupParameter<DoubleValue>) Parameters[BestKnownQualityParameterName]; }
     }
+    public ILookupParameter<IntValue> EvaluatedSolutionsParameter {
+      get { return (LookupParameter<IntValue>)Parameters[EvaluatedSolutionsParameterName]; }
+    }
 
     [StorableConstructor]
     private BestASRSolutionAnalyzer(bool deserializing) : base(deserializing) { }
@@ -77,6 +81,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
       Parameters.Add(new LookupParameter<ASRSolution>(BestSolutionParameterName, "The best ASR solution."));
       Parameters.Add(new ValueLookupParameter<ResultCollection>(ResultsParameterName, "The result collection where the best ASR solution should be stored."));
       Parameters.Add (new LookupParameter<DoubleValue> (BestKnownQualityParameterName, "The quality of the best known solution of this ASR instance."));
+      Parameters.Add (new LookupParameter<IntValue> (EvaluatedSolutionsParameterName, "The current number of evaluated solutions."));
 
       ProblemInstanceParameter.Hidden = true;
       ASRSolutionParameter.Hidden = true;
@@ -84,6 +89,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
       BestSolutionParameter.Hidden = true;
       ResultsParameter.Hidden = true;
       BestKnownQualityParameter.Hidden = true;
+      EvaluatedSolutionsParameter.Hidden = true;
     }
 
     public override IOperation InstrumentedApply() {
@@ -97,7 +103,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
       var bestSolutionCurrentPopulation = asrSolution[bestQualityIndex].Clone() as IASREncoding;
       var bestSolution = BestSolutionParameter.ActualValue;
       if (bestSolution == null) {
-        bestSolution = new ASRSolution(problemInstance, bestSolutionCurrentPopulation.Clone() as IASREncoding, new DoubleValue(qualities[bestQualityIndex].Value));
+        bestSolution = new ASRSolution(problemInstance, bestSolutionCurrentPopulation.Clone() as IASREncoding, new DoubleValue(qualities[bestQualityIndex].Value), EvaluatedSolutionsParameter.ActualValue);
         BestSolutionParameter.ActualValue = bestSolution;
         results.Add(new Result(CurrentBestsolutionProgramResultName, bestSolution));
       } else {
@@ -105,8 +111,10 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
           bestSolution.ProblemInstance = problemInstance;
           bestSolution.Solution = bestSolutionCurrentPopulation.Clone() as IASREncoding;
           bestSolution.Quality.Value = qualities[bestQualityIndex].Value;
+          bestSolution.EvaluatedSolutions = EvaluatedSolutionsParameter.ActualValue;
         }
       }
+
       return base.InstrumentedApply();
     }
   }

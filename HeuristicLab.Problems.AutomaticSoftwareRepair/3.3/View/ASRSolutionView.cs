@@ -52,6 +52,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.View {
     private void UpdateContentView() {
       if (Content != null && Content.Solution != null) {
         solutionCodeTextBox.Text = Content.Solution.GetSolutionCode();
+        evaluatedSolutionsTextBox.Text = Content.EvaluatedSolutions.Value.ToString();
       }
     }
 

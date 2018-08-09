@@ -74,13 +74,28 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
       }
     }
 
+    [Storable]
+    private IntValue evaluatedSolutions;
+    public IntValue EvaluatedSolutions {
+      get { return evaluatedSolutions; }
+      set {
+        if (evaluatedSolutions != value) {
+          if (evaluatedSolutions != null) DeregisterQualityEvents();
+          evaluatedSolutions = value;
+          if (evaluatedSolutions != null) RegisterQualityEvents();
+          OnQualityChanged();
+        }
+      }
+    }
+
     public ASRSolution() : base() { }
 
-    public ASRSolution(IASRProblemInstance problemInstance, IASREncoding solution, DoubleValue quality)
+    public ASRSolution(IASRProblemInstance problemInstance, IASREncoding solution, DoubleValue quality, IntValue evaluatedSolutions)
       : base() {
       this.problemInstance = problemInstance;
       this.solution = solution;
       this.quality = quality;
+      this.evaluatedSolutions = evaluatedSolutions;
 
       Initialize();
     }
@@ -92,6 +107,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
       if (problemInstance != null) RegisterProblemInstanceEvents();
       if (solution != null) RegisterSolutionEvents();
       if (quality != null) RegisterQualityEvents();
+      if (evaluatedSolutions != null) RegisterEvaluatedSolutionEvents();
     }
 
 
@@ -103,6 +119,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
       : base(original, cloner) {
       solution = cloner.Clone(original.solution);
       quality = cloner.Clone(original.quality);
+      evaluatedSolutions = cloner.Clone(original.evaluatedSolutions);
 
       if (original.ProblemInstance != null && cloner.ClonedObjectRegistered(original.ProblemInstance))
         ProblemInstance = cloner.Clone(original.ProblemInstance);
@@ -132,6 +149,13 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
         changed(this, EventArgs.Empty);
     }
 
+    public event EventHandler EvaluatedSolutionsChanged;
+    private void OnEvaluatedSolutionsChanged() {
+      var changed = EvaluatedSolutionsChanged;
+      if (changed != null)
+        changed(this, EventArgs.Empty);
+    }
+
     private void RegisterProblemInstanceEvents() {
       ProblemInstance.ToStringChanged += ProblemInstance_ToStringChanged;
     }
@@ -150,6 +174,12 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
     private void DeregisterQualityEvents() {
       Quality.ValueChanged -= Quality_ValueChanged;
     }
+    private void RegisterEvaluatedSolutionEvents() {
+      EvaluatedSolutions.ValueChanged += EvaluatedSolutions_ValueChanged;
+    }
+    private void DeregisterEvaluatedSolutionEvents() {
+      EvaluatedSolutions.ValueChanged -= EvaluatedSolutions_ValueChanged;
+    }
 
     private void ProblemInstance_ToStringChanged(object sender, EventArgs e) {
       OnProblemInstanceChanged();
@@ -160,6 +190,10 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
     private void Quality_ValueChanged(object sender, EventArgs e) {
       OnQualityChanged();
     }
+    private void EvaluatedSolutions_ValueChanged (object sender, EventArgs e) {
+      OnEvaluatedSolutionsChanged();
+    }
+
     #endregion
   }
 }
