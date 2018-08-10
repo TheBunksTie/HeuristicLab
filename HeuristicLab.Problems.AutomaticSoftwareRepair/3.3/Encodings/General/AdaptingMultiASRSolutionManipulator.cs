@@ -29,6 +29,7 @@ using HeuristicLab.Optimization;
 using HeuristicLab.Parameters;
 using HeuristicLab.Persistence.Default.CompositeSerializers.Storable;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer;
+using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPlatform.Manipulators.Specific;
 using HeuristicLab.Problems.AutomaticSoftwareRepair.Interfaces;
 using HeuristicLab.Random;
@@ -82,7 +83,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.General {
 
     public override void SetOperators (IEnumerable<IOperator> operators) {
       foreach (var op in operators) {
-        if (op is SpecificManipulator) {
+        if (op is SpecificManipulator || op is InitialCodeReInserter) {
           Operators.Add(op.Clone() as IASRManipulator);
         }
       }

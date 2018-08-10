@@ -42,16 +42,19 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.View {
 
     protected override void DeregisterContentEvents() {
       Content.SolutionChanged -= Content_SolutionChanged;
+      Content.EvaluatedSolutionsChanged -= Content_SolutionChanged;
       base.DeregisterContentEvents();
     }
     protected override void RegisterContentEvents() {
       base.RegisterContentEvents();
       Content.SolutionChanged += Content_SolutionChanged;
+      Content.EvaluatedSolutionsChanged += Content_SolutionChanged;
+
     }
 
     private void UpdateContentView() {
       if (Content != null && Content.Solution != null) {
-        solutionCodeTextBox.Text = Content.Solution.GetSolutionCode();
+        solutionCodeTextBox.Text = Content.Solution.Value;
         evaluatedSolutionsTextBox.Text = Content.EvaluatedSolutions.Value.ToString();
       }
     }

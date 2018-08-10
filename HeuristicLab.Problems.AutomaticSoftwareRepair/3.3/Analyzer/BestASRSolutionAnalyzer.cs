@@ -44,6 +44,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
     private const string ASRSolutionParameterName = "ASRSolution";
     private const string CurrentBestsolutionProgramResultName = "CurrentBestSolutionProgram";
     private const string EvaluatedSolutionsParameterName = "EvaluatedSolutions";
+    private const string PopulationSizeParameterName = "PopulationSize";
 
     public bool EnabledByDefault {
       get { return true; }
@@ -67,6 +68,9 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
     public ILookupParameter<IntValue> EvaluatedSolutionsParameter {
       get { return (LookupParameter<IntValue>)Parameters[EvaluatedSolutionsParameterName]; }
     }
+    private ILookupParameter<IntValue> PopulationSizeParameter {
+      get { return (LookupParameter<IntValue>)Parameters[PopulationSizeParameterName]; }
+    }
 
     [StorableConstructor]
     private BestASRSolutionAnalyzer(bool deserializing) : base(deserializing) { }
@@ -82,6 +86,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
       Parameters.Add(new ValueLookupParameter<ResultCollection>(ResultsParameterName, "The result collection where the best ASR solution should be stored."));
       Parameters.Add (new LookupParameter<DoubleValue> (BestKnownQualityParameterName, "The quality of the best known solution of this ASR instance."));
       Parameters.Add (new LookupParameter<IntValue> (EvaluatedSolutionsParameterName, "The current number of evaluated solutions."));
+      Parameters.Add (new LookupParameter<IntValue> (PopulationSizeParameterName, "The current population size."));
 
       ProblemInstanceParameter.Hidden = true;
       ASRSolutionParameter.Hidden = true;
@@ -102,16 +107,17 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
 
       var bestSolutionCurrentPopulation = asrSolution[bestQualityIndex].Clone() as IASREncoding;
       var bestSolution = BestSolutionParameter.ActualValue;
+      var currentlyEvaluatedSolution = new IntValue (EvaluatedSolutionsParameter.ActualValue.Value - PopulationSizeParameter.ActualValue.Value + bestQualityIndex);
       if (bestSolution == null) {
-        bestSolution = new ASRSolution(problemInstance, bestSolutionCurrentPopulation.Clone() as IASREncoding, new DoubleValue(qualities[bestQualityIndex].Value), EvaluatedSolutionsParameter.ActualValue);
+        bestSolution = new ASRSolution(problemInstance, bestSolutionCurrentPopulation.Clone() as IASREncoding, new DoubleValue(qualities[bestQualityIndex].Value), currentlyEvaluatedSolution);
         BestSolutionParameter.ActualValue = bestSolution;
         results.Add(new Result(CurrentBestsolutionProgramResultName, bestSolution));
       } else {
         if (bestSolution.Quality.Value < qualities[bestQualityIndex].Value) {
           bestSolution.ProblemInstance = problemInstance;
-          bestSolution.Solution = bestSolutionCurrentPopulation.Clone() as IASREncoding;
+          bestSolution.Solution.Value = bestSolutionCurrentPopulation.GetSolutionCode();
           bestSolution.Quality.Value = qualities[bestQualityIndex].Value;
-          bestSolution.EvaluatedSolutions = EvaluatedSolutionsParameter.ActualValue;
+          bestSolution.EvaluatedSolutions = currentlyEvaluatedSolution;
         }
       }
 

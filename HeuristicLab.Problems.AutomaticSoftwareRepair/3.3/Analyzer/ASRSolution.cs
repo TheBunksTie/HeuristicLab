@@ -48,8 +48,8 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
       }
     }
     [Storable]
-    private IASREncoding solution;
-    public IASREncoding Solution {
+    private StringValue solution;
+    public StringValue Solution {
       get { return solution; }
       set {
         if (solution != value) {
@@ -60,6 +60,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
         }
       }
     }
+
     [Storable]
     private DoubleValue quality;
     public DoubleValue Quality {
@@ -80,10 +81,10 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
       get { return evaluatedSolutions; }
       set {
         if (evaluatedSolutions != value) {
-          if (evaluatedSolutions != null) DeregisterQualityEvents();
+          if (evaluatedSolutions != null) DeregisterEvaluatedSolutionEvents();
           evaluatedSolutions = value;
-          if (evaluatedSolutions != null) RegisterQualityEvents();
-          OnQualityChanged();
+          if (evaluatedSolutions != null) RegisterEvaluatedSolutionEvents();
+          OnEvaluatedSolutionsChanged();
         }
       }
     }
@@ -93,10 +94,10 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Analyzer {
     public ASRSolution(IASRProblemInstance problemInstance, IASREncoding solution, DoubleValue quality, IntValue evaluatedSolutions)
       : base() {
       this.problemInstance = problemInstance;
-      this.solution = solution;
+      this.solution = new StringValue(solution.GetSolutionCode());
       this.quality = quality;
       this.evaluatedSolutions = evaluatedSolutions;
-
+     
       Initialize();
     }
     [StorableConstructor]
