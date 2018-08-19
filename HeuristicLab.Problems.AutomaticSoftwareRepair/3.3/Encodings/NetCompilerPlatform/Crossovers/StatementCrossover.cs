@@ -49,8 +49,10 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.Encodings.NetCompilerPla
     protected override SyntaxTreeEncoding Crossover (SyntaxTreeEncoding parent1, SyntaxTreeEncoding parent2) {
       var random = RandomParameter.ActualValue;
       var statements = GetAllStatements(parent1.SyntaxTree.GetRoot());
-      var selectedStatement = statements[random.Next(statements.Length)];
+      if (statements.Length == 0)
+        return parent1;
 
+      var selectedStatement = statements[random.Next(statements.Length)];
       var statements2 = GetAllStatements(parent2.SyntaxTree.GetRoot(), s => s.Kind() == selectedStatement.Kind());
       if (statements2.Length == 0)
         return parent1;

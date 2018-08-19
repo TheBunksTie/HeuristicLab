@@ -33,7 +33,7 @@ namespace HeuristicLab.Problems.AutomaticSoftwareRepair.ProblemInstances {
   public abstract class ASRProblemInstance : ParameterizedNamedItem, IASRProblemInstance, IStatefulItem {
     private const string CorrectnessSpecificationParameterName = "CorrectnessSpecification";
     private const string ProductionCodeParameterName = "ProductionCode";
-    private const string CorrectSolutionParameterName = "CorrectSolutionParameter";
+    private const string CorrectSolutionParameterName = "CorrectSolution";
     private const string PassingTestsParameterName = "PassingTests";
     private const string FailingTestsParameterName = "FailingTests";
 
